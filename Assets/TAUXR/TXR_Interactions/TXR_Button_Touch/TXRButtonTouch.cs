@@ -49,8 +49,8 @@ public class TXRButtonTouch : MonoBehaviour
     [SerializeField] private AudioSource soundHoverExit;
     [SerializeField] private AudioSource soundPress;
     [SerializeField] private AudioSource soundRelease;
-    
-    private TXRButtonVisuals visuals;
+    [SerializeField] private Animator animator;
+
     private bool isPressed = false;
     private bool isHovered = false;
 
@@ -58,7 +58,6 @@ public class TXRButtonTouch : MonoBehaviour
 
     void Start()
     {
-        visuals = GetComponent<TXRButtonVisuals>();
         lastState = state;
         SetState(state);
     }
@@ -87,10 +86,10 @@ public class TXRButtonTouch : MonoBehaviour
             case ButtonState.Hidden:
                 break;
             case ButtonState.Disabled:
-                visuals.Disabled();
+                animator.SetBool("IsInteractable", false);
                 break;
             case ButtonState.Interactable:
-                visuals.Active();
+                animator.SetBool("IsInteractable", true);
                 break;
         }
 
@@ -183,7 +182,7 @@ public class TXRButtonTouch : MonoBehaviour
     {
         isHovered = true;
         PlaySound(soundHoverEnter);
-        visuals.Hover();
+        animator.SetBool("IsHover", true);
     }
 
     // called from button collider
@@ -191,7 +190,7 @@ public class TXRButtonTouch : MonoBehaviour
     public void OnHoverExit(Transform toucher)
     {
         if (state != ButtonState.Interactable) return;
-        print("HOVER EXIT 1");
+
         // Catching extreme cases where toucher exit the hover collider without activating the press collider
         if (isPressed)
         {
@@ -228,7 +227,7 @@ public class TXRButtonTouch : MonoBehaviour
         isHovered = false;
         activeToucher = null;
         PlaySound(soundHoverExit);
-        visuals.Active();
+        animator.SetBool("IsHover", false);
     }
 
     // called from the UnityEvent on the press collider
@@ -246,7 +245,7 @@ public class TXRButtonTouch : MonoBehaviour
     {
         isPressed = true;
         PlaySound(soundPress);
-        visuals.Press();
+        animator.SetBool("IsPressed", true);
     }
 
     // called from the UnityEvent on the press collider
@@ -263,7 +262,7 @@ public class TXRButtonTouch : MonoBehaviour
     {
         isPressed = false;
         PlaySound(soundRelease);
-        visuals.Active();
+        animator.SetBool("IsPressed", false);
     }
 
     // added as a quick fix for bug where title on sun nav wouldn't clear active toucher after touch (probably because it moves immediately to keyboard position.
@@ -271,6 +270,11 @@ public class TXRButtonTouch : MonoBehaviour
     {
         OnHoverExitInternal();
         touchers.Clear();
+    }
+
+    private void OnDisable()
+    {
+        ClearActiveToucher();
     }
 }
 
