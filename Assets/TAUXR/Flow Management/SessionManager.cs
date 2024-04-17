@@ -9,6 +9,9 @@ public class SessionManager : TXRSingleton<SessionManager>
     [SerializeField] private Round[] _rounds;
     private int _currentRound;
 
+
+
+
     //If there is a higher level flow manager, remove this and use his start method
     private void Start()
     {
@@ -33,6 +36,8 @@ public class SessionManager : TXRSingleton<SessionManager>
     private void StartSession()
     {
         // setup session initial conditions.
+        
+
     }
 
 

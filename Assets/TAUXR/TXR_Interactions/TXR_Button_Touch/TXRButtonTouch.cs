@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -55,6 +56,7 @@ public class TXRButtonTouch : MonoBehaviour
     private bool isHovered = false;
 
     public Action<Transform> PressTransform;
+    private TaskCompletionSource<bool> _buttonPressedTcs;
 
     void Start()
     {
@@ -244,6 +246,13 @@ public class TXRButtonTouch : MonoBehaviour
     private void OnPressedInternal()
     {
         isPressed = true;
+        
+        // Complete the task after button pressed
+        if (_buttonPressedTcs != null && !_buttonPressedTcs.Task.IsCompleted)
+        {
+            _buttonPressedTcs.SetResult(true);
+        }
+
         PlaySound(soundPress);
         animator.SetBool("IsPressed", true);
     }
@@ -276,6 +285,14 @@ public class TXRButtonTouch : MonoBehaviour
     {
         ClearActiveToucher();
     }
+
+
+    public Task WaitForButtonPress()
+    {
+        _buttonPressedTcs = new TaskCompletionSource<bool>();
+        return _buttonPressedTcs.Task;
+    }
+
 }
 
 public enum ButtonColliderResponse { Both, Internal, External, None }
