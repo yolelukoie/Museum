@@ -10,4 +10,6 @@ public class SceneReferencer : TXRSingleton<SceneReferencer>
 
     public List<Piece> pieces;
 
+    public FloatingBoard floatingBoard;
+
 }
