@@ -16,9 +16,11 @@ public class FloatingBoard : MonoBehaviour
 
     private void SetText(string text)
     {
-        board.SetTextAndScale(text);
+        board.SetTextAndAutoScale(text);
     }
 
+
+    //TODO update to TextPopUp's Show() and Hide() methods
     private async UniTask ShowUntilContinuePressed()
     {
         board.gameObject.SetActive(true);

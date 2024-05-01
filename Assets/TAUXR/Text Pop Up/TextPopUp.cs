@@ -1,146 +1,124 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Sirenix.OdinInspector;
+using Cysharp.Threading.Tasks;
+using Shapes;
 using UnityEngine;
 using TMPro;
 
-
 public class TextPopUp : MonoBehaviour
 {
-
-    private const float DefaultTextWidth = 0.48f;
-    private const float DefaultTextHeight = 0.08f;
-    private const float DefaultTextFontSize = 0.3368976f;
-    private const int NumberOfLettersUntilLineWrap = 32;
-    private const int NumberOfLettersWhenScaleIsOne = 55;
-
-    [SerializeField] private bool _useAnimation = true;
-
-    [SerializeField] private Transform _background;
-    [SerializeField] private TextMeshPro _textUI;
-
-    [SerializeField] private float _fontSizeMultiplier = 1;
-
-
-
-
-    //old variables
-    private const float ScaleMultiplierScalar = 0.5f;
-    [SerializeField] private GameObject _backFace;
-    [SerializeField] private GameObject _pointer;
-
-
+    [SerializeField] private TextPopUpReferences _textPopUpReferences;
+    [SerializeField] private ETextPopUpState _startingState;
     [TextArea(1, 10)] [SerializeField] private string _text;
 
-    private void OnEnable()
+    [SerializeField] private TextPopUpTextsConfigurationsScriptableObject _textConfigurations;
+
+    private void Awake()
     {
-        if (!_useAnimation)
+        _textPopUpReferences.TextPopUpScaler.Init(_textPopUpReferences);
+        _textPopUpReferences.TextPopUpAnimator.Init(_textPopUpReferences);
+    }
+
+    private void Start()
+    {
+        SetStartingState();
+    }
+
+    private void SetStartingState()
+    {
+        switch (_startingState)
         {
-            GetComponent<Animator>().Play("Birth", -1, 1);
+            case ETextPopUpState.Active:
+                _textPopUpReferences.TextPopUpAnimator.SetAppearance(true, false);
+                break;
+            case ETextPopUpState.Appear:
+                _textPopUpReferences.TextPopUpAnimator.SetAppearance(false, false);
+                _textPopUpReferences.TextPopUpAnimator.SetAppearance(true);
+                break;
+            case ETextPopUpState.Disabled:
+                _textPopUpReferences.TextPopUpAnimator.SetAppearance(false, false);
+                break;
         }
     }
 
+    public void Show(bool useAnimation = true)
+    {
+        _textPopUpReferences.TextPopUpAnimator.SetAppearance(true, useAnimation);
+    }
+
+    public void Hide(bool useAnimation = true)
+    {
+        _textPopUpReferences.TextPopUpAnimator.SetAppearance(false, useAnimation);
+    }
 
     public void SetText(string newText)
     {
-        _textUI.text = newText;
+        _textPopUpReferences.TextUI.text = newText;
     }
 
-    public void SetTextAndScale(string newText)
+    public void SetTextAndAutoScale(string newText, bool useAnimation = true)
     {
-        _textUI.text = newText;
-        _textUI.fontSize = DefaultTextFontSize * _fontSizeMultiplier;
-        float newScale = (float)newText.Length / NumberOfLettersWhenScaleIsOne;
-        newScale = Mathf.Sqrt(newScale) * _fontSizeMultiplier;
-        UpdateTextRect(newScale);
-        _textUI.rectTransform.sizeDelta = new Vector2(DefaultTextWidth * newScale,
-            DefaultTextHeight * newScale);
-        _background.localScale = new Vector3(1, newScale, newScale);
+        _textPopUpReferences.TextUI.text = newText;
+        _textPopUpReferences.TextPopUpScaler.Text = newText;
+        _textPopUpReferences.TextPopUpScaler.AutoScale(useAnimation);
     }
 
-    private void UpdateTextRect(float scaleMultiplier)
+    public void SetTextAndScale(string newText, Vector2 textSize, bool useAnimation = true)
     {
-        _textUI.rectTransform.sizeDelta = new Vector2(DefaultTextWidth * scaleMultiplier,
-            DefaultTextHeight * scaleMultiplier);
+        _textPopUpReferences.TextUI.text = newText;
+        _textPopUpReferences.TextPopUpScaler.Text = newText;
+        _textPopUpReferences.TextPopUpScaler.SetScale(textSize, useAnimation);
     }
 
-    //public void SetTextAndScaleFromSerializedField()
-    //{
-    //    _textUI.text = _text;
-    //    SetNewScale();
-    //}
-
-    //--------------------------------------------
-
-    //public void SetNewScale()
-    //{
-    //    float scaleMultiplier = CalculateScaleMultiplier();
-    //    UpdateBackFace(scaleMultiplier);
-    //    UpdateTextUI(scaleMultiplier);
-    //    UpdatePointer(scaleMultiplier);
-    //}
-
-
-    //private float CalculateScaleMultiplier()
-    //{
-    //    float scaleMultiplier = (float)_textUI.text.Length / NumberOfLettersWhenScaleIsOne;
-    //    scaleMultiplier = Mathf.Lerp(1, scaleMultiplier, ScaleMultiplierScalar);
-    //    if (_textUI.text.Length > 300)
-    //    {
-    //        scaleMultiplier /= 1.5f;
-    //    }
-
-    //    return scaleMultiplier;
-    //}
-
-    //private void UpdateBackFace(float scaleMultiplier)
-    //{
-    //    //TODO: instead of changing scale, change rectangle size
-    //    _backFace.transform.localScale = new Vector3(scaleMultiplier, scaleMultiplier, 1);
-    //}
-
-    //private void UpdateTextUI(float scaleMultiplier)
-    //{
-    //    _textUI.rectTransform.sizeDelta = new Vector2(DefaultTextWidth * scaleMultiplier,
-    //        DefaultTextHeight * scaleMultiplier);
-    //}
-
-    private void UpdatePointer(float scaleMultiplier)
+    public void SetTextFromConfiguration(string textId, bool useAnimation = true)
     {
-        //TODO: instead of changing scale, change rectangle size
-        _pointer.transform.localPosition = new Vector3(-0.0034f, 0,
-            _textUI.rectTransform.offsetMax.x + 0.02f * scaleMultiplier);
-        _pointer.transform.localScale = new Vector3(scaleMultiplier, scaleMultiplier, 1);
+        TextPopUpTextConfiguration textConfiguration = _textConfigurations.GetTextConfiguration(textId);
+        if (textConfiguration == null)
+        {
+            return;
+        }
+
+        SetTextAndScale(textConfiguration.Text, textConfiguration.TextRectSize, useAnimation);
     }
 
-    //-----------------
+    public void SetLanguageToEnglish()
+    {
+        _textPopUpReferences.TextUI.isRightToLeftText = false;
+        _textPopUpReferences.TextUI.alignment = TextAlignmentOptions.Left;
+    }
 
+    public void SetLanguageToHebrew()
+    {
+        _textPopUpReferences.TextUI.isRightToLeftText = true;
+        _textPopUpReferences.TextUI.alignment = TextAlignmentOptions.Right;
+    }
 #if UNITY_EDITOR
-    [Button]
     public void GetTextFromComponent()
     {
-        _text = _textUI.text;
+        _text = _textPopUpReferences.TextUI.text;
     }
 
-    [Button]
-    public void SetTextAndScale()
+    public void SetTextAndAutoScale()
     {
-        SetTextAndScale(_text);
+        _textPopUpReferences.TextPopUpScaler.Init(_textPopUpReferences);
+        _textPopUpReferences.TextPopUpAnimator.Init(_textPopUpReferences);
+        SetTextAndAutoScale(_text, false);
     }
 
-    [Button]
-    public void DebugNumberOfLetters()
+    public void SetTextAndScale(Vector2 textSize)
     {
-        Debug.Log(_textUI.text.Length);
+        _textPopUpReferences.TextPopUpScaler.Init(_textPopUpReferences);
+        _textPopUpReferences.TextPopUpAnimator.Init(_textPopUpReferences);
+        SetTextAndScale(_text, textSize, false);
     }
 
-    [Button]
-    public void ResetScale()
+    public void SetActiveState(bool newState)
     {
-        _textUI.rectTransform.sizeDelta = new Vector2(0.48f, 0.08f);
-        _background.transform.localScale = Vector3.one;
+        _textPopUpReferences.TextPopUpAnimator.Init(_textPopUpReferences);
+        _textPopUpReferences.TextPopUpAnimator.SetAppearance(newState, false);
     }
+
 
 #endif
 }
