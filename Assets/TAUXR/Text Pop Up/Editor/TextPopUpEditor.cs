@@ -1,43 +1,85 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using UnityEditor;
+using UnityEngine;
 
-//[CustomEditor(typeof(TextPopUp))]
+[CustomEditor(typeof(TextPopUp))]
 public class TextPopUpEditor : Editor
 {
-    //public override void OnInspectorGUI()
-    //{
-    //    base.OnInspectorGUI();
-    //    TextPopUp textPopUp = target as TextPopUp;
+    private Vector2 _textSize;
+    private readonly int _spacingBetweenSections = 5;
+    private TextPopUp _textPopUp;
 
-    //    if (GUILayout.Button("Get text from component"))
-    //    {
-    //        textPopUp.GetTextFromComponent();
-    //    }
+    public override void OnInspectorGUI()
+    {
+        base.OnInspectorGUI();
+        _textPopUp = (TextPopUp)target;
 
-    //    GUILayout.Space(10);
+        AddGetTextSection();
+        EditorGUILayout.Space(_spacingBetweenSections);
+        AddScalingSection();
+        EditorGUILayout.Space(_spacingBetweenSections);
+        AddStateSection();
+        EditorGUILayout.Space(_spacingBetweenSections);
+        AddLanguageSection();
+    }
 
-    //    if (GUILayout.Button("Set text and scale"))
-    //    {
-    //        textPopUp.SetTextAndScaleFromSerializedField();
-    //    }
+    private void AddGetTextSection()
+    {
+        if (GUILayout.Button("Get text from component"))
+        {
+            _textPopUp.GetTextFromComponent();
+        }
+    }
 
-    //    if (GUILayout.Button("Set new scale"))
-    //    {
-    //        textPopUp.SetNewScale();
-    //    }
+    private void AddScalingSection()
+    {
+        EditorGUILayout.LabelField("Scaling", EditorStyles.boldLabel);
+        if (GUILayout.Button("Set text and auto scale"))
+        {
+            _textPopUp.SetTextAndAutoScale();
+        }
 
-    //    if (GUILayout.Button("Reset scale"))
-    //    {
-    //        textPopUp.ResetScale();
-    //    }
+        EditorGUILayout.Space(_spacingBetweenSections);
 
-    //    GUILayout.Space(10);
+        _textSize = EditorGUILayout.Vector2Field("Text size", _textSize);
+        if (GUILayout.Button("Set text and scale"))
+        {
+            _textPopUp.SetTextAndScale(_textSize);
+        }
+    }
 
-    //    if (GUILayout.Button("Debug number of letters and scale multiplier"))
-    //    {
-    //        textPopUp.DebugNumberOfLettersAndScaleMultiplier();
-    //    }
-    //}
+    private void AddStateSection()
+    {
+        EditorGUILayout.LabelField("Set state in editor", EditorStyles.boldLabel);
+        GUILayout.BeginHorizontal();
+        if (GUILayout.Button("Enabled"))
+        {
+            _textPopUp.SetActiveState(true);
+        }
+
+        if (GUILayout.Button("Disabled"))
+        {
+            _textPopUp.SetActiveState(false);
+        }
+
+        GUILayout.EndHorizontal();
+    }
+
+    private void AddLanguageSection()
+    {
+        EditorGUILayout.LabelField("Set language", EditorStyles.boldLabel);
+        GUILayout.BeginHorizontal();
+        if (GUILayout.Button("English"))
+        {
+            _textPopUp.SetLanguageToEnglish();
+        }
+
+        if (GUILayout.Button("Hebrew"))
+        {
+            _textPopUp.SetLanguageToHebrew();
+        }
+
+        GUILayout.EndHorizontal();
+    }
 }

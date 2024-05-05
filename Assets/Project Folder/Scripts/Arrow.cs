@@ -3,10 +3,10 @@ using UnityEngine;
 public class Arrow : MonoBehaviour
 {
 
-    //TODO
-    // Update is called once per frame
+
     void Update()
     {
+        transform.position.Set(transform.position.x, Mathf.Sin(Time.time), transform.position.z);
 
     }
 }

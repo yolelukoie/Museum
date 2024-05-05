@@ -66,7 +66,7 @@ public class EyeDataDebugger : MonoBehaviour
         _textPopUp.transform.LookAt(TXRPlayer.Instance.EyeTracker.EyePosition);
         _textPopUp.transform.eulerAngles = new Vector3(0,
             _textPopUp.transform.eulerAngles.y + 90, 0);
-        _textPopUp.GetComponent<TextPopUp>().SetTextAndScale(focusedObject.name);
+        _textPopUp.GetComponent<TextPopUp>().SetTextAndAutoScale(focusedObject.name);
     }
 
     private void RevertPreviousFocusedObject()
