@@ -101,8 +101,6 @@ public class TextPopUpScaler : MonoBehaviour
     private int GetNumberOfWrappingLineBreaksInText(string text)
     {
         int numberOfLettersUntilLineWrap = (int)(ReferenceNumberOfLettersUntilLineWrap * (float)Text.Length / ReferenceNumberOfLetters);
-        //return numberOfLettersUntilLineWrap == 0 ? 0 : text.Length / numberOfLettersUntilLineWrap;
-
         return text.Length / numberOfLettersUntilLineWrap;
     }
 

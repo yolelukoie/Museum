@@ -3,10 +3,9 @@ using UnityEngine;
 public class Arrow : MonoBehaviour
 {
 
-
-    void Update()
+    private float _movementScalar = 0.002f;
+    private void Update()
     {
-        transform.position.Set(transform.position.x, Mathf.Sin(Time.time), transform.position.z);
-
+        this.transform.Translate(0, Mathf.Sin(Time.time) * _movementScalar, 0);
     }
 }

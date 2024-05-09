@@ -16,15 +16,21 @@ public class SceneManagementTool : EditorWindow
     [MenuItem("Tools/TXR Scene Management Tool")]
     public static void ShowWindow()
     {
-        GetWindow<SceneManagementTool>("TXR Scene Management");
+        var window = GetWindow<SceneManagementTool>("TXR Scene Management");
+        window.UpdateSceneList();
+        window.UpdateLoadedSceneNames();
     }
 
     private void OnEnable()
     {
+        UpdateSceneList();
+        UpdateLoadedSceneNames();
+    }
+
+    private void UpdateSceneList()
+    {
         allScenePaths = Directory.GetFiles(Application.dataPath, "*.unity", SearchOption.AllDirectories);
         scenesInBuild = EditorBuildSettings.scenes.ToList();
-        UpdateLoadedSceneNames();
-
     }
 
     private void UpdateLoadedSceneNames()
@@ -55,8 +61,8 @@ public class SceneManagementTool : EditorWindow
         };
 
         GUILayout.Label("TXR Scene Management", headerStyle);
-        GUILayout.Space(10);
 
+        GUILayout.Space(10);
         GUILayout.Label("Currently Open Scenes", EditorStyles.boldLabel);
 
         foreach (string loadedSceneName in loadedSceneNames)
@@ -98,6 +104,14 @@ public class SceneManagementTool : EditorWindow
             }
         }
 
+        GUILayout.Space(10);
+        if (GUILayout.Button("Refresh Scene List", buttonStyle))
+        {
+            UpdateSceneList();
+            UpdateLoadedSceneNames();
+            Repaint(); // Repaint the editor window to show the updated lists
+        }
+
         GUILayout.Space(20);
 
         // Scenes in Build Settings
@@ -121,6 +135,5 @@ public class SceneManagementTool : EditorWindow
         {
             EditorWindow.GetWindow(typeof(BuildPlayerWindow));
         }
-
     }
 }

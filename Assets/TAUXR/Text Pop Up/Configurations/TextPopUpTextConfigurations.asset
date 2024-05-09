@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32054d3591d46494b8d8c7f83ae940ad, type: 3}
   m_Name: TextPopUpTextConfigurations
   m_EditorClassIdentifier: 
-  TextConfigurations: []
+  TextsData: []

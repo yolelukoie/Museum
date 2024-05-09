@@ -25,7 +25,8 @@ public class SessionManager : TXRSingleton<SessionManager>
 
 
 
-        await _floatingBoard.ShowTextUntilContinue("Floating board");
+        await _floatingBoard.ShowTextUntilContinue("Hi! Here are some Instructions...press continue");
+        await _floatingBoard.ShowTextUntilContinue("Instructions 2...press continue");
 
         foreach (Piece p in _pieces)
         {

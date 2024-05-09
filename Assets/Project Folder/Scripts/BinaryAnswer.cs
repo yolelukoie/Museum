@@ -28,7 +28,6 @@ public class BinaryAnswer : MonoBehaviour
         MatchCollidersSizeToImage();
     }
 
-
     private void ResizeImage()
     {
         Texture2D texture = (Texture2D)_image.texture;
@@ -77,4 +76,7 @@ public class BinaryAnswer : MonoBehaviour
         height = width = 0;
         return false;
     }
+
+
+
 }
