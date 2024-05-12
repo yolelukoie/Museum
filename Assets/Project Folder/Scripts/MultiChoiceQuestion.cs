@@ -1,4 +1,5 @@
 using Cysharp.Threading.Tasks;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class MultiChoiceQuestion : MonoBehaviour
@@ -6,7 +7,18 @@ public class MultiChoiceQuestion : MonoBehaviour
     [SerializeField]
     private TextPopUp board;
     [SerializeField]
-    private TXRButtonTouch ContinueButton;
+    private List<MultichoiceAnswer> _answers;
+    private void Start()
+    {
+        MultichoiceAnswer.OnAnswerSelected.AddListener(ProcessAnswer);
+    }
+
+    void ProcessAnswer(string selectedAnswer)
+    {
+        // TODO report selected answer
+        Debug.Log("Selected answer: " + selectedAnswer);
+    }
+
 
 
     public async UniTask ShowTextUntilContinue(string text)
