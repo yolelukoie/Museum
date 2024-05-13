@@ -23,10 +23,17 @@ public class SessionManager : TXRSingleton<SessionManager>
         StartSession();
         //this is where our flow goes
 
-        await _floatingBoard.ShowTextUntilContinue("Go To Klimt");
+
+
+        await _floatingBoard.ShowTextUntilContinue("Hi! Here are some Instructions...press continue");
+        await _floatingBoard.ShowTextUntilContinue("Instructions 2...press continue");
+
         foreach (Piece p in _pieces)
         {
+            p.arrow.gameObject.SetActive(true);
+            await _floatingBoard.ShowTextUntilContinue("Follow the arrow to the next piece");
             await p.audioGuideButton.WaitForAudioGuideToFinish();
+            p.arrow.gameObject.SetActive(false);
         }
 
         await _floatingBoard.ShowTextUntilContinue("Finished");
@@ -50,6 +57,12 @@ public class SessionManager : TXRSingleton<SessionManager>
         // setup session initial conditions.
         _floatingBoard = SceneReferencer.Instance.floatingBoard;
         _pieces = SceneReferencer.Instance.pieces;
+
+        foreach (Piece p in _pieces)
+        {
+            p.arrow.gameObject.SetActive(false);
+        }
+
 
     }
 

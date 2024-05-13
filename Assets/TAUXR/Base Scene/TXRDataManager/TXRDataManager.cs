@@ -23,6 +23,23 @@ public class AnalyticsLogLine : AnalyticsDataClass
 }
 
 // Declare here new AnalyticsDataClasses for every table file output you desire.
+public enum AudioGuideState { Started, Finished, Skipped }
+
+public class AudioGuideTimingData : AnalyticsDataClass
+{
+    public string TableName => "AudioGuideTiming";
+    public float LogTime;
+    public string AudioGuideName;
+    public AudioGuideState State;
+
+    public AudioGuideTimingData(string audioGuideName, AudioGuideState state)
+    {
+        LogTime = Time.time;
+        AudioGuideName = audioGuideName;
+        State = state;
+    }
+
+}
 
 #endregion
 
@@ -44,7 +61,7 @@ public class TXRDataManager : TXRSingleton<TXRDataManager>
     #region Analytics Data Classes
     // declare pointers for all experience-specific analytics classes
     private AnalyticsLogLine logLine;
-
+    private AudioGuideTimingData audioGuideTimingData;
     // write additional events here..
 
 
@@ -52,6 +69,11 @@ public class TXRDataManager : TXRSingleton<TXRDataManager>
 
     #region Project Specific Analytics Reporters
     // Write here all the functions you'll want to use to report relevant data.
+    public void ReportAudioGuideTiming(string audioGuideName, AudioGuideState state)
+    {
+        analyticsWriter.WriteAnalyticsDataFile(new AudioGuideTimingData(audioGuideName, state));
+    }
+
 
     // log a new string line with the time logged to TAUXR_Logs file.
     public void LogLineToFile(string line)
@@ -101,12 +123,12 @@ public class TXRDataManager : TXRSingleton<TXRDataManager>
     // default data export on false in editor. always export on build.
     private bool ShouldExportData()
     {
-		if (Application.isEditor && !shouldExport)
-		{
-			Debug.Log("Data Manager won't export data because it is running in editor. To export, manually enable ShouldExport");
-		}
-		return shouldExport || !Application.isEditor;
-	}
+        if (Application.isEditor && !shouldExport)
+        {
+            Debug.Log("Data Manager won't export data because it is running in editor. To export, manually enable ShouldExport");
+        }
+        return shouldExport || !Application.isEditor;
+    }
 
     void FixedUpdate()
     {

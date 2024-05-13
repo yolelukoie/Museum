@@ -8,6 +8,7 @@ public class FloatingBoard : MonoBehaviour
     [SerializeField]
     private TXRButtonTouch ContinueButton;
 
+
     public async UniTask ShowTextUntilContinue(string text)
     {
         SetText(text);
@@ -20,16 +21,20 @@ public class FloatingBoard : MonoBehaviour
     }
 
 
-    //TODO update to TextPopUp's Show() and Hide() methods
+
     private async UniTask ShowUntilContinuePressed()
     {
-        board.gameObject.SetActive(true);
-        ContinueButton.gameObject.SetActive(true);
-        await ContinueButton.WaitForButtonPress();
+        board.Show();
+        //ContinueButton.gameObject.SetActive(true);
+        ContinueButton.SetState(ButtonState.Interactable);
 
-        //replace with a fade out animation TODO
-        board.gameObject.SetActive(false);
-        ContinueButton.gameObject.SetActive(false);
+        print("FloatingBoard: ShowUntilContinuePressed() before WaitForButtonPress");
+        await ContinueButton.WaitForButtonPress();
+        print("FloatingBoard: ShowUntilContinuePressed() after WaitForButtonPress");
+
+        board.Hide();
+        //ContinueButton.gameObject.SetActive(false);
+        ContinueButton.SetState(ButtonState.Hidden);
     }
 
 

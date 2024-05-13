@@ -1,16 +1,11 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using Cysharp.Threading.Tasks;
-using Shapes;
-using UnityEngine;
 using TMPro;
+using UnityEngine;
 
 public class TextPopUp : MonoBehaviour
 {
     [SerializeField] private TextPopUpReferences _textPopUpReferences;
     [SerializeField] private ETextPopUpState _startingState;
-    [TextArea(1, 10)] [SerializeField] private string _text;
+    [TextArea(1, 10)][SerializeField] private string _text;
 
     [SerializeField] private TextPopUpTextsConfigurationsScriptableObject _textConfigurations;
 

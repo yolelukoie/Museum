@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7691344890528863867}
   - component: {fileID: 8288052908884547444}
-  - component: {fileID: 7647395166678650003}
+  - component: {fileID: 5885087391639894375}
   m_Layer: 0
   m_Name: ImageAnswerB
   m_TagString: Untagged
@@ -46,7 +46,7 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 748337206411480791}
   m_CullTransparentMesh: 1
---- !u!114 &7647395166678650003
+--- !u!114 &5885087391639894375
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -55,7 +55,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 748337206411480791}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 34d817c14b80bd24ca2c8276d3570770, type: 3}
+  m_Script: {fileID: 11500000, guid: 8c3f2467b968fda43ba1eeaffcfc575f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _image: {fileID: 3811274268882978273}
@@ -268,7 +268,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0.24409698, y: 0.04438127}
+  m_SizeDelta: {x: 0.54160255, y: 0.09847319}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!23 &8619792478561333875
 MeshRenderer:
@@ -332,7 +332,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'In front you are two images. press on the image that you prefer:'
+  m_text: 'In front you are two images. Click on the image that you prefer:'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: f75b6952568eb244ea15495febc34083, type: 2}
   m_sharedMaterial: {fileID: 6012080355370164626, guid: f75b6952568eb244ea15495febc34083,
@@ -1246,7 +1246,7 @@ MonoBehaviour:
   _extendWidthOnly: 0
   _extendHeightOnly: 0
   _autoScaleWhenChangingTextInInspector: 1
-  Text: Im a Question
+  Text: 'In front you are two images. Click on the image that you prefer:'
 --- !u!114 &2260593492294968960
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1617,7 +1617,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8823639986204883607}
   - component: {fileID: 5140633634772963698}
-  - component: {fileID: 2438682740496728044}
+  - component: {fileID: 1263822796504754191}
   m_Layer: 0
   m_Name: BinaryQuestion
   m_TagString: Untagged
@@ -1666,7 +1666,7 @@ MonoBehaviour:
   lerpSpeed: 4
   _minDistanceToControl: 0.1
   _angleOffset: 5
---- !u!114 &2438682740496728044
+--- !u!114 &1263822796504754191
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1675,12 +1675,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 4488005439555279295}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d639323482b60c34dba79253240c80b8, type: 3}
+  m_Script: {fileID: 11500000, guid: 677dfda0861691549a1e24b0ed636ed1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  QuestionText: 'In front you are two images. Click on the image that you prefer:'
-  ImageAnswerA: {fileID: 0}
-  ImageAnswerB: {fileID: 0}
+  QuestionText: 'In front of you are two images, click on the image that you prefer:'
+  ImageAnswerA: {fileID: 2800000, guid: 32f51198dd8fb9e4283efae2d0b6d950, type: 3}
+  ImageAnswerB: {fileID: 2800000, guid: 409caa4d6c3fb1449b308ba2e114ee7b, type: 3}
 --- !u!1 &5687567153561386761
 GameObject:
   m_ObjectHideFlags: 0
@@ -2180,8 +2180,8 @@ MonoBehaviour:
   stencilReadMask: 255
   stencilWriteMask: 255
   pivot: 1
-  width: 0.544097
-  height: 0.14438127
+  width: 0.84160256
+  height: 0.19847319
   type: 3
   cornerRadiusMode: 0
   cornerRadii: {x: 0.04, y: 0.04, z: 0.04, w: 0.04}
@@ -2893,7 +2893,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8708021765968682418}
   - component: {fileID: 7709951240062830175}
-  - component: {fileID: 8301050954510106949}
+  - component: {fileID: 595132888822220538}
   m_Layer: 0
   m_Name: ImageAnswerA
   m_TagString: Untagged
@@ -2929,7 +2929,7 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8860012945149310392}
   m_CullTransparentMesh: 1
---- !u!114 &8301050954510106949
+--- !u!114 &595132888822220538
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2938,7 +2938,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 8860012945149310392}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 34d817c14b80bd24ca2c8276d3570770, type: 3}
+  m_Script: {fileID: 11500000, guid: 8c3f2467b968fda43ba1eeaffcfc575f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _image: {fileID: 2379993723816878249}
