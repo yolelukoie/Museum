@@ -50,6 +50,7 @@ public class TXRButtonTouch : MonoBehaviour
     [SerializeField] private AudioSource soundPress;
     [SerializeField] private AudioSource soundRelease;
 
+    [SerializeField]
     private TXRButtonVisuals visuals;
     private bool isPressed = false;
     private bool isHovered = false;
@@ -57,11 +58,29 @@ public class TXRButtonTouch : MonoBehaviour
     public Action<Transform> PressTransform;
     private TaskCompletionSource<bool> _buttonPressedTcs;
 
+    //added:
+    [SerializeField]
+    private TMPro.TextMeshPro textComponent;
+
+    public void SetText(String text)
+    {
+        textComponent.text = text;
+
+        print("Set button text to: " + text + " textComponent: " + textComponent);
+    }
+
+    public void TextInit()
+    {
+        textComponent = ComponentChecker.GetComponentInAllChildren<TMPro.TextMeshPro>(transform);
+    }
+
+
     void Start()
     {
         visuals = GetComponent<TXRButtonVisuals>();
         lastState = state;
         SetState(state);
+        textComponent = ComponentChecker.GetComponentInAllChildren<TMPro.TextMeshPro>(transform);
     }
 
     void Update()

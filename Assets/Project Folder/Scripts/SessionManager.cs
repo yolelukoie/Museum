@@ -8,9 +8,11 @@ public class SessionManager : TXRSingleton<SessionManager>
     //private int _currentRound;
 
     private FloatingBoard _floatingBoard;
+    private MultiChoiceQuestion _multiChoiceQuestion;
     private List<Piece> _pieces;
+    private bool _activeTour = true;
 
-
+    List<List<String>> activeTourQuestions = new List<List<String>>();
 
     //If there is a higher level flow manager, remove this and use his start method
     private void Start()
@@ -18,25 +20,42 @@ public class SessionManager : TXRSingleton<SessionManager>
         RunSessionFlow().Forget();
     }
 
+
+    private void InitActiveTourQuestionsList()
+    {
+        activeTourQuestions.Add(new List<String> { "What would you like to see next?", "Art piece from beggining of 20th century", "phobistic art piece", "dutch artist" });
+        activeTourQuestions.Add(new List<String> { "What would you like to see next?", "landscape painting", "an artist from paris", "Cubist art" });
+        activeTourQuestions.Add(new List<String> { "What would you like to see next?", "Expressionist painting", "Abstract painting", "Art created in 2nd world war" });
+        activeTourQuestions.Add(new List<String> { "What would you like to see next?", "a swiss artist", "Multidisciplinary artist", "an artist from paris" });
+        activeTourQuestions.Add(new List<String> { "What would you like to see next?", "A painting that refers to the art of sculpture", "Surreal art", "Of a greek artist" });
+        activeTourQuestions.Add(new List<String> { "What would you like to see next?", "Dada art", "an Israeli artist", "Defined art" });
+        activeTourQuestions.Add(new List<String> { "What would you like to see next?", "Intimate portrait", "a spanish artist", "colorful & strong art piece" });
+        activeTourQuestions.Add(new List<String> { "What would you like to see next?", "a swiss artist", "Multidisciplinary artist", "an artist from paris" });
+    }
+
     public async UniTask RunSessionFlow()
     {
         StartSession();
         //this is where our flow goes
 
+        await _floatingBoard.ShowTextUntilContinue("Welcome to the simulation. \n An arrow above the paintings will show you the next step in your tour.");
+        await _floatingBoard.ShowTextUntilContinue("Next to each painting you can see a button that plays a brief explanation about it. You can press the button by simply touching it with your hand. If you want to skip the recording, press the same button again.");
+        await _floatingBoard.ShowTextUntilContinue("Afterwards, in order to best match the next artwork for you, you will need to choose from a number of options what you would like to see next.In this way, you will tour between 8 artworks in the collection.)");
 
 
-        await _floatingBoard.ShowTextUntilContinue("Hi! Here are some Instructions...press continue");
-        await _floatingBoard.ShowTextUntilContinue("Instructions 2...press continue");
 
         foreach (Piece p in _pieces)
         {
+            if (_activeTour)
+            {
+                await _multiChoiceQuestion.SetQuestionAndWaitForAnswer(activeTourQuestions[_pieces.IndexOf(p)][0], activeTourQuestions[_pieces.IndexOf(p)][1], activeTourQuestions[_pieces.IndexOf(p)][2], activeTourQuestions[_pieces.IndexOf(p)][3]);
+            }
             p.arrow.gameObject.SetActive(true);
             await _floatingBoard.ShowTextUntilContinue("Follow the arrow to the next piece");
             await p.audioGuideButton.WaitForAudioGuideToFinish();
             p.arrow.gameObject.SetActive(false);
         }
-
-        await _floatingBoard.ShowTextUntilContinue("Finished");
+        await _floatingBoard.ShowTextUntilContinue("Thank you for participating!");
 
 
 
@@ -50,28 +69,24 @@ public class SessionManager : TXRSingleton<SessionManager>
 
         EndSession();
     }
-
-
     private void StartSession()
     {
         // setup session initial conditions.
+        InitActiveTourQuestionsList();
         _floatingBoard = SceneReferencer.Instance.floatingBoard;
         _pieces = SceneReferencer.Instance.pieces;
-
+        _multiChoiceQuestion = SceneReferencer.Instance.multiChoiceQuestion;
         foreach (Piece p in _pieces)
         {
             p.arrow.gameObject.SetActive(false);
         }
-
+        _multiChoiceQuestion.gameObject.SetActive(false);
 
     }
-
-
     private void EndSession()
     {
         // setup end session conditions
     }
-
     private async UniTask BetweenRoundsFlow()
     {
         await UniTask.Yield();

@@ -9,17 +9,29 @@ public class MultichoiceAnswer : MonoBehaviour
 
     public static UnityEvent<string> OnAnswerSelected = new UnityEvent<string>();
 
-
-    void Start()
+    private void Start()
     {
-        button = GetComponentInChildren<TXRButtonTouch>();
-        button.Released.AddListener(() => SelectAnswer(answerText));
+        Init();
+    }
 
+    void Init()
+    {
+        button = GetComponentInChildren<TXRButtonTouch>(true);
+        button.Released.AddListener(() => SelectAnswer(answerText));
+        button.TextInit();
     }
 
 
     void SelectAnswer(string selectedAnswer)
     {
         OnAnswerSelected.Invoke(selectedAnswer);
+    }
+
+    internal void SetText(string answer)
+    {
+        Init();
+
+        button.SetText(answer);
+        answerText = answer;
     }
 }
