@@ -12,7 +12,8 @@ public class BinaryAnswer : MonoBehaviour
     public float imageFixedWidth = 0.5f;
 
     private float _imageToColliderScalar = 15f;
-
+    //TODO: FIX FOR BUILDDDDDD
+#if UNITY_EDITOR
     void Start()
     {
         ResizeImage();
@@ -44,6 +45,8 @@ public class BinaryAnswer : MonoBehaviour
         float newHeight = (float)newWidth / aspectRatio;
         _image.rectTransform.sizeDelta = new Vector2(newWidth, newHeight);
     }
+
+
 
     private void MatchCollidersSizeToImage()
     {
@@ -78,5 +81,5 @@ public class BinaryAnswer : MonoBehaviour
     }
 
 
-
+#endif
 }

@@ -12,8 +12,8 @@ PlayerSettings:
   targetDevice: 2
   useOnDemandResources: 0
   accelerometerFrequency: 60
-  companyName: TAUXR Studio
-  productName: TAUXR Template - Quest URP
+  companyName: S-Lab
+  productName: Museum Tour
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
   m_SplashScreenBackgroundColor: {r: 0.13725491, g: 0.12156863, b: 0.1254902, a: 1}
@@ -162,7 +162,7 @@ PlayerSettings:
   androidSupportedAspectRatio: 1
   androidMaxAspectRatio: 2.1
   applicationIdentifier:
-    Android: com.TAUXRStudio.TAUXRTemplateQuestURP
+    Android: com.SLab.MuseumTour
     Standalone: com.TAUXR-Studio.TAUXR-Template---Quest-URP
   buildNumber:
     Standalone: 0
@@ -898,7 +898,13 @@ PlayerSettings:
   XboxOneOverrideIdentityName: 
   XboxOneOverrideIdentityPublisher: 
   vrEditorSettings: {}
-  cloudServicesEnabled: {}
+  cloudServicesEnabled:
+    Build: 0
+    Game Performance: 0
+    Legacy Analytics: 0
+    Purchasing: 0
+    UDP: 0
+    Unity Ads: 0
   luminIcon:
     m_Name: 
     m_ModelFolderPath: 
@@ -918,11 +924,11 @@ PlayerSettings:
   apiCompatibilityLevel: 6
   activeInputHandler: 0
   windowsGamepadBackendHint: 0
-  cloudProjectId: 5a82e2c9-a54d-493e-8415-1288d83b6088
+  cloudProjectId: 973bdac4-ccc4-4c7a-9ca6-d6ee832f3c44
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
-  projectName: Museum-Tour-VR-main
-  organizationId: yolelukoie
+  projectName: Museum Tour
+  organizationId: noa_s-lab
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 0
   hmiLoadingImage: {fileID: 0}

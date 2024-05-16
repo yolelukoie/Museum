@@ -1,4 +1,5 @@
 using Cysharp.Threading.Tasks;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -65,6 +66,7 @@ public class MultiChoiceQuestion : MonoBehaviour, Question
         Show();
         InitAnswers();
         setQuestion(question, answer1, answer2, answer3);
+        await UniTask.Delay(TimeSpan.FromSeconds(2));
         await WaitForAnswer();
 
         Hide();

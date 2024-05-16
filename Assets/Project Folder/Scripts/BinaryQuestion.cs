@@ -15,7 +15,7 @@ public class BinaryQuestion : MonoBehaviour, Question
     {
         throw new System.NotImplementedException();
     }
-
+#if UNITY_EDITOR
     void Start()
     {
 
@@ -53,5 +53,5 @@ public class BinaryQuestion : MonoBehaviour, Question
         _answerA.gameObject.SetActive(true);
         _answerB.gameObject.SetActive(true);
     }
-
+#endif // UNITY_EDITOR
 }
