@@ -10,6 +10,9 @@ using UnityEngine.Events;
  * - refactor input processing to another script and get rid of the hovera and press colliders
  */
 
+
+// TO BE DELETED AFTER TESTING NEW BUTTON!!!
+
 public class TXRButtonTouch : MonoBehaviour
 {
     public ButtonState State => state;
@@ -104,15 +107,15 @@ public class TXRButtonTouch : MonoBehaviour
     {
         switch (state)
         {
-            case ButtonState.Hidden:
-                visuals.Hide();
-                break;
-            case ButtonState.Disabled:
-                visuals.Disabled();
-                break;
-            case ButtonState.Interactable:
-                visuals.Active();
-                break;
+            //case ButtonState.Hidden:
+            //    visuals.Hide();
+            //    break;
+            //case ButtonState.Disabled:
+            //    visuals.Disabled();
+            //    break;
+            //case ButtonState.Interactable:
+            //    visuals.Active();
+            //    break;
         }
 
         this.state = state;
@@ -204,7 +207,7 @@ public class TXRButtonTouch : MonoBehaviour
     {
         isHovered = true;
         PlaySound(soundHoverEnter);
-        visuals.Hover();
+        //visuals.Hover();
     }
 
     // called from button collider
@@ -249,7 +252,7 @@ public class TXRButtonTouch : MonoBehaviour
         isHovered = false;
         activeToucher = null;
         PlaySound(soundHoverExit);
-        visuals.Active();
+        //visuals.Active();
     }
 
     // called from the UnityEvent on the press collider
@@ -274,7 +277,7 @@ public class TXRButtonTouch : MonoBehaviour
         }
 
         PlaySound(soundPress);
-        visuals.Press();
+        //visuals.Press();
     }
 
     // called from the UnityEvent on the press collider
@@ -291,7 +294,7 @@ public class TXRButtonTouch : MonoBehaviour
     {
         isPressed = false;
         PlaySound(soundRelease);
-        visuals.Active();
+        //visuals.Active();
     }
 
     // added as a quick fix for bug where title on sun nav wouldn't clear active toucher after touch (probably because it moves immediately to keyboard position.
@@ -311,8 +314,3 @@ public class TXRButtonTouch : MonoBehaviour
 }
 
 
-
-
-public enum ButtonColliderResponse { Both, Internal, External, None }
-public enum ButtonEvent { HoverEnter, Pressed, Released, HoverExit }
-public enum ButtonState { Hidden, Disabled, Interactable }

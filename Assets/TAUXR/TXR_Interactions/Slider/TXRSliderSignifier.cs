@@ -1,12 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public enum SliderSignifier{ HoverIn, HoverOut, ButtonPress, ButtonRelease, BeforeRating, AfterRating }
+public enum SliderSignifier { HoverIn, HoverOut, ButtonPress, ButtonRelease, BeforeRating, AfterRating }
 public class TXRSliderSignifier : MonoBehaviour
 {
-    [SerializeField] TXRButtonTouch sliderButton;
+    [SerializeField] TXRButton sliderButton;
 
 
     public UnityEvent IdlePreRating;

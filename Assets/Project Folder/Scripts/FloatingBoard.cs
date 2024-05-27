@@ -6,7 +6,7 @@ public class FloatingBoard : MonoBehaviour
     [SerializeField]
     private TextPopUp board;
     [SerializeField]
-    private TXRButtonTouch ContinueButton;
+    private TXRButton ContinueButton;
 
 
     public async UniTask ShowTextUntilContinue(string text)

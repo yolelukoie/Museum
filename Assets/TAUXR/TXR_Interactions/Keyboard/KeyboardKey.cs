@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
@@ -9,11 +7,11 @@ public class KeyboardKey : MonoBehaviour
 
     [SerializeField] KeyboardKeyType type;
     string character;
-    TXRButtonTouch btn;
+    TXRButton btn;
     TXRKeyboard keyboard;
     private void Awake()
     {
-        btn = GetComponent<TXRButtonTouch>();
+        btn = GetComponent<TXRButton>();
         btn.Pressed.AddListener(OnKeyPressed);
         btn.PressTransform += OnCharacterPressed;
         if (type == KeyboardKeyType.Character)
@@ -24,7 +22,7 @@ public class KeyboardKey : MonoBehaviour
 
     private void OnCharacterPressed(Transform toucher)
     {
-        keyboard.CharPressed(character,toucher);
+        keyboard.CharPressed(character, toucher);
     }
 
     private void OnKeyPressed()

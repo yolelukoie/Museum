@@ -8,11 +8,17 @@ public class SceneReferencer : TXRSingleton<SceneReferencer>
     //[Header("Configurations")]
 
 
-    //[Header("Objects")]
+
     [Header("Art Pieces")]
     public List<Piece> pieces;
+    [Header("Active Tour Questions")]
+    public List<SerializedMultichoiceQuestion> questions;
+    [Header("Beginning Instructions")]
+    [TextArea(3, 10)]
+    public List<string> instructions;
 
-    [Space(10)]
+    [Space(20)]
+    [Header("Game Objects")]
     public FloatingBoard floatingBoard;
     public MultiChoiceQuestion multiChoiceQuestion;
 
