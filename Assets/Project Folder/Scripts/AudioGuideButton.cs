@@ -11,7 +11,7 @@ public class AudioGuideButton : MonoBehaviour
 {
     private Piece _piece;
     private AudioSource _audioGuideSource;
-    private TXRButtonTouch _txrButtonTouch;
+    private TXRButton _txrButtonTouch;
     private bool _isPlaying = false;
 
     public UnityEvent guideSkipped;
@@ -21,7 +21,7 @@ public class AudioGuideButton : MonoBehaviour
     private void Start()
     {
         _audioGuideSource = GetComponent<AudioSource>();
-        _txrButtonTouch = GetComponent<TXRButtonTouch>();
+        _txrButtonTouch = GetComponent<TXRButton>();
         _piece = GetComponentInParent<Piece>();
         _audioGuideSource.clip = _piece.audioGuideClip;
 

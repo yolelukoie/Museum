@@ -23,26 +23,28 @@ public class SessionManager : TXRSingleton<SessionManager>
 
     private void InitActiveTourQuestionsList()
     {
-        activeTourQuestions.Add(new List<String> { "What would you like to see next?", "Art piece from beggining of 20th century", "phobistic art piece", "dutch artist" });
-        activeTourQuestions.Add(new List<String> { "What would you like to see next?", "landscape painting", "an artist from paris", "Cubist art" });
-        activeTourQuestions.Add(new List<String> { "What would you like to see next?", "Expressionist painting", "Abstract painting", "Art created in 2nd world war" });
-        activeTourQuestions.Add(new List<String> { "What would you like to see next?", "a swiss artist", "Multidisciplinary artist", "an artist from paris" });
-        activeTourQuestions.Add(new List<String> { "What would you like to see next?", "A painting that refers to the art of sculpture", "Surreal art", "Of a greek artist" });
-        activeTourQuestions.Add(new List<String> { "What would you like to see next?", "Dada art", "an Israeli artist", "Defined art" });
-        activeTourQuestions.Add(new List<String> { "What would you like to see next?", "Intimate portrait", "a spanish artist", "colorful & strong art piece" });
-        activeTourQuestions.Add(new List<String> { "What would you like to see next?", "a swiss artist", "Multidisciplinary artist", "an artist from paris" });
+        List<SerializedMultichoiceQuestion> MultichoiceQuestions = SceneReferencer.Instance.questions;
+        foreach (SerializedMultichoiceQuestion q in MultichoiceQuestions)
+        {
+            activeTourQuestions.Add(new List<String> { q.Question, q.Answer1, q.Answer2, q.Answer3 });
+        }
+
+        //REMOVE AFTER COPYING QUESTIONS:
+        //activeTourQuestions.Add(new List<String> { "What would you like to see next?", "Art piece from beggining of 20th century", "phobistic art piece", "dutch artist" });
+        //activeTourQuestions.Add(new List<String> { "What would you like to see next?", "landscape painting", "an artist from paris", "Cubist art" });
+        //activeTourQuestions.Add(new List<String> { "What would you like to see next?", "Expressionist painting", "Abstract painting", "Art created in 2nd world war" });
+        //activeTourQuestions.Add(new List<String> { "What would you like to see next?", "a swiss artist", "Multidisciplinary artist", "an artist from paris" });
+        //activeTourQuestions.Add(new List<String> { "What would you like to see next?", "A painting that refers to the art of sculpture", "Surreal art", "Of a greek artist" });
+        //activeTourQuestions.Add(new List<String> { "What would you like to see next?", "Dada art", "an Israeli artist", "Defined art" });
+        //activeTourQuestions.Add(new List<String> { "What would you like to see next?", "Intimate portrait", "a spanish artist", "colorful & strong art piece" });
+        //activeTourQuestions.Add(new List<String> { "What would you like to see next?", "a swiss artist", "Multidisciplinary artist", "an artist from paris" });
     }
 
     public async UniTask RunSessionFlow()
     {
         StartSession();
-        //this is where our flow goes
 
-        await _floatingBoard.ShowTextUntilContinue("Welcome to the simulation. \n An arrow above the paintings will show you the next step in your tour.");
-        await _floatingBoard.ShowTextUntilContinue("Next to each painting you can see a button that plays a brief explanation about it. You can press the button by simply touching it with your hand. If you want to skip the recording, press the same button again.");
-        await _floatingBoard.ShowTextUntilContinue("Afterwards, in order to best match the next artwork for you, you will need to choose from a number of options what you would like to see next.In this way, you will tour between 8 artworks in the collection.)");
-
-
+        await ShowBeginningInstructions();
 
         foreach (Piece p in _pieces)
         {
@@ -92,5 +94,13 @@ public class SessionManager : TXRSingleton<SessionManager>
         await UniTask.Yield();
 
         throw new NotImplementedException();
+    }
+
+    private async UniTask ShowBeginningInstructions()
+    {
+        foreach (string instruction in SceneReferencer.Instance.instructions)
+        {
+            await _floatingBoard.ShowTextUntilContinue(instruction);
+        }
     }
 }

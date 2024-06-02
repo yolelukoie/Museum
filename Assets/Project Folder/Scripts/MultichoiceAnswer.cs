@@ -5,7 +5,7 @@ public class MultichoiceAnswer : MonoBehaviour
 {
 
     public string answerText;
-    public TXRButtonTouch button;
+    public TXRButton button;
 
     public static UnityEvent<string> OnAnswerSelected = new UnityEvent<string>();
 
@@ -16,7 +16,7 @@ public class MultichoiceAnswer : MonoBehaviour
 
     void Init()
     {
-        button = GetComponentInChildren<TXRButtonTouch>(true);
+        button = GetComponentInChildren<TXRButton>(true);
         button.Released.AddListener(() => SelectAnswer(answerText));
         button.TextInit();
     }
