@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18019, g: 0.2255916, b: 0.3067828, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028411, g: 0.22571464, b: 0.3069242, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -10457,36 +10457,36 @@ PrefabInstance:
         type: 3}
       propertyPath: pieces.Array.data[1]
       value: 
-      objectReference: {fileID: 1643070632}
+      objectReference: {fileID: 1347461795}
     - target: {fileID: 612552674921322229, guid: 56cb0481d0a95af4a8059ec0bd4b07c5,
         type: 3}
       propertyPath: pieces.Array.data[2]
       value: 
-      objectReference: {fileID: 1507242113}
+      objectReference: {fileID: 1631974006}
     - target: {fileID: 612552674921322229, guid: 56cb0481d0a95af4a8059ec0bd4b07c5,
         type: 3}
       propertyPath: pieces.Array.data[3]
       value: 
-      objectReference: {fileID: 886837087}
+      objectReference: {fileID: 1507242113}
     - target: {fileID: 612552674921322229, guid: 56cb0481d0a95af4a8059ec0bd4b07c5,
         type: 3}
       propertyPath: pieces.Array.data[4]
       value: 
-      objectReference: {fileID: 1631974006}
+      objectReference: {fileID: 2020798662}
     - target: {fileID: 612552674921322229, guid: 56cb0481d0a95af4a8059ec0bd4b07c5,
         type: 3}
       propertyPath: pieces.Array.data[5]
       value: 
-      objectReference: {fileID: 1347461795}
+      objectReference: {fileID: 886837087}
     - target: {fileID: 612552674921322229, guid: 56cb0481d0a95af4a8059ec0bd4b07c5,
         type: 3}
       propertyPath: pieces.Array.data[6]
       value: 
-      objectReference: {fileID: 2020798662}
+      objectReference: {fileID: 1643070632}
     - target: {fileID: 612552674921322229, guid: 56cb0481d0a95af4a8059ec0bd4b07c5,
         type: 3}
       propertyPath: questions.Array.size
-      value: 6
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 612552674921322229, guid: 56cb0481d0a95af4a8059ec0bd4b07c5,
         type: 3}
@@ -10535,116 +10535,22 @@ PrefabInstance:
         need to choose from a number of options what you would like to see next.
 
         In
-        this way, you will tour between 8 artworks in the collection.'
+        this way, you will tour between 8 artworks in the collection.)'
       objectReference: {fileID: 0}
     - target: {fileID: 612552674921322229, guid: 56cb0481d0a95af4a8059ec0bd4b07c5,
         type: 3}
       propertyPath: questions.Array.data[0].Answer1
-      value: "20-\u05D4 \u05D4\u05D0\u05DE\u05D4 \u05EA\u05D9\u05E9\u05D0\u05E8 \u05DC\u05E9
-        \u05D4\u05E4\u05D5\u05E8\u05D9\u05D0\u05DE \u05D4\u05E8\u05D9\u05E6\u05D9"
+      value: Art piece from beggining of 20th century
       objectReference: {fileID: 0}
     - target: {fileID: 612552674921322229, guid: 56cb0481d0a95af4a8059ec0bd4b07c5,
         type: 3}
       propertyPath: questions.Array.data[0].Answer2
-      value: "\u05EA\u05D9\u05D8\u05E1\u05D9\u05D1\u05D5\u05E4 \u05D4\u05E8\u05D9\u05E6\u05D9"
+      value: phobistic art piece
       objectReference: {fileID: 0}
     - target: {fileID: 612552674921322229, guid: 56cb0481d0a95af4a8059ec0bd4b07c5,
         type: 3}
       propertyPath: questions.Array.data[0].Answer3
-      value: "\u05D9\u05D3\u05E0\u05DC\u05D5\u05D4 \u05DF\u05DE\u05D0"
-      objectReference: {fileID: 0}
-    - target: {fileID: 612552674921322229, guid: 56cb0481d0a95af4a8059ec0bd4b07c5,
-        type: 3}
-      propertyPath: questions.Array.data[1].Answer1
-      value: "\u05E3\u05D5\u05E0 \u05E8\u05D5\u05D9\u05E6"
-      objectReference: {fileID: 0}
-    - target: {fileID: 612552674921322229, guid: 56cb0481d0a95af4a8059ec0bd4b07c5,
-        type: 3}
-      propertyPath: questions.Array.data[1].Answer2
-      value: "\u05D6\u05D9\u05E8\u05E4 \u05EA\u05DC\u05D5\u05DB\u05E1\u05D0\u05DE
-        \u05E8\u05D9\u05D9\u05E6"
-      objectReference: {fileID: 0}
-    - target: {fileID: 612552674921322229, guid: 56cb0481d0a95af4a8059ec0bd4b07c5,
-        type: 3}
-      propertyPath: questions.Array.data[1].Answer3
-      value: "\u05EA\u05D9\u05D8\u05E1\u05D9\u05D1\u05D5\u05E7  \u05EA\u05D5\u05E0\u05DE\u05D0"
-      objectReference: {fileID: 0}
-    - target: {fileID: 612552674921322229, guid: 56cb0481d0a95af4a8059ec0bd4b07c5,
-        type: 3}
-      propertyPath: questions.Array.data[2].Answer1
-      value: "\u05D9\u05D8\u05E1\u05D9\u05E0\u05D5\u05D9\u05E1\u05E8\u05E4\u05E1\u05E7\u05D0
-        \u05E8\u05D5\u05D9\u05E6"
-      objectReference: {fileID: 0}
-    - target: {fileID: 612552674921322229, guid: 56cb0481d0a95af4a8059ec0bd4b07c5,
-        type: 3}
-      propertyPath: questions.Array.data[2].Answer2
-      value: "\u05D8\u05E9\u05E4\u05D5\u05DE \u05E8\u05D5\u05D9\u05E6"
-      objectReference: {fileID: 0}
-    - target: {fileID: 612552674921322229, guid: 56cb0481d0a95af4a8059ec0bd4b07c5,
-        type: 3}
-      propertyPath: questions.Array.data[2].Answer3
-      value: "\u05D4\u05D9\u05E0\u05E9\u05D4 \u05DD\u05DC\u05D5\u05E2\u05D4 \u05EA\u05DE\u05D7\u05DC\u05DE
-        \u05D9\u05E8\u05D7\u05D0 \u05D4\u05E8\u05E6\u05D5\u05E0\u05E9 \u05EA\u05D5\u05E0\u05DE\u05D0"
-      objectReference: {fileID: 0}
-    - target: {fileID: 612552674921322229, guid: 56cb0481d0a95af4a8059ec0bd4b07c5,
-        type: 3}
-      propertyPath: questions.Array.data[3].Answer1
-      value: "\u05D9\u05E8\u05E6\u05D9\u05D5\u05D5\u05E9 \u05DF\u05DE\u05D0"
-      objectReference: {fileID: 0}
-    - target: {fileID: 612552674921322229, guid: 56cb0481d0a95af4a8059ec0bd4b07c5,
-        type: 3}
-      propertyPath: questions.Array.data[3].Answer2
-      value: "\u05D9\u05DE\u05D5\u05D7\u05EA \u05D1\u05E8 \u05DF\u05DE\u05D0"
-      objectReference: {fileID: 0}
-    - target: {fileID: 612552674921322229, guid: 56cb0481d0a95af4a8059ec0bd4b07c5,
-        type: 3}
-      propertyPath: questions.Array.data[3].Answer3
-      value: "\u05D6\u05D9\u05E8\u05E4\u05D1 \u05DC\u05E2\u05E4\u05E9 \u05DF\u05DE\u05D0"
-      objectReference: {fileID: 0}
-    - target: {fileID: 612552674921322229, guid: 56cb0481d0a95af4a8059ec0bd4b07c5,
-        type: 3}
-      propertyPath: questions.Array.data[4].Answer1
-      value: "\u05D0\u05D3\u05D0\u05D3\u05D4 \u05DD\u05E8\u05D6\u05DE \u05EA\u05D5\u05E0\u05DE\u05D0"
-      objectReference: {fileID: 0}
-    - target: {fileID: 612552674921322229, guid: 56cb0481d0a95af4a8059ec0bd4b07c5,
-        type: 3}
-      propertyPath: questions.Array.data[4].Answer2
-      value: "\u05D9\u05DC\u05D0\u05E8\u05E9\u05D9 \u05DF\u05DE\u05D0"
-      objectReference: {fileID: 0}
-    - target: {fileID: 612552674921322229, guid: 56cb0481d0a95af4a8059ec0bd4b07c5,
-        type: 3}
-      propertyPath: questions.Array.data[4].Answer3
-      value: "\u05EA\u05E8\u05D3\u05D2\u05D5\u05DE \u05EA\u05D5\u05E0\u05DE\u05D0"
-      objectReference: {fileID: 0}
-    - target: {fileID: 612552674921322229, guid: 56cb0481d0a95af4a8059ec0bd4b07c5,
-        type: 3}
-      propertyPath: questions.Array.data[5].Answer1
-      value: "\u05D9\u05DE\u05D9\u05D8\u05E0\u05D9\u05D0 \u05DF\u05E7\u05D5\u05D9\u05D3"
-      objectReference: {fileID: 0}
-    - target: {fileID: 612552674921322229, guid: 56cb0481d0a95af4a8059ec0bd4b07c5,
-        type: 3}
-      propertyPath: questions.Array.data[5].Answer2
-      value: "\u05D9\u05D3\u05E8\u05E4\u05E1 \u05DF\u05DE\u05D0"
-      objectReference: {fileID: 0}
-    - target: {fileID: 612552674921322229, guid: 56cb0481d0a95af4a8059ec0bd4b07c5,
-        type: 3}
-      propertyPath: questions.Array.data[5].Answer3
-      value: "\u05EA\u05D5\u05D9\u05E0\u05D5\u05E2\u05D1\u05E6 \u05DD\u05E2 \u05D4\u05E8\u05D9\u05E6\u05D9"
-      objectReference: {fileID: 0}
-    - target: {fileID: 612552674921322229, guid: 56cb0481d0a95af4a8059ec0bd4b07c5,
-        type: 3}
-      propertyPath: questions.Array.data[6].Answer1
-      value: "\u05DC\u05E2\u05E4\u05E9 \u05DF\u05DE\u05D0"
-      objectReference: {fileID: 0}
-    - target: {fileID: 612552674921322229, guid: 56cb0481d0a95af4a8059ec0bd4b07c5,
-        type: 3}
-      propertyPath: questions.Array.data[6].Answer2
-      value: "\u05D9\u05DE\u05D5\u05D7\u05EA \u05D1\u05E8 \u05DF\u05DE\u05D0"
-      objectReference: {fileID: 0}
-    - target: {fileID: 612552674921322229, guid: 56cb0481d0a95af4a8059ec0bd4b07c5,
-        type: 3}
-      propertyPath: questions.Array.data[6].Answer3
-      value: "\u05D9\u05E8\u05E6\u05D9\u05D5\u05D5\u05E9 \u05DF\u05DE\u05D0"
+      value: dutch artist
       objectReference: {fileID: 0}
     - target: {fileID: 612552674921322229, guid: 56cb0481d0a95af4a8059ec0bd4b07c5,
         type: 3}
