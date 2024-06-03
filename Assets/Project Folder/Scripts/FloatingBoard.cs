@@ -25,16 +25,16 @@ public class FloatingBoard : MonoBehaviour
     private async UniTask ShowUntilContinuePressed()
     {
         board.Show();
-        //ContinueButton.gameObject.SetActive(true);
-        ContinueButton.SetState(ButtonState.Interactable);
+        ContinueButton.gameObject.SetActive(true);
+        //ContinueButton.SetState(ButtonState.Interactable);
 
         print("FloatingBoard: ShowUntilContinuePressed() before WaitForButtonPress");
         await ContinueButton.WaitForButtonPress();
         print("FloatingBoard: ShowUntilContinuePressed() after WaitForButtonPress");
 
         board.Hide();
-        //ContinueButton.gameObject.SetActive(false);
-        ContinueButton.SetState(ButtonState.Hidden);
+        ContinueButton.gameObject.SetActive(false);
+        //ContinueButton.SetState(ButtonState.Hidden);
     }
 
 

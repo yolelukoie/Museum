@@ -7,5 +7,4 @@ public class Piece : MonoBehaviour
     public AudioGuideButton audioGuideButton;
     public AudioClip audioGuideClip;
 
-
 }

@@ -23,8 +23,8 @@ public class AnalyticsLogLine : AnalyticsDataClass
 }
 
 // Declare here new AnalyticsDataClasses for every table file output you desire.
-public enum AudioGuideState { Started, Finished, Skipped }
 
+[Serializable]
 public class AudioGuideTimingData : AnalyticsDataClass
 {
     public string TableName => "AudioGuideTiming";
@@ -39,6 +39,27 @@ public class AudioGuideTimingData : AnalyticsDataClass
         State = state;
     }
 
+}
+[Serializable]
+public class QuestionsData : AnalyticsDataClass
+{
+    public string TableName => "QuestionsData";
+    public float LogTime;
+    public string Question;
+    public string Answer1;
+    public string Answer2;
+    public string Answer3;
+    public string ChosenAnswer;
+
+    public QuestionsData(string question, string answer1, string answer2, string answer3, string chosenAnswer)
+    {
+        LogTime = Time.time;
+        Question = question;
+        Answer1 = answer1;
+        Answer2 = answer2;
+        Answer3 = answer3;
+        ChosenAnswer = chosenAnswer;
+    }
 }
 
 #endregion
@@ -72,6 +93,10 @@ public class TXRDataManager : TXRSingleton<TXRDataManager>
     public void ReportAudioGuideTiming(string audioGuideName, AudioGuideState state)
     {
         analyticsWriter.WriteAnalyticsDataFile(new AudioGuideTimingData(audioGuideName, state));
+    }
+    public void ReportMultichoiceAnswer(string question, string answer1, string answer2, string answer3, string chosenAnswer)
+    {
+        analyticsWriter.WriteAnalyticsDataFile(new QuestionsData(question, answer1, answer2, answer3, chosenAnswer));
     }
 
 

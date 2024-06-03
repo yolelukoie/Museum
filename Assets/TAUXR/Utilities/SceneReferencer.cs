@@ -7,7 +7,7 @@ public class SceneReferencer : TXRSingleton<SceneReferencer>
 {
     //[Header("Configurations")]
 
-
+    public int NumberOfQuestionsInSemiActiveTour = 3;
 
     [Header("Art Pieces")]
     public List<Piece> pieces;
@@ -16,6 +16,8 @@ public class SceneReferencer : TXRSingleton<SceneReferencer>
     [Header("Beginning Instructions")]
     [TextArea(3, 10)]
     public List<string> instructions;
+    [TextArea(3, 10)]
+    public List<string> endInstructions;
 
     [Space(20)]
     [Header("Game Objects")]

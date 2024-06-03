@@ -184,6 +184,7 @@ public class TXRButton : MonoBehaviour
         PlaySound(References.SoundPress);
         visuals.SetState(EButtonAnimationState.Press);
         // Complete the task after button pressed
+        print("Button: OnPressedInternal");
         if (_buttonPressedTcs != null && !_buttonPressedTcs.Task.IsCompleted)
         {
             _buttonPressedTcs.SetResult(true);

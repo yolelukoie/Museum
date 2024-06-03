@@ -11,6 +11,7 @@ public class SessionManager : TXRSingleton<SessionManager>
     private MultiChoiceQuestion _multiChoiceQuestion;
     private List<Piece> _pieces;
     private bool _activeTour = true;
+    private ExperimentType _experimentType;
 
     List<List<String>> activeTourQuestions = new List<List<String>>();
 
@@ -29,45 +30,51 @@ public class SessionManager : TXRSingleton<SessionManager>
             activeTourQuestions.Add(new List<String> { q.Question, q.Answer1, q.Answer2, q.Answer3 });
         }
 
-        //REMOVE AFTER COPYING QUESTIONS:
-        //activeTourQuestions.Add(new List<String> { "What would you like to see next?", "Art piece from beggining of 20th century", "phobistic art piece", "dutch artist" });
-        //activeTourQuestions.Add(new List<String> { "What would you like to see next?", "landscape painting", "an artist from paris", "Cubist art" });
-        //activeTourQuestions.Add(new List<String> { "What would you like to see next?", "Expressionist painting", "Abstract painting", "Art created in 2nd world war" });
-        //activeTourQuestions.Add(new List<String> { "What would you like to see next?", "a swiss artist", "Multidisciplinary artist", "an artist from paris" });
-        //activeTourQuestions.Add(new List<String> { "What would you like to see next?", "A painting that refers to the art of sculpture", "Surreal art", "Of a greek artist" });
-        //activeTourQuestions.Add(new List<String> { "What would you like to see next?", "Dada art", "an Israeli artist", "Defined art" });
-        //activeTourQuestions.Add(new List<String> { "What would you like to see next?", "Intimate portrait", "a spanish artist", "colorful & strong art piece" });
-        //activeTourQuestions.Add(new List<String> { "What would you like to see next?", "a swiss artist", "Multidisciplinary artist", "an artist from paris" });
     }
 
     public async UniTask RunSessionFlow()
     {
         StartSession();
+        await OperatorsInit();
 
         await ShowBeginningInstructions();
 
         foreach (Piece p in _pieces)
         {
-            if (_activeTour)
+            int pieceIndex = _pieces.IndexOf(p);
+            switch (_experimentType)
             {
-                await _multiChoiceQuestion.SetQuestionAndWaitForAnswer(activeTourQuestions[_pieces.IndexOf(p)][0], activeTourQuestions[_pieces.IndexOf(p)][1], activeTourQuestions[_pieces.IndexOf(p)][2], activeTourQuestions[_pieces.IndexOf(p)][3]);
+                case ExperimentType.Active:
+                    await _multiChoiceQuestion.SetQuestionAndWaitForAnswer(activeTourQuestions[pieceIndex][0], activeTourQuestions[pieceIndex][1], activeTourQuestions[pieceIndex][2], activeTourQuestions[pieceIndex][3]);
+                    break;
+
+                case ExperimentType.Both:
+                    if (pieceIndex < (SceneReferencer.Instance.NumberOfQuestionsInSemiActiveTour - 1))
+                    {
+                        await _multiChoiceQuestion.SetQuestionAndWaitForAnswer(activeTourQuestions[pieceIndex][0], activeTourQuestions[pieceIndex][1], activeTourQuestions[pieceIndex][2], activeTourQuestions[pieceIndex][3]);
+                    }
+                    else if (pieceIndex == SceneReferencer.Instance.NumberOfQuestionsInSemiActiveTour)
+                    {
+                        //await _floatingBoard.ShowTextUntilContinue("You won't be asked what do wou want to see next from now on.");
+                    }
+                    break;
+
+                case ExperimentType.Passive:
+                    break;
             }
+
             p.arrow.gameObject.SetActive(true);
+            p.audioGuideButton.gameObject.SetActive(true);
+
             await _floatingBoard.ShowTextUntilContinue("Follow the arrow to the next piece");
             await p.audioGuideButton.WaitForAudioGuideToFinish();
+
             p.arrow.gameObject.SetActive(false);
+            p.audioGuideButton.gameObject.SetActive(false);
+
         }
-        await _floatingBoard.ShowTextUntilContinue("Thank you for participating!");
 
-
-
-        //while (_currentRound < _rounds.Length)
-        //{
-        //    await RoundManager.Instance.RunRoundFlow(_rounds[_currentRound]);
-        //    await BetweenRoundsFlow();
-        //    _currentRound++;
-        //}
-
+        await ShowEndInstructions();
 
         EndSession();
     }
@@ -81,6 +88,7 @@ public class SessionManager : TXRSingleton<SessionManager>
         foreach (Piece p in _pieces)
         {
             p.arrow.gameObject.SetActive(false);
+            p.audioGuideButton.gameObject.SetActive(false);
         }
         _multiChoiceQuestion.gameObject.SetActive(false);
 
@@ -101,6 +109,58 @@ public class SessionManager : TXRSingleton<SessionManager>
         foreach (string instruction in SceneReferencer.Instance.instructions)
         {
             await _floatingBoard.ShowTextUntilContinue(instruction);
+            await UniTask.Delay(TimeSpan.FromSeconds(1));
         }
     }
+
+    private async UniTask ShowEndInstructions()
+    {
+        foreach (string instruction in SceneReferencer.Instance.endInstructions)
+        {
+            await _floatingBoard.ShowTextUntilContinue(instruction);
+            await UniTask.Delay(TimeSpan.FromSeconds(1));
+        }
+    }
+
+    // experiment operator chooses type of experiment, etc
+    private async UniTask OperatorsInit()
+    {
+        //wait for calibration to finish
+        await _floatingBoard.ShowTextUntilContinue("Press continue when you finished calibrating");
+        await UniTask.Delay(TimeSpan.FromSeconds(1));
+        //set experiment type
+        MultichoiceAnswer.OnAnswerSelected.AddListener(processExperimentType);
+        await _multiChoiceQuestion.SetQuestionAndWaitForAnswer("Choose the type of experiment", "Active", "Passive", "Both");
+        MultichoiceAnswer.OnAnswerSelected.RemoveListener(processExperimentType);
+        await UniTask.Delay(TimeSpan.FromSeconds(1));
+        //validate with operator
+        await _floatingBoard.ShowTextUntilContinue("Starting " + _experimentType.ToString() + " tour");
+        await UniTask.Delay(TimeSpan.FromSeconds(1));
+    }
+
+    private void processExperimentType(string selectedAnswer)
+    {
+        switch (selectedAnswer)
+        {
+            case "Active":
+                _experimentType = ExperimentType.Active;
+                break;
+            case "Passive":
+                _experimentType = ExperimentType.Passive;
+                break;
+            case "Both":
+                _experimentType = ExperimentType.Both;
+                break;
+            default:
+                break;
+        }
+    }
+
+}
+
+public enum ExperimentType
+{
+    Active,
+    Passive,
+    Both
 }

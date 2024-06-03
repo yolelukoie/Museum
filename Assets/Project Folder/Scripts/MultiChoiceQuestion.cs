@@ -11,6 +11,11 @@ public class MultiChoiceQuestion : MonoBehaviour, Question
     private List<MultichoiceAnswer> _answers;
     private UniTaskCompletionSource<string> answerCompletionSource;
 
+    private string _question;
+    private string _answer1;
+    private string _answer2;
+    private string _answer3;
+
     private void InitAnswers()
     {
         _answers = new List<MultichoiceAnswer>();
@@ -31,8 +36,9 @@ public class MultiChoiceQuestion : MonoBehaviour, Question
         // Complete the UniTask when an answer is selected
         answerCompletionSource?.TrySetResult(selectedAnswer);
 
-        // TODO report selected answer
+
         Debug.Log("Selected answer: " + selectedAnswer);
+        TXRDataManager.Instance.ReportMultichoiceAnswer(_question, _answer1, _answer2, _answer3, selectedAnswer);
     }
 
 
@@ -43,6 +49,11 @@ public class MultiChoiceQuestion : MonoBehaviour, Question
         _answers[0].SetText(answer1);
         _answers[1].SetText(answer2);
         _answers[2].SetText(answer3);
+
+        _question = question;
+        _answer1 = answer1;
+        _answer2 = answer2;
+        _answer3 = answer3;
 
     }
 

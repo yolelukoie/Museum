@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.Events;
 
 
+public enum AudioGuideState { Started, Finished, Skipped }
 
 
 
@@ -13,6 +14,7 @@ public class AudioGuideButton : MonoBehaviour
     private AudioSource _audioGuideSource;
     private TXRButton _txrButtonTouch;
     private bool _isPlaying = false;
+    private bool _isSkipped = false;
 
     public UnityEvent guideSkipped;
 
@@ -36,6 +38,7 @@ public class AudioGuideButton : MonoBehaviour
         {
             _audioGuideSource.Play();
             _isPlaying = true;
+            TXRDataManager.Instance.ReportAudioGuideTiming(_piece.name, AudioGuideState.Started);
             return;
         }
 
@@ -44,8 +47,8 @@ public class AudioGuideButton : MonoBehaviour
         {
             _audioGuideSource.Stop();
             _isPlaying = false;
+            _isSkipped = true;
             guideSkipped.Invoke();
-
             return;
         }
 
@@ -64,11 +67,18 @@ public class AudioGuideButton : MonoBehaviour
     {
         //wait for player to hit play
         await new WaitUntil(() => _isPlaying == true);
+
         // wait for player to hit skip / audioguidefinished
         await new WaitUntil(() => _audioGuideSource.isPlaying == false);
 
-
-
+        if (_isSkipped)
+        {
+            TXRDataManager.Instance.ReportAudioGuideTiming(_piece.name, AudioGuideState.Skipped);
+        }
+        else
+        {
+            TXRDataManager.Instance.ReportAudioGuideTiming(_piece.name, AudioGuideState.Finished);
+        }
 
 
     }
@@ -84,3 +94,4 @@ public class AudioGuideButton : MonoBehaviour
 
 
 }
+
