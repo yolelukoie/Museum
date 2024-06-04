@@ -30,9 +30,9 @@ public class AudioGuideTimingData : AnalyticsDataClass
     public string TableName => "AudioGuideTiming";
     public float LogTime;
     public string AudioGuideName;
-    public AudioGuideState State;
+    public String State;
 
-    public AudioGuideTimingData(string audioGuideName, AudioGuideState state)
+    public AudioGuideTimingData(string audioGuideName, String state)
     {
         LogTime = Time.time;
         AudioGuideName = audioGuideName;
@@ -90,7 +90,7 @@ public class TXRDataManager : TXRSingleton<TXRDataManager>
 
     #region Project Specific Analytics Reporters
     // Write here all the functions you'll want to use to report relevant data.
-    public void ReportAudioGuideTiming(string audioGuideName, AudioGuideState state)
+    public void ReportAudioGuideTiming(string audioGuideName, String state)
     {
         analyticsWriter.WriteAnalyticsDataFile(new AudioGuideTimingData(audioGuideName, state));
     }

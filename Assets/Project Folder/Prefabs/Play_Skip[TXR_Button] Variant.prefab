@@ -86,11 +86,13 @@ PrefabInstance:
     - target: {fileID: 2914481266669485010, guid: 57ad22544a02ba249b521b357c7d5c08,
         type: 3}
       propertyPath: m_text
-      value: Play/ Skip
+      value: Play
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 768673785525378048, guid: 57ad22544a02ba249b521b357c7d5c08, type: 3}
     - {fileID: 7973432231621262242, guid: 57ad22544a02ba249b521b357c7d5c08, type: 3}
+    - {fileID: 8809082385711651190, guid: 57ad22544a02ba249b521b357c7d5c08, type: 3}
+    - {fileID: 3566622811339156458, guid: 57ad22544a02ba249b521b357c7d5c08, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:

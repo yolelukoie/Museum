@@ -8,4 +8,7 @@ public class Arrow : MonoBehaviour
     {
         this.transform.Translate(0, Mathf.Sin(Time.time) * _movementScalar, 0);
     }
+
+
+
 }

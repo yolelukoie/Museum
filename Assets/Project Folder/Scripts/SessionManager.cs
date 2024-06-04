@@ -4,16 +4,20 @@ using System.Collections.Generic;
 
 public class SessionManager : TXRSingleton<SessionManager>
 {
-    //[SerializeField] private Round[] _rounds;
-    //private int _currentRound;
+    const String ACTIVE_TYPE = "Type 1";
+    const String PASSIVE_TYPE = "Type 2";
+    const String BOTH_TYPE = "Type 3";
+
+    const int FIRST_PIECE_INDEX = 0;
 
     private FloatingBoard _floatingBoard;
     private MultiChoiceQuestion _multiChoiceQuestion;
     private List<Piece> _pieces;
-    private bool _activeTour = true;
-    private ExperimentType _experimentType;
+    private String _experimentType;
+    private int _maxQuestionsInSemiActiveTour;
 
     List<List<String>> activeTourQuestions = new List<List<String>>();
+
 
     //If there is a higher level flow manager, remove this and use his start method
     private void Start()
@@ -22,21 +26,10 @@ public class SessionManager : TXRSingleton<SessionManager>
     }
 
 
-    private void InitActiveTourQuestionsList()
-    {
-        List<SerializedMultichoiceQuestion> MultichoiceQuestions = SceneReferencer.Instance.questions;
-        foreach (SerializedMultichoiceQuestion q in MultichoiceQuestions)
-        {
-            activeTourQuestions.Add(new List<String> { q.Question, q.Answer1, q.Answer2, q.Answer3 });
-        }
-
-    }
-
     public async UniTask RunSessionFlow()
     {
         StartSession();
         await OperatorsInit();
-
         await ShowBeginningInstructions();
 
         foreach (Piece p in _pieces)
@@ -44,22 +37,16 @@ public class SessionManager : TXRSingleton<SessionManager>
             int pieceIndex = _pieces.IndexOf(p);
             switch (_experimentType)
             {
-                case ExperimentType.Active:
-                    await _multiChoiceQuestion.SetQuestionAndWaitForAnswer(activeTourQuestions[pieceIndex][0], activeTourQuestions[pieceIndex][1], activeTourQuestions[pieceIndex][2], activeTourQuestions[pieceIndex][3]);
+                case PASSIVE_TYPE:
                     break;
 
-                case ExperimentType.Both:
-                    if (pieceIndex < (SceneReferencer.Instance.NumberOfQuestionsInSemiActiveTour - 1))
+                // If the piece is not the first piece and the experiment type is active or both (but than the piece index is within the active range), show the question
+                case ACTIVE_TYPE:
+                case BOTH_TYPE:
+                    if ((pieceIndex > FIRST_PIECE_INDEX) & ((_experimentType == ACTIVE_TYPE) || (pieceIndex <= _maxQuestionsInSemiActiveTour)))
                     {
                         await _multiChoiceQuestion.SetQuestionAndWaitForAnswer(activeTourQuestions[pieceIndex][0], activeTourQuestions[pieceIndex][1], activeTourQuestions[pieceIndex][2], activeTourQuestions[pieceIndex][3]);
                     }
-                    else if (pieceIndex == SceneReferencer.Instance.NumberOfQuestionsInSemiActiveTour)
-                    {
-                        //await _floatingBoard.ShowTextUntilContinue("You won't be asked what do wou want to see next from now on.");
-                    }
-                    break;
-
-                case ExperimentType.Passive:
                     break;
             }
 
@@ -75,16 +62,20 @@ public class SessionManager : TXRSingleton<SessionManager>
         }
 
         await ShowEndInstructions();
-
         EndSession();
     }
     private void StartSession()
     {
         // setup session initial conditions.
         InitActiveTourQuestionsList();
+
+        //get some references:
         _floatingBoard = SceneReferencer.Instance.floatingBoard;
         _pieces = SceneReferencer.Instance.pieces;
         _multiChoiceQuestion = SceneReferencer.Instance.multiChoiceQuestion;
+        _maxQuestionsInSemiActiveTour = SceneReferencer.Instance.NumberOfQuestionsInSemiActiveTour;
+
+        //make sure everything is hidden
         foreach (Piece p in _pieces)
         {
             p.arrow.gameObject.SetActive(false);
@@ -93,15 +84,27 @@ public class SessionManager : TXRSingleton<SessionManager>
         _multiChoiceQuestion.gameObject.SetActive(false);
 
     }
+
     private void EndSession()
     {
         // setup end session conditions
     }
+
     private async UniTask BetweenRoundsFlow()
     {
         await UniTask.Yield();
 
         throw new NotImplementedException();
+    }
+
+    private void InitActiveTourQuestionsList()
+    {
+        List<SerializedMultichoiceQuestion> MultichoiceQuestions = SceneReferencer.Instance.questions;
+        foreach (SerializedMultichoiceQuestion q in MultichoiceQuestions)
+        {
+            activeTourQuestions.Add(new List<String> { q.Question, q.Answer1, q.Answer2, q.Answer3 });
+        }
+
     }
 
     private async UniTask ShowBeginningInstructions()
@@ -128,13 +131,15 @@ public class SessionManager : TXRSingleton<SessionManager>
         //wait for calibration to finish
         await _floatingBoard.ShowTextUntilContinue("Press continue when you finished calibrating");
         await UniTask.Delay(TimeSpan.FromSeconds(1));
+
         //set experiment type
         MultichoiceAnswer.OnAnswerSelected.AddListener(processExperimentType);
-        await _multiChoiceQuestion.SetQuestionAndWaitForAnswer("Choose the type of experiment", "Active", "Passive", "Both");
+        await _multiChoiceQuestion.SetQuestionAndWaitForAnswer("Choose the type of experiment", ACTIVE_TYPE, PASSIVE_TYPE, BOTH_TYPE);
         MultichoiceAnswer.OnAnswerSelected.RemoveListener(processExperimentType);
         await UniTask.Delay(TimeSpan.FromSeconds(1));
+
         //validate with operator
-        await _floatingBoard.ShowTextUntilContinue("Starting " + _experimentType.ToString() + " tour");
+        await _floatingBoard.ShowTextUntilContinue("Starting " + _experimentType + " tour");
         await UniTask.Delay(TimeSpan.FromSeconds(1));
     }
 
@@ -143,24 +148,17 @@ public class SessionManager : TXRSingleton<SessionManager>
         switch (selectedAnswer)
         {
             case "Active":
-                _experimentType = ExperimentType.Active;
+                _experimentType = ACTIVE_TYPE;
                 break;
             case "Passive":
-                _experimentType = ExperimentType.Passive;
+                _experimentType = PASSIVE_TYPE;
                 break;
             case "Both":
-                _experimentType = ExperimentType.Both;
+                _experimentType = BOTH_TYPE;
                 break;
             default:
                 break;
         }
     }
 
-}
-
-public enum ExperimentType
-{
-    Active,
-    Passive,
-    Both
 }
