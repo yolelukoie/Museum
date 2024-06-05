@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028411, g: 0.22571464, b: 0.3069242, a: 1}
+  m_IndirectSpecularColor: {r: 0.18019, g: 0.2255916, b: 0.3067828, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -10702,7 +10702,7 @@ PrefabInstance:
     - target: {fileID: 612552674921322229, guid: 56cb0481d0a95af4a8059ec0bd4b07c5,
         type: 3}
       propertyPath: instructions.Array.size
-      value: 4
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 612552674921322229, guid: 56cb0481d0a95af4a8059ec0bd4b07c5,
         type: 3}
@@ -10723,35 +10723,51 @@ PrefabInstance:
     - target: {fileID: 612552674921322229, guid: 56cb0481d0a95af4a8059ec0bd4b07c5,
         type: 3}
       propertyPath: instructions.Array.data[1]
-      value: 'Welcome to the simulation.
-
-        An arrow above the paintings will
-        show you the next step in your tour.'
+      value: "\u05DA\u05DC\u05E9 \u05E8\u05D5\u05D9\u05E1\u05D1 \u05D0\u05D1\u05D4
+        \u05D1\u05DC\u05E9\u05D4 \u05EA\u05D0 \u05DA\u05DC \u05D4\u05D0\u05E8\u05D9
+        \u05DD\u05D9\u05E8\u05D5\u05D9\u05E6\u05D4 \u05DC\u05E2\u05DE \u05E5\u05D7
+        .\u05DD\u05DB\u05D9\u05E0\u05E4\u05D1 \u05D2\u05E6\u05D5\u05EA \u05E8\u05D5\u05D9\u05E1\u05D4
+        \u05DC\u05D9\u05D7\u05EA\u05DE \u05D4\u05E0\u05DE\u05DE \u05EA\u05D9\u05E0\u05D5\u05E9\u05D0\u05E8\u05D4
+        \u05D4\u05E8\u05D9\u05E6\u05D9\u05D4"
       objectReference: {fileID: 0}
     - target: {fileID: 612552674921322229, guid: 56cb0481d0a95af4a8059ec0bd4b07c5,
         type: 3}
       propertyPath: instructions.Array.data[2]
-      value: 'Next to each painting you can see a button that plays a brief explanation
-        about it.
-
-        You can press the button by simply touching it with your
-        hand.
-
-        If you want to skip the recording, press the same button again.'
+      value: "\u05DA\u05DC\u05E9 \u05D3\u05D9\u05D4 \u05DD\u05E2 \u05D5\u05D1 \u05D4\u05E2\u05D9\u05D2\u05E0
+        \u05D9\u05D3\u05D9 \u05DC\u05E2 \u05D8\u05D5\u05E9\u05E4 \u05E8\u05D5\u05EA\u05E4\u05DB\u05D4
+        \u05DC\u05E2 \u05E5\u05D5\u05D7\u05DC\u05DC \u05DC\u05D5\u05DB\u05D9 \u05D4\u05EA\u05D0
+        .\u05D5\u05D9\u05D1\u05D2\u05DC \u05E8\u05E6\u05E7 \u05E8\u05D1\u05E1\u05D4
+        \u05E2\u05D9\u05DE\u05E9\u05DE\u05E9 \u05E8\u05D5\u05EA\u05E4\u05DB \u05EA\u05D5\u05D0\u05E8\u05DC
+        \u05DF\u05EA\u05D9\u05E0 \u05E8\u05D5\u05D9\u05E6 \u05DC\u05DB \u05D3\u05D9\u05DC"
       objectReference: {fileID: 0}
     - target: {fileID: 612552674921322229, guid: 56cb0481d0a95af4a8059ec0bd4b07c5,
         type: 3}
       propertyPath: instructions.Array.data[3]
-      value: 'Afterwards, in order to best match the next artwork for you, you will
-        need to choose from a number of options what you would like to see next.
-
-        In
-        this way, you will tour between 8 artworks in the collection.'
+      value: ").\u05E3\u05E1\u05D5\u05D0\u05D1 \u05EA\u05D5\u05E8\u05D9\u05E6\u05D9
+        8 \u05DF\u05D9\u05D1 \u05D5\u05E8\u05D9\u05D9\u05E1\u05EA \u05DA\u05DB .\u05DA\u05E9\u05DE\u05D4\u05D1
+        \u05EA\u05D5\u05D0\u05E8\u05DC \u05D5\u05E6\u05E8\u05EA\u05E9 \u05D4\u05DE
+        \u05EA\u05D0 \u05EA\u05D5\u05D9\u05D5\u05E8\u05E9\u05E4\u05D0 \u05E8\u05E4\u05E1\u05DE
+        \u05DF\u05D9\u05D1\u05DE \u05E8\u05D5\u05D7\u05D1\u05DC \u05D5\u05DB\u05E8\u05D8\u05E6\u05EA
+        ,\u05DD\u05DB\u05E8\u05D5\u05D1\u05E2 \u05D4\u05D0\u05D1\u05D4 \u05D4\u05E8\u05D9\u05E6\u05D9\u05D4
+        \u05EA\u05D0 \u05E8\u05EA\u05D5\u05D9\u05D1 \u05D4\u05D1\u05D5\u05D8\u05D4
+        \u05D4\u05E8\u05D5\u05E6\u05D1 \u05DD\u05D9\u05D0\u05EA\u05D4\u05DC \u05EA\u05E0\u05DE
+        \u05DC\u05E2 ,\u05DF\u05DB\u05DE \u05E8\u05D7\u05D0\u05DC("
+      objectReference: {fileID: 0}
+    - target: {fileID: 612552674921322229, guid: 56cb0481d0a95af4a8059ec0bd4b07c5,
+        type: 3}
+      propertyPath: instructions.Array.data[4]
+      value: ".\u05EA\u05D5\u05E0\u05DE\u05D0\u05D4 \u05EA\u05D5\u05E8\u05D9\u05E6\u05D9
+        \u05DC\u05E2\u05D5 \u05E8\u05D5\u05D9\u05E1\u05D4 \u05DC\u05E2 \u05EA\u05D5\u05DC\u05D0\u05E9
+        \u05E8\u05E4\u05E1\u05DE \u05DC\u05E2 \u05EA\u05D5\u05E0\u05E2\u05DC \u05D5\u05E9\u05E7\u05D1\u05EA\u05EA
+        ,\u05E3\u05D5\u05E1\u05D1\u05DC .\u05D9\u05EA\u05D9\u05DE\u05D0\u05D4 \u05DD\u05DC\u05D5\u05E2\u05D1
+        \u05EA\u05D5\u05D9\u05EA\u05D9\u05DE\u05D0 \u05EA\u05D5\u05DE\u05D5\u05D7
+        \u05DD\u05D4 - \u05DD\u05D5\u05E1\u05D7\u05DE \u05D9\u05DC\u05D1\u05D7 \u05DA\u05E8\u05D3
+        \u05E8\u05D5\u05D1\u05E2\u05DC \u05D4\u05E1\u05E0\u05EA \u05DC\u05D0 ,\u05D4\u05E9\u05E7\u05D1\u05D1\n"
       objectReference: {fileID: 0}
     - target: {fileID: 612552674921322229, guid: 56cb0481d0a95af4a8059ec0bd4b07c5,
         type: 3}
       propertyPath: endInstructions.Array.data[0]
-      value: Thank you for participating!
+      value: "!\u05EA\u05D5\u05E4\u05EA\u05EA\u05E9\u05D4\u05D4 \u05DC\u05E2 \u05D4\u05D3\u05D5\u05EA"
       objectReference: {fileID: 0}
     - target: {fileID: 612552674921322229, guid: 56cb0481d0a95af4a8059ec0bd4b07c5,
         type: 3}
@@ -10865,32 +10881,38 @@ PrefabInstance:
     - target: {fileID: 612552674921322229, guid: 56cb0481d0a95af4a8059ec0bd4b07c5,
         type: 3}
       propertyPath: questions.Array.data[0].Question
-      value: What would you like to see next?
+      value: "?\u05D1\u05D0\u05D1\u05D4 \u05D4\u05E8\u05E6\u05E6\u05D9\u05DC \u05D4\u05D9\u05D4\u05D9\u05E9
+        \u05D5\u05E6\u05E8\u05EA \u05DF\u05D9\u05D9\u05E4\u05D0\u05DE \u05D4\u05D6\u05D9\u05D0 "
       objectReference: {fileID: 0}
     - target: {fileID: 612552674921322229, guid: 56cb0481d0a95af4a8059ec0bd4b07c5,
         type: 3}
       propertyPath: questions.Array.data[1].Question
-      value: What would you like to see next?
+      value: "?\u05D1\u05D0\u05D1\u05D4 \u05D4\u05E8\u05E6\u05E6\u05D9\u05DC \u05D4\u05D9\u05D4\u05D9\u05E9
+        \u05D5\u05E6\u05E8\u05EA \u05DF\u05D9\u05D9\u05E4\u05D0\u05DE \u05D4\u05D6\u05D9\u05D0 "
       objectReference: {fileID: 0}
     - target: {fileID: 612552674921322229, guid: 56cb0481d0a95af4a8059ec0bd4b07c5,
         type: 3}
       propertyPath: questions.Array.data[2].Question
-      value: What would you like to see next?
+      value: "?\u05D1\u05D0\u05D1\u05D4 \u05D4\u05E8\u05E6\u05E6\u05D9\u05DC \u05D4\u05D9\u05D4\u05D9\u05E9
+        \u05D5\u05E6\u05E8\u05EA \u05DF\u05D9\u05D9\u05E4\u05D0\u05DE \u05D4\u05D6\u05D9\u05D0 "
       objectReference: {fileID: 0}
     - target: {fileID: 612552674921322229, guid: 56cb0481d0a95af4a8059ec0bd4b07c5,
         type: 3}
       propertyPath: questions.Array.data[3].Question
-      value: What would you like to see next?
+      value: "?\u05D1\u05D0\u05D1\u05D4 \u05D4\u05E8\u05E6\u05E6\u05D9\u05DC \u05D4\u05D9\u05D4\u05D9\u05E9
+        \u05D5\u05E6\u05E8\u05EA \u05DF\u05D9\u05D9\u05E4\u05D0\u05DE \u05D4\u05D6\u05D9\u05D0 "
       objectReference: {fileID: 0}
     - target: {fileID: 612552674921322229, guid: 56cb0481d0a95af4a8059ec0bd4b07c5,
         type: 3}
       propertyPath: questions.Array.data[4].Question
-      value: What would you like to see next?
+      value: "?\u05D1\u05D0\u05D1\u05D4 \u05D4\u05E8\u05E6\u05E6\u05D9\u05DC \u05D4\u05D9\u05D4\u05D9\u05E9
+        \u05D5\u05E6\u05E8\u05EA \u05DF\u05D9\u05D9\u05E4\u05D0\u05DE \u05D4\u05D6\u05D9\u05D0 "
       objectReference: {fileID: 0}
     - target: {fileID: 612552674921322229, guid: 56cb0481d0a95af4a8059ec0bd4b07c5,
         type: 3}
       propertyPath: questions.Array.data[5].Question
-      value: What would you like to see next?
+      value: "?\u05D1\u05D0\u05D1\u05D4 \u05D4\u05E8\u05E6\u05E6\u05D9\u05DC \u05D4\u05D9\u05D4\u05D9\u05E9
+        \u05D5\u05E6\u05E8\u05EA \u05DF\u05D9\u05D9\u05E4\u05D0\u05DE \u05D4\u05D6\u05D9\u05D0 "
       objectReference: {fileID: 0}
     - target: {fileID: 612552674921322229, guid: 56cb0481d0a95af4a8059ec0bd4b07c5,
         type: 3}
