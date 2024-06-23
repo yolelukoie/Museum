@@ -15,8 +15,11 @@ public class SessionManager : TXRSingleton<SessionManager>
     private List<Piece> _pieces;
     private String _experimentType;
     private int _maxQuestionsInSemiActiveTour;
+    private List<SerializedMultichoiceQuestion> _questions;
+    private ArrowPointer _directionArrow;
 
     List<List<String>> activeTourQuestions = new List<List<String>>();
+    private int question_index = 0;
 
 
     //If there is a higher level flow manager, remove this and use his start method
@@ -29,6 +32,7 @@ public class SessionManager : TXRSingleton<SessionManager>
     public async UniTask RunSessionFlow()
     {
         StartSession();
+
         await OperatorsInit();
         await ShowBeginningInstructions();
 
@@ -45,7 +49,8 @@ public class SessionManager : TXRSingleton<SessionManager>
                 case BOTH_TYPE:
                     if ((pieceIndex > FIRST_PIECE_INDEX) & ((_experimentType == ACTIVE_TYPE) || (pieceIndex <= _maxQuestionsInSemiActiveTour)))
                     {
-                        await _multiChoiceQuestion.SetQuestionAndWaitForAnswer(activeTourQuestions[pieceIndex][0], activeTourQuestions[pieceIndex][1], activeTourQuestions[pieceIndex][2], activeTourQuestions[pieceIndex][3]);
+                        await ShowNextQuestion();
+
                     }
                     break;
             }
@@ -54,6 +59,7 @@ public class SessionManager : TXRSingleton<SessionManager>
             p.audioGuideButton.gameObject.SetActive(true);
 
             await _floatingBoard.ShowTextUntilContinue("Follow the arrow to the next piece");
+            _directionArrow.ShowAndSetTarget(p.audioGuideButton.transform);
             await p.audioGuideButton.WaitForAudioGuideToFinish();
 
             p.arrow.gameObject.SetActive(false);
@@ -74,6 +80,8 @@ public class SessionManager : TXRSingleton<SessionManager>
         _pieces = SceneReferencer.Instance.pieces;
         _multiChoiceQuestion = SceneReferencer.Instance.multiChoiceQuestion;
         _maxQuestionsInSemiActiveTour = SceneReferencer.Instance.NumberOfQuestionsInSemiActiveTour;
+        _questions = SceneReferencer.Instance.questions;
+        _directionArrow = SceneReferencer.Instance.arrowPointer;
 
         //make sure everything is hidden
         foreach (Piece p in _pieces)
@@ -82,6 +90,7 @@ public class SessionManager : TXRSingleton<SessionManager>
             p.audioGuideButton.gameObject.SetActive(false);
         }
         _multiChoiceQuestion.gameObject.SetActive(false);
+        _directionArrow.Hide();
 
     }
 
@@ -107,20 +116,22 @@ public class SessionManager : TXRSingleton<SessionManager>
 
     }
 
+
     private async UniTask ShowBeginningInstructions()
     {
-        foreach (string instruction in SceneReferencer.Instance.instructions)
+        foreach (TextAndScaleTuple instruction in SceneReferencer.Instance.ScaledInstructions)
         {
-            await _floatingBoard.ShowTextUntilContinue(instruction);
+            await _floatingBoard.ShowTextAndScaleUntilContinue(instruction);
             await UniTask.Delay(TimeSpan.FromSeconds(1));
         }
     }
 
+    //Manualscale
     private async UniTask ShowEndInstructions()
     {
-        foreach (string instruction in SceneReferencer.Instance.endInstructions)
+        foreach (TextAndScaleTuple instruction in SceneReferencer.Instance.ScaledInstructions)
         {
-            await _floatingBoard.ShowTextUntilContinue(instruction);
+            await _floatingBoard.ShowTextAndScaleUntilContinue(instruction);
             await UniTask.Delay(TimeSpan.FromSeconds(1));
         }
     }
@@ -145,20 +156,14 @@ public class SessionManager : TXRSingleton<SessionManager>
 
     private void processExperimentType(string selectedAnswer)
     {
-        switch (selectedAnswer)
-        {
-            case "Active":
-                _experimentType = ACTIVE_TYPE;
-                break;
-            case "Passive":
-                _experimentType = PASSIVE_TYPE;
-                break;
-            case "Both":
-                _experimentType = BOTH_TYPE;
-                break;
-            default:
-                break;
-        }
+        _experimentType = selectedAnswer;
+    }
+
+    private async UniTask ShowNextQuestion()
+    {
+
+        await _multiChoiceQuestion.SetQuestionAndScaleAndWaitForAnswer(_questions[question_index].Question, _questions[question_index].Answer1, _questions[question_index].Answer2, _questions[question_index].Answer3, _questions[question_index].size_x, _questions[question_index].size_y);
+        question_index++;
     }
 
 }

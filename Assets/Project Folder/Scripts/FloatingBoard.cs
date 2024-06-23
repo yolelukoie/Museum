@@ -1,4 +1,5 @@
 using Cysharp.Threading.Tasks;
+using System;
 using UnityEngine;
 
 public class FloatingBoard : MonoBehaviour
@@ -8,7 +9,7 @@ public class FloatingBoard : MonoBehaviour
     [SerializeField]
     private TXRButton ContinueButton;
 
-
+    //AutoScale: Text will be scaled to fit the board
     public async UniTask ShowTextUntilContinue(string text)
     {
         SetText(text);
@@ -18,6 +19,17 @@ public class FloatingBoard : MonoBehaviour
     private void SetText(string text)
     {
         board.SetTextAndAutoScale(text);
+    }
+
+    //ManualScale
+    public async UniTask ShowTextAndScaleUntilContinue(TextAndScaleTuple tup)
+    {
+        SetTextWithCustomScale(tup);
+        await ShowUntilContinuePressed();
+    }
+    private void SetTextWithCustomScale(TextAndScaleTuple tup)
+    {
+        board.SetTextAndScale(tup.text, new Vector2(tup.scale_x, tup.scale_y));
     }
 
 
@@ -31,6 +43,8 @@ public class FloatingBoard : MonoBehaviour
         print("FloatingBoard: ShowUntilContinuePressed() before WaitForButtonPress");
         await ContinueButton.WaitForButtonPress();
         print("FloatingBoard: ShowUntilContinuePressed() after WaitForButtonPress");
+
+        await UniTask.Delay(TimeSpan.FromSeconds(1));
 
         board.Hide();
         ContinueButton.gameObject.SetActive(false);
