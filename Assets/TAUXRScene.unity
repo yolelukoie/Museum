@@ -13523,6 +13523,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 612552674921322229, guid: 56cb0481d0a95af4a8059ec0bd4b07c5,
         type: 3}
+      propertyPath: ScaledInstructions.Array.data[2].semi
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 612552674921322229, guid: 56cb0481d0a95af4a8059ec0bd4b07c5,
+        type: 3}
       propertyPath: ScaledInstructions.Array.data[2].text
       value: "\u05D4\u05E8\u05D9\u05E6\u05D9 \u05DC\u05DB \u05E8\u05D7\u05D0\u05DC\n.\u05DA\u05E9\u05DE\u05D4\u05D1
         \u05EA\u05D5\u05D0\u05E8\u05DC \u05D5\u05E6\u05E8\u05EA \u05D4\u05DE \u05E8\u05D5\u05D7\u05D1\u05DC
@@ -13548,7 +13553,7 @@ PrefabInstance:
     - target: {fileID: 612552674921322229, guid: 56cb0481d0a95af4a8059ec0bd4b07c5,
         type: 3}
       propertyPath: BetweenPiecesMsg.Array.data[0].scale_x
-      value: 0.2
+      value: 0.3
       objectReference: {fileID: 0}
     - target: {fileID: 612552674921322229, guid: 56cb0481d0a95af4a8059ec0bd4b07c5,
         type: 3}
@@ -13564,6 +13569,11 @@ PrefabInstance:
         type: 3}
       propertyPath: endInstructions2.Array.data[0].scale_y
       value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 612552674921322229, guid: 56cb0481d0a95af4a8059ec0bd4b07c5,
+        type: 3}
+      propertyPath: ScaledInstructions.Array.data[2].active
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 612552674921322229, guid: 56cb0481d0a95af4a8059ec0bd4b07c5,
         type: 3}
@@ -13617,6 +13627,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 612552674921322229, guid: 56cb0481d0a95af4a8059ec0bd4b07c5,
         type: 3}
+      propertyPath: endInstructionsAndScales.Array.data[0].semi
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 612552674921322229, guid: 56cb0481d0a95af4a8059ec0bd4b07c5,
+        type: 3}
       propertyPath: endInstructionsAndScales.Array.data[0].text
       value: "!\u05DA\u05EA\u05D5\u05E4\u05EA\u05EA\u05E9\u05D4 \u05DC\u05E2 \u05D4\u05D3\u05D5\u05EA
         ,\u05E8\u05DE\u05D2\u05E0 \u05E8\u05D5\u05D9\u05E1\u05D4\r\n,\u05DD\u05D9\u05D9\u05E4\u05E7\u05E9\u05DE\u05D4
@@ -13624,6 +13639,16 @@ PrefabInstance:
         \u05E8\u05D5\u05D9\u05E1\u05D4 \u05EA\u05D5\u05D3\u05D5\u05D0 \u05EA\u05D5\u05DC\u05D0\u05E9
         \u05E8\u05E4\u05E1\u05DE \u05DC\u05E2 \u05EA\u05D5\u05E0\u05E2\u05DC \u05D5\u05E9\u05E7\u05D1\u05EA\u05EA
         \u05D4\u05EA\u05E2\u05D5"
+      objectReference: {fileID: 0}
+    - target: {fileID: 612552674921322229, guid: 56cb0481d0a95af4a8059ec0bd4b07c5,
+        type: 3}
+      propertyPath: endInstructionsAndScales.Array.data[0].active
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 612552674921322229, guid: 56cb0481d0a95af4a8059ec0bd4b07c5,
+        type: 3}
+      propertyPath: endInstructionsAndScales.Array.data[0].passive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 612552674921322229, guid: 56cb0481d0a95af4a8059ec0bd4b07c5,
         type: 3}

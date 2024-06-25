@@ -27,7 +27,20 @@ public class TextAndScaleTuple
 {
     [TextArea(3, 10)]
     public string text;
+
+    [FoldoutGroup("Options")]
+    [HorizontalGroup("Options/Split")]
+    [VerticalGroup("Options/Split/Left")]
+    [BoxGroup("Options/Split/Left/Scale")]
     public float scale_x;
+    [BoxGroup("Options/Split/Left/Scale")]
     public float scale_y;
+
+
+    [VerticalGroup("Options/Split/Right")]
+    [BoxGroup("Options/Split/Right/Show only in")]
+    [PropertyTooltip("Checking none of the options is equal to checking all of them")]
+    public bool active, semi, passive;
+
 }
 

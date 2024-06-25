@@ -33,12 +33,18 @@ public class SessionManager : TXRSingleton<SessionManager>
     {
         StartSession();
 
+        //wait for calibration to finish
         await OperatorsInit();
-        await ShowBeginningInstructions();
 
+        //run the session
+        await ShowInstructions(SceneReferencer.Instance.ScaledInstructions);
+
+        //main session loop
         foreach (Piece p in _pieces)
         {
             int pieceIndex = _pieces.IndexOf(p);
+
+            //should we show the question?
             switch (_experimentType)
             {
                 case PASSIVE_TYPE:
@@ -58,7 +64,7 @@ public class SessionManager : TXRSingleton<SessionManager>
             p.arrow.gameObject.SetActive(true);
             p.audioGuideButton.gameObject.SetActive(true);
 
-            await ShowBetweenPiecesMsg();
+            await ShowInstructions(SceneReferencer.Instance.BetweenPiecesMsg);
             _directionArrow.ShowAndSetTarget(p.audioGuideButton.transform);
             await p.audioGuideButton.WaitForAudioGuideToFinish();
 
@@ -67,7 +73,7 @@ public class SessionManager : TXRSingleton<SessionManager>
 
         }
 
-        await ShowEndInstructions();
+        await ShowInstructions(SceneReferencer.Instance.endInstructionsAndScales);
         EndSession();
     }
     private void StartSession()
@@ -117,34 +123,6 @@ public class SessionManager : TXRSingleton<SessionManager>
     }
 
 
-    private async UniTask ShowBeginningInstructions()
-    {
-        foreach (TextAndScaleTuple instruction in SceneReferencer.Instance.ScaledInstructions)
-        {
-            await _floatingBoard.ShowTextAndScaleUntilContinue(instruction);
-            await UniTask.Delay(TimeSpan.FromSeconds(1));
-        }
-    }
-
-    //Manualscale
-    private async UniTask ShowEndInstructions()
-    {
-        foreach (TextAndScaleTuple instruction in SceneReferencer.Instance.ScaledInstructions)
-        {
-            await _floatingBoard.ShowTextAndScaleUntilContinue(instruction);
-            await UniTask.Delay(TimeSpan.FromSeconds(1));
-        }
-    }
-
-    private async UniTask ShowBetweenPiecesMsg()
-    {
-        foreach (TextAndScaleTuple instruction in SceneReferencer.Instance.BetweenPiecesMsg)
-        {
-            await _floatingBoard.ShowTextAndScaleUntilContinue(instruction);
-            await UniTask.Delay(TimeSpan.FromSeconds(1));
-        }
-    }
-
     // experiment operator chooses type of experiment, etc
     private async UniTask OperatorsInit()
     {
@@ -166,6 +144,8 @@ public class SessionManager : TXRSingleton<SessionManager>
     private void processExperimentType(string selectedAnswer)
     {
         _experimentType = selectedAnswer;
+        print("Selected experiment type: " + _experimentType);
+        TXRDataManager.Instance.LogLineToFile("Selected experiment type: " + _experimentType);
     }
 
     private async UniTask ShowNextQuestion()
@@ -175,4 +155,45 @@ public class SessionManager : TXRSingleton<SessionManager>
         question_index++;
     }
 
+    private async UniTask ShowInstructions(List<TextAndScaleTuple> instructions)
+    {
+        foreach (TextAndScaleTuple instruction in instructions)
+        {
+            //check if the instruction should be shown
+            bool shouldShowMsg;
+
+            //if none is checked, show the message
+            if (!(instruction.active & instruction.passive & instruction.semi))
+            {
+                shouldShowMsg = true;
+            }
+            else
+            {
+                switch (_experimentType)
+                {
+                    case ACTIVE_TYPE:
+                        shouldShowMsg = instruction.active;
+                        break;
+                    case PASSIVE_TYPE:
+                        shouldShowMsg = instruction.passive;
+                        break;
+                    case BOTH_TYPE:
+                        shouldShowMsg = instruction.semi;
+                        break;
+                    default:
+                        shouldShowMsg = false;
+                        break;
+                }
+            }
+            print("should show msg: " + shouldShowMsg);
+
+
+            //show the instruction
+            if (shouldShowMsg)
+            {
+                await _floatingBoard.ShowTextAndScaleUntilContinue(instruction);
+                await UniTask.Delay(TimeSpan.FromSeconds(1));
+            }
+        }
+    }
 }
