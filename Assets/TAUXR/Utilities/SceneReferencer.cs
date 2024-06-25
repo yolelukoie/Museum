@@ -26,6 +26,8 @@ public class SceneReferencer : TXRSingleton<SceneReferencer>
 
     public List<TextAndScaleTuple> ScaledInstructions;
 
+    public List<TextAndScaleTuple> BetweenPiecesMsg;
+
     public List<TextAndScaleTuple> endInstructionsAndScales;
 
     //----------------------Game Objects----------------------

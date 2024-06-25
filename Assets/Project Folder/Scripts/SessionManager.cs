@@ -58,7 +58,7 @@ public class SessionManager : TXRSingleton<SessionManager>
             p.arrow.gameObject.SetActive(true);
             p.audioGuideButton.gameObject.SetActive(true);
 
-            await _floatingBoard.ShowTextUntilContinue("Follow the arrow to the next piece");
+            await ShowBetweenPiecesMsg();
             _directionArrow.ShowAndSetTarget(p.audioGuideButton.transform);
             await p.audioGuideButton.WaitForAudioGuideToFinish();
 
@@ -130,6 +130,15 @@ public class SessionManager : TXRSingleton<SessionManager>
     private async UniTask ShowEndInstructions()
     {
         foreach (TextAndScaleTuple instruction in SceneReferencer.Instance.ScaledInstructions)
+        {
+            await _floatingBoard.ShowTextAndScaleUntilContinue(instruction);
+            await UniTask.Delay(TimeSpan.FromSeconds(1));
+        }
+    }
+
+    private async UniTask ShowBetweenPiecesMsg()
+    {
+        foreach (TextAndScaleTuple instruction in SceneReferencer.Instance.BetweenPiecesMsg)
         {
             await _floatingBoard.ShowTextAndScaleUntilContinue(instruction);
             await UniTask.Delay(TimeSpan.FromSeconds(1));
