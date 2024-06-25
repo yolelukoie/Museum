@@ -15,8 +15,11 @@ public class SessionManager : TXRSingleton<SessionManager>
     private List<Piece> _pieces;
     private String _experimentType;
     private int _maxQuestionsInSemiActiveTour;
+    private List<SerializedMultichoiceQuestion> _questions;
+    private ArrowPointer _directionArrow;
 
     List<List<String>> activeTourQuestions = new List<List<String>>();
+    private int question_index = 0;
 
 
     //If there is a higher level flow manager, remove this and use his start method
@@ -29,12 +32,19 @@ public class SessionManager : TXRSingleton<SessionManager>
     public async UniTask RunSessionFlow()
     {
         StartSession();
-        await OperatorsInit();
-        await ShowBeginningInstructions();
 
+        //wait for calibration to finish
+        await OperatorsInit();
+
+        //run the session
+        await ShowInstructions(SceneReferencer.Instance.ScaledInstructions);
+
+        //main session loop
         foreach (Piece p in _pieces)
         {
             int pieceIndex = _pieces.IndexOf(p);
+
+            //should we show the question?
             switch (_experimentType)
             {
                 case PASSIVE_TYPE:
@@ -45,7 +55,8 @@ public class SessionManager : TXRSingleton<SessionManager>
                 case BOTH_TYPE:
                     if ((pieceIndex > FIRST_PIECE_INDEX) & ((_experimentType == ACTIVE_TYPE) || (pieceIndex <= _maxQuestionsInSemiActiveTour)))
                     {
-                        await _multiChoiceQuestion.SetQuestionAndWaitForAnswer(activeTourQuestions[pieceIndex][0], activeTourQuestions[pieceIndex][1], activeTourQuestions[pieceIndex][2], activeTourQuestions[pieceIndex][3]);
+                        await ShowNextQuestion();
+
                     }
                     break;
             }
@@ -53,7 +64,8 @@ public class SessionManager : TXRSingleton<SessionManager>
             p.arrow.gameObject.SetActive(true);
             p.audioGuideButton.gameObject.SetActive(true);
 
-            await _floatingBoard.ShowTextUntilContinue("Follow the arrow to the next piece");
+            await ShowInstructions(SceneReferencer.Instance.BetweenPiecesMsg);
+            _directionArrow.ShowAndSetTarget(p.audioGuideButton.transform);
             await p.audioGuideButton.WaitForAudioGuideToFinish();
 
             p.arrow.gameObject.SetActive(false);
@@ -61,7 +73,7 @@ public class SessionManager : TXRSingleton<SessionManager>
 
         }
 
-        await ShowEndInstructions();
+        await ShowInstructions(SceneReferencer.Instance.endInstructionsAndScales);
         EndSession();
     }
     private void StartSession()
@@ -74,6 +86,8 @@ public class SessionManager : TXRSingleton<SessionManager>
         _pieces = SceneReferencer.Instance.pieces;
         _multiChoiceQuestion = SceneReferencer.Instance.multiChoiceQuestion;
         _maxQuestionsInSemiActiveTour = SceneReferencer.Instance.NumberOfQuestionsInSemiActiveTour;
+        _questions = SceneReferencer.Instance.questions;
+        _directionArrow = SceneReferencer.Instance.arrowPointer;
 
         //make sure everything is hidden
         foreach (Piece p in _pieces)
@@ -82,6 +96,7 @@ public class SessionManager : TXRSingleton<SessionManager>
             p.audioGuideButton.gameObject.SetActive(false);
         }
         _multiChoiceQuestion.gameObject.SetActive(false);
+        _directionArrow.Hide();
 
     }
 
@@ -107,23 +122,6 @@ public class SessionManager : TXRSingleton<SessionManager>
 
     }
 
-    private async UniTask ShowBeginningInstructions()
-    {
-        foreach (string instruction in SceneReferencer.Instance.instructions)
-        {
-            await _floatingBoard.ShowTextUntilContinue(instruction);
-            await UniTask.Delay(TimeSpan.FromSeconds(1));
-        }
-    }
-
-    private async UniTask ShowEndInstructions()
-    {
-        foreach (string instruction in SceneReferencer.Instance.endInstructions)
-        {
-            await _floatingBoard.ShowTextUntilContinue(instruction);
-            await UniTask.Delay(TimeSpan.FromSeconds(1));
-        }
-    }
 
     // experiment operator chooses type of experiment, etc
     private async UniTask OperatorsInit()
@@ -145,20 +143,57 @@ public class SessionManager : TXRSingleton<SessionManager>
 
     private void processExperimentType(string selectedAnswer)
     {
-        switch (selectedAnswer)
-        {
-            case "Active":
-                _experimentType = ACTIVE_TYPE;
-                break;
-            case "Passive":
-                _experimentType = PASSIVE_TYPE;
-                break;
-            case "Both":
-                _experimentType = BOTH_TYPE;
-                break;
-            default:
-                break;
-        }
+        _experimentType = selectedAnswer;
+        print("Selected experiment type: " + _experimentType);
+        TXRDataManager.Instance.LogLineToFile("Selected experiment type: " + _experimentType);
     }
 
+    private async UniTask ShowNextQuestion()
+    {
+
+        await _multiChoiceQuestion.SetQuestionAndScaleAndWaitForAnswer(_questions[question_index].Question, _questions[question_index].Answer1, _questions[question_index].Answer2, _questions[question_index].Answer3, _questions[question_index].size_x, _questions[question_index].size_y);
+        question_index++;
+    }
+
+    private async UniTask ShowInstructions(List<TextAndScaleTuple> instructions)
+    {
+        foreach (TextAndScaleTuple instruction in instructions)
+        {
+            //check if the instruction should be shown
+            bool shouldShowMsg;
+
+            //if none is checked, show the message
+            if (!(instruction.active & instruction.passive & instruction.semi))
+            {
+                shouldShowMsg = true;
+            }
+            else
+            {
+                switch (_experimentType)
+                {
+                    case ACTIVE_TYPE:
+                        shouldShowMsg = instruction.active;
+                        break;
+                    case PASSIVE_TYPE:
+                        shouldShowMsg = instruction.passive;
+                        break;
+                    case BOTH_TYPE:
+                        shouldShowMsg = instruction.semi;
+                        break;
+                    default:
+                        shouldShowMsg = false;
+                        break;
+                }
+            }
+            print("should show msg: " + shouldShowMsg);
+
+
+            //show the instruction
+            if (shouldShowMsg)
+            {
+                await _floatingBoard.ShowTextAndScaleUntilContinue(instruction);
+                await UniTask.Delay(TimeSpan.FromSeconds(1));
+            }
+        }
+    }
 }

@@ -42,7 +42,7 @@ public class FollowPlayer : MonoBehaviour
         float heightOffset = _heightOffset;
         float radius = _radius;
         // float angle = Mathf.Deg2Rad * _angle + 1.57f;       // 1.57 radians are 90 deg. without it 0 angle point towards X, with this offset we will use Z as forward.
-        // float angle = Mathf.Deg2Rad * (_angle - TXRPlayer.Instance.PlayerHead.eulerAngles.y) + 1.57f; // 1.57 radians are 90 deg. without it 0 angle point towards X, with this offset we will use Z as forward.\
+        //float angle = Mathf.Deg2Rad * (_angle - TXRPlayer.Instance.PlayerHead.eulerAngles.y) + 1.57f; // 1.57 radians are 90 deg. without it 0 angle point towards X, with this offset we will use Z as forward.\
         Vector3 headPosition = TXRPlayer.Instance.PlayerHead.position;
 
         Vector3 circleCenter = headPosition;
@@ -72,6 +72,7 @@ public class FollowPlayer : MonoBehaviour
             print("HAND OUT OF TRACKING, angle: " + _angle);
         }
         _handPositionLastFrame = handPosition;
+        _angle = GetAngleByPlayerGlobalLookDirection();
         // _angle is set in GetPositionNearHand according to hand position.
         float targetX = radius * Mathf.Cos(Mathf.Deg2Rad * _angle + 1.57f);
         float targetZ = radius * Mathf.Sin(Mathf.Deg2Rad * _angle + 1.57f);
@@ -100,26 +101,26 @@ public class FollowPlayer : MonoBehaviour
         if (playerLookAngle < 45f && playerLookAngle > -45f)
         {
             // point forward
-            return -50f;
+            return 0f;
         }
         else if (playerLookAngle > 45f && playerLookAngle < 135f)
         {
             // point left
-            return 40f;
+            return 90f;
         }
         else if ((playerLookAngle > 135f || playerLookAngle < -135f))
         {
             // point back
-            return 130f;
+            return 180f;
         }
         else if ((playerLookAngle > -135f || playerLookAngle < -45f))
         {
             // point right
-            return 220f;
+            return -90f;
         }
         else
         {
-            return -50f;
+            return 0f;
         }
     }
 

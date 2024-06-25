@@ -43,9 +43,10 @@ public class MultiChoiceQuestion : MonoBehaviour, Question
 
 
 
-    public void setQuestion(string question, string answer1, string answer2, string answer3)
+    public void setQuestionWithAutoScale(string question, string answer1, string answer2, string answer3)
     {
         board.SetTextAndAutoScale(question);
+
         _answers[0].SetText(answer1);
         _answers[1].SetText(answer2);
         _answers[2].SetText(answer3);
@@ -54,8 +55,22 @@ public class MultiChoiceQuestion : MonoBehaviour, Question
         _answer1 = answer1;
         _answer2 = answer2;
         _answer3 = answer3;
-
     }
+
+    public void setQuestionAndScale(string question, string answer1, string answer2, string answer3, float scale_x, float scale_y)
+    {
+        board.SetTextAndScale(question, new Vector2(scale_x, scale_y));
+
+        _answers[0].SetText(answer1);
+        _answers[1].SetText(answer2);
+        _answers[2].SetText(answer3);
+
+        _question = question;
+        _answer1 = answer1;
+        _answer2 = answer2;
+        _answer3 = answer3;
+    }
+
 
     public async UniTask WaitForAnswer()
     {
@@ -76,7 +91,18 @@ public class MultiChoiceQuestion : MonoBehaviour, Question
     {
         Show();
         InitAnswers();
-        setQuestion(question, answer1, answer2, answer3);
+        setQuestionWithAutoScale(question, answer1, answer2, answer3);
+        await UniTask.Delay(TimeSpan.FromSeconds(2));
+        await WaitForAnswer();
+
+        Hide();
+    }
+
+    public async UniTask SetQuestionAndScaleAndWaitForAnswer(string question, string answer1, string answer2, string answer3, float scale_x, float scale_y)
+    {
+        Show();
+        InitAnswers();
+        setQuestionAndScale(question, answer1, answer2, answer3, scale_x, scale_y);
         await UniTask.Delay(TimeSpan.FromSeconds(2));
         await WaitForAnswer();
 

@@ -2735,6 +2735,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: TXR_DataManager
       objectReference: {fileID: 0}
+    - target: {fileID: 5909402029071504862, guid: 0e536bf5e85d3f34f97dbec656223294,
+        type: 3}
+      propertyPath: FileName
+      value: 
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
