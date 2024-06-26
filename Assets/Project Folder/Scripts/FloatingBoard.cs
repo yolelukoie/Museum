@@ -40,9 +40,7 @@ public class FloatingBoard : MonoBehaviour
         ContinueButton.gameObject.SetActive(true);
         //ContinueButton.SetState(ButtonState.Interactable);
 
-        print("FloatingBoard: ShowUntilContinuePressed() before WaitForButtonPress");
         await ContinueButton.WaitForButtonPress();
-        print("FloatingBoard: ShowUntilContinuePressed() after WaitForButtonPress");
 
         await UniTask.Delay(TimeSpan.FromSeconds(1));
 

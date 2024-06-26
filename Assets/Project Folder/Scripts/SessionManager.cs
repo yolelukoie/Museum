@@ -144,8 +144,8 @@ public class SessionManager : TXRSingleton<SessionManager>
     private void processExperimentType(string selectedAnswer)
     {
         _experimentType = selectedAnswer;
-        print("Selected experiment type: " + _experimentType);
-        TXRDataManager.Instance.LogLineToFile("Selected experiment type: " + _experimentType);
+        print("Selected experiment type: " + _experimentType + ", " + nameof(_experimentType));
+        TXRDataManager.Instance.LogLineToFile("Selected experiment type: " + _experimentType + ", " + nameof(_experimentType));
     }
 
     private async UniTask ShowNextQuestion()
@@ -162,8 +162,9 @@ public class SessionManager : TXRSingleton<SessionManager>
             //check if the instruction should be shown
             bool shouldShowMsg;
 
+
             //if none is checked, show the message
-            if (!(instruction.active & instruction.passive & instruction.semi))
+            if (!(instruction.active || instruction.passive || instruction.semi))
             {
                 shouldShowMsg = true;
             }
@@ -185,7 +186,9 @@ public class SessionManager : TXRSingleton<SessionManager>
                         break;
                 }
             }
-            print("should show msg: " + shouldShowMsg);
+
+
+            print("should show msg (mumber " + instructions.IndexOf(instruction) + "): " + shouldShowMsg);
 
 
             //show the instruction
