@@ -144,8 +144,27 @@ public class SessionManager : TXRSingleton<SessionManager>
     private void processExperimentType(string selectedAnswer)
     {
         _experimentType = selectedAnswer;
-        print("Selected experiment type: " + _experimentType + ", " + nameof(_experimentType));
-        TXRDataManager.Instance.LogLineToFile("Selected experiment type: " + _experimentType + ", " + nameof(_experimentType));
+
+        string message = "Selected experiment type: " + _experimentType + ", ";
+        switch (_experimentType)
+        {
+            case ACTIVE_TYPE:
+                message += "Active";
+                break;
+            case PASSIVE_TYPE:
+                message += "Passive";
+                break;
+            case BOTH_TYPE:
+                message += "Semi-active/both";
+                break;
+            default:
+                message = "something went wrong with tour type selection";
+                break;
+        }
+
+
+        print(message);
+        TXRDataManager.Instance.LogLineToFile(message);
     }
 
     private async UniTask ShowNextQuestion()
@@ -187,9 +206,7 @@ public class SessionManager : TXRSingleton<SessionManager>
                 }
             }
 
-
-            print("should show msg (mumber " + instructions.IndexOf(instruction) + "): " + shouldShowMsg);
-
+            //print("should show msg (mumber " + instructions.IndexOf(instruction) + "): " + shouldShowMsg);
 
             //show the instruction
             if (shouldShowMsg)

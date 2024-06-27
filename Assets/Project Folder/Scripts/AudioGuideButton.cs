@@ -40,10 +40,12 @@ public class AudioGuideButton : MonoBehaviour
         if (!_isPlaying)
         {
             _audioGuideSource.Play();
-            _isPlaying = true;
-            _directionArrow.Hide();
             TXRDataManager.Instance.ReportAudioGuideTiming(_piece.name, AudioGuideState.Started.ToString());
-            _piece.arrow.gameObject.SetActive(false);
+
+            _isPlaying = true;
+
+            _directionArrow.Hide();
+            _piece.arrow.Hide();
         }
     }
 
