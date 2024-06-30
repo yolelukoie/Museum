@@ -14,8 +14,11 @@ Library: /Users/yanasklar/GitHub/Museum/Temp/BurstOutput/tempburstlibs/arm64-v8a
 --assembly-defines=DOTween;
 --assembly-defines=Mono.Security;
 --assembly-defines=mscorlib;
+--assembly-defines=NaughtyAttributes.Core;
+--assembly-defines=NaughtyAttributes.Test;
 --assembly-defines=Newtonsoft.Json;
 --assembly-defines=Oculus.VR;
+--assembly-defines=RTLTMPro;
 --assembly-defines=ShapesRuntime;
 --assembly-defines=ShapesSamples;
 --assembly-defines=Sirenix.OdinInspector.Attributes;
@@ -68,8 +71,11 @@ Library: /Users/yanasklar/GitHub/Museum/Temp/BurstOutput/tempburstlibs/arm64-v8a
 --assembly-defines=DOTween;
 --assembly-defines=Mono.Security;
 --assembly-defines=mscorlib;
+--assembly-defines=NaughtyAttributes.Core;
+--assembly-defines=NaughtyAttributes.Test;
 --assembly-defines=Newtonsoft.Json;
 --assembly-defines=Oculus.VR;
+--assembly-defines=RTLTMPro;
 --assembly-defines=ShapesRuntime;
 --assembly-defines=ShapesSamples;
 --assembly-defines=Sirenix.OdinInspector.Attributes;
