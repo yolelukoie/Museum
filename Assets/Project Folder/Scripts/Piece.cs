@@ -21,5 +21,6 @@ public class Piece : MonoBehaviour
         //spriteComponent.sprite = Sprite.Create(resizedImage, new Rect(0, 0, size.x, size.y), new Vector2(0.5f, 0.5f), pixelsPerUnit);
     }
 
+
 }
 

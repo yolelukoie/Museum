@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class TextPopUpScaler : MonoBehaviour
 {
-    private const float DefaultTextFontSize = 0.34f;
+    private const float DefaultTextFontSize = 0.2f;
     private const int ReferenceNumberOfLettersUntilLineWrap = 50;
     private const int ReferenceNumberOfLetters = 300;
     private const float ReferenceSquareMeters = 0.25f;
