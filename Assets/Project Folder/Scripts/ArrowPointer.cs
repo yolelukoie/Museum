@@ -14,20 +14,10 @@ public class ArrowPointer : MonoBehaviour
     {
         if (target != null)
         {
-
             Vector3 direction = (target.position - _playerHead.position).normalized;
+            UpdateRadius();
             transform.position = _playerHead.position + direction * radius + Vector3.up * heightOffset;
             transform.LookAt(target);
-
-
-            //// Calculate the direction from the arrow to the target
-            //Vector3 direction = target.position - _playerHead.position;
-
-            //// Calculate the rotation required to point in that direction
-            //Quaternion rotation = Quaternion.LookRotation(direction);
-
-            //// Apply the rotation to the arrow (only rotate around the Y axis if it's a 2D arrow)
-            //transform.rotation = Quaternion.Euler(0, rotation.eulerAngles.y, 0);
         }
     }
 
@@ -51,11 +41,13 @@ public class ArrowPointer : MonoBehaviour
         initialRadius = radius;
     }
 
+    // if the player is close to the target' update the radius to avoid the arrow to be inside the target
     private void UpdateRadius()
     {
         Vector3 distanceToTarget = target.position - _playerHead.position;
         if (distanceToTarget.magnitude < radius)
         {
+            Debug.Log("distance to target: " + distanceToTarget.magnitude);
             radius = distanceToTarget.magnitude;
         }
         else
