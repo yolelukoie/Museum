@@ -10,13 +10,17 @@ public class ArrowPointer : MonoBehaviour
 
     private float initialRadius;
 
+    private Vector3 arrowPosition;
+
+    public Vector3 arrowOffset;
+
     void Update()
     {
         if (target != null)
         {
             Vector3 direction = (target.position - _playerHead.position).normalized;
             UpdateRadius();
-            transform.position = _playerHead.position + direction * radius + Vector3.up * heightOffset;
+            transform.position = _playerHead.position + arrowOffset + (direction * radius + Vector3.up * heightOffset);
             transform.LookAt(target);
         }
     }

@@ -5,8 +5,8 @@ using System.Collections.Generic;
 public class SessionManager : TXRSingleton<SessionManager>
 {
     const String ACTIVE_TYPE = "Type 1";
-    const String PASSIVE_TYPE = "Type 2";
-    const String BOTH_TYPE = "Type 3";
+    const String BOTH_TYPE = "Type 2";
+    const String PASSIVE_TYPE = "Type 3";
 
     const int FIRST_PIECE_INDEX = 0;
 
@@ -127,12 +127,12 @@ public class SessionManager : TXRSingleton<SessionManager>
     private async UniTask OperatorsInit()
     {
         //wait for calibration to finish
-        await _floatingBoard.ShowTextUntilContinue("Press continue when you finished calibrating");
+        await _floatingBoard.ShowTextUntilContinue("Press continue when you've finished calibrating");
         await UniTask.Delay(TimeSpan.FromSeconds(1));
 
         //set experiment type
         MultichoiceAnswer.OnAnswerSelected.AddListener(processExperimentType);
-        await _multiChoiceQuestion.SetQuestionAndWaitForAnswer("Choose the type of experiment", ACTIVE_TYPE, PASSIVE_TYPE, BOTH_TYPE);
+        await _multiChoiceQuestion.SetQuestionAndWaitForAnswer("Choose the type of experiment", ACTIVE_TYPE, BOTH_TYPE, PASSIVE_TYPE);
         MultichoiceAnswer.OnAnswerSelected.RemoveListener(processExperimentType);
         await UniTask.Delay(TimeSpan.FromSeconds(1));
 
@@ -174,10 +174,20 @@ public class SessionManager : TXRSingleton<SessionManager>
         question_index++;
     }
 
+    //general method to display a list of instructions on the floating board one after the other
     private async UniTask ShowInstructions(List<TextAndScaleTuple> instructions)
     {
         foreach (TextAndScaleTuple instruction in instructions)
         {
+            ////TODO change to if hebrew text
+            //if (true)
+            //{
+            //    print("reversing instruction: " + instruction.text);
+            //    instruction.text = HebrewText.ReverseString(instruction.text);
+            //    print("reversed instruction: " + instruction.text);
+            //}
+
+
             //check if the instruction should be shown
             bool shouldShowMsg;
 
