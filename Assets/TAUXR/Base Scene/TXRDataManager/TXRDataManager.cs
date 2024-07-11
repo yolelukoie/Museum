@@ -92,11 +92,11 @@ public class TXRDataManager : TXRSingleton<TXRDataManager>
     // Write here all the functions you'll want to use to report relevant data.
     public void ReportAudioGuideTiming(string audioGuideName, String state)
     {
-        analyticsWriter.WriteAnalyticsDataFile(new AudioGuideTimingData(audioGuideName, state));
+        WriteAnalyticsToFile(new AudioGuideTimingData(audioGuideName, state));
     }
     public void ReportMultichoiceAnswer(string question, string answer1, string answer2, string answer3, string chosenAnswer)
     {
-        analyticsWriter.WriteAnalyticsDataFile(new QuestionsData(question, answer1, answer2, answer3, chosenAnswer));
+        WriteAnalyticsToFile(new QuestionsData(question, answer1, answer2, answer3, chosenAnswer));
     }
 
 

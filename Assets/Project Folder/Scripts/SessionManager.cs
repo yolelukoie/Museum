@@ -1,6 +1,7 @@
 using Cysharp.Threading.Tasks;
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 public class SessionManager : TXRSingleton<SessionManager>
 {
@@ -44,32 +45,32 @@ public class SessionManager : TXRSingleton<SessionManager>
         {
             int pieceIndex = _pieces.IndexOf(p);
 
+            p.arrow.gameObject.SetActive(true);
+            p.audioGuideButton.gameObject.SetActive(true);
+
+            _directionArrow.ShowAndSetTarget(p.audioGuideButton.transform);
+            await ShowInstructions(SceneReferencer.Instance.BetweenPiecesMsg);
+
+            await p.audioGuideButton.WaitForAudioGuideToFinish();
+
+            p.audioGuideButton.gameObject.SetActive(false);
+
             //should we show the question?
             switch (_experimentType)
             {
                 case PASSIVE_TYPE:
                     break;
 
-                // If the piece is not the first piece and the experiment type is active or both (but than the piece index is within the active range), show the question
+                // If the experiment type is active or both (but than the piece index is within the active range), show the question
                 case ACTIVE_TYPE:
                 case BOTH_TYPE:
-                    if ((pieceIndex > FIRST_PIECE_INDEX) & ((_experimentType == ACTIVE_TYPE) || (pieceIndex <= _maxQuestionsInSemiActiveTour)))
+                    if ((_experimentType == ACTIVE_TYPE) || (pieceIndex <= _maxQuestionsInSemiActiveTour))
                     {
+                        SetQuestionPosition(p.questionBoardPositioner);
                         await ShowNextQuestion();
-
                     }
                     break;
             }
-
-            p.arrow.gameObject.SetActive(true);
-            p.audioGuideButton.gameObject.SetActive(true);
-
-            await ShowInstructions(SceneReferencer.Instance.BetweenPiecesMsg);
-            _directionArrow.ShowAndSetTarget(p.audioGuideButton.transform);
-            await p.audioGuideButton.WaitForAudioGuideToFinish();
-
-            p.arrow.gameObject.SetActive(false);
-            p.audioGuideButton.gameObject.SetActive(false);
 
         }
 
@@ -167,9 +168,14 @@ public class SessionManager : TXRSingleton<SessionManager>
         TXRDataManager.Instance.LogLineToFile(message);
     }
 
+    private void SetQuestionPosition(Transform Positioner)
+    {
+        _multiChoiceQuestion.transform.position = Positioner.position;
+        _multiChoiceQuestion.transform.rotation = Positioner.rotation;
+    }
+
     private async UniTask ShowNextQuestion()
     {
-
         await _multiChoiceQuestion.SetQuestionAndScaleAndWaitForAnswer(_questions[question_index].Question, _questions[question_index].Answer1, _questions[question_index].Answer2, _questions[question_index].Answer3, _questions[question_index].size_x, _questions[question_index].size_y);
         question_index++;
     }

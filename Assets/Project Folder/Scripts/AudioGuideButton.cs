@@ -50,7 +50,7 @@ public class AudioGuideButton : MonoBehaviour
     }
 
     // Skip the audio guide, for debug only!!!
-    //[Button("Skip")]
+    [Button("Skip")]
     private void Skip()
     {
         _isSkipped = true;
@@ -63,11 +63,16 @@ public class AudioGuideButton : MonoBehaviour
 
     public async UniTask WaitForAudioGuideToFinish()
     {
-        //wait for player to hit play
-        await new WaitUntil(() => _isPlaying == true);
+        print("Debug WaitForAudioGuideToFinish, " + _piece.name);
 
+        //wait for player to hit play
+        await new WaitUntil(() => _audioGuideSource.isPlaying == true);
+
+        print("Debug WaitForAudioGuideToFinish: " + _audioGuideSource.clip.name + " is playing");
         // wait for audio guide to finish
-        await new WaitUntil(() => ((_audioGuideSource.isPlaying == false)));
+
+        await new WaitUntil(() => _audioGuideSource.time >= _audioGuideSource.clip.length);
+        print("Debug WaitForAudioGuideToFinish: " + _audioGuideSource.clip.name + " finished");
 
         TXRDataManager.Instance.ReportAudioGuideTiming(_piece.name, AudioGuideState.Finished.ToString());
 

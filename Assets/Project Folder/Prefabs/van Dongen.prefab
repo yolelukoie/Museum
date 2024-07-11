@@ -2431,6 +2431,11 @@ PrefabInstance:
       propertyPath: _activeColor.r
       value: 0.10980393
       objectReference: {fileID: 0}
+    - target: {fileID: 8239235791068181872, guid: f5f25575ac7a799489a8eed3bb3c8778,
+        type: 3}
+      propertyPath: m_PlayOnAwake
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 2442866153587199109, guid: f5f25575ac7a799489a8eed3bb3c8778, type: 3}
     - {fileID: 7699423219382582809, guid: f5f25575ac7a799489a8eed3bb3c8778, type: 3}
