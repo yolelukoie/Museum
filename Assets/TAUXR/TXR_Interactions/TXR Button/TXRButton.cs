@@ -38,8 +38,6 @@ public class TXRButton : MonoBehaviour
     public void SetText(String text)
     {
         textComponent.text = text;
-
-        print("Set button text to: " + text + " textComponent: " + textComponent);
     }
 
     public void TextInit()

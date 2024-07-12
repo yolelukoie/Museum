@@ -370,7 +370,7 @@ PrefabInstance:
     - target: {fileID: 9179752179251115253, guid: 967af0223632a1649afa8f1a4520fc54,
         type: 3}
       propertyPath: m_ClearFlags
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9179752179251115253, guid: 967af0223632a1649afa8f1a4520fc54,
         type: 3}
@@ -445,7 +445,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _positionIndex: 0
-  _positions: []
+  _positions:
+  - {x: 0, y: 0, z: 0}
+  - {x: 1.5, y: 0, z: 0.5}
 --- !u!4 &189833906 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 9179752179252683371, guid: 967af0223632a1649afa8f1a4520fc54,

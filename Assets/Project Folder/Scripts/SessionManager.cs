@@ -1,12 +1,13 @@
 using Cysharp.Threading.Tasks;
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 public class SessionManager : TXRSingleton<SessionManager>
 {
     const String ACTIVE_TYPE = "Type 1";
-    const String PASSIVE_TYPE = "Type 2";
-    const String BOTH_TYPE = "Type 3";
+    const String BOTH_TYPE = "Type 2";
+    const String PASSIVE_TYPE = "Type 3";
 
     const int FIRST_PIECE_INDEX = 0;
 
@@ -44,32 +45,32 @@ public class SessionManager : TXRSingleton<SessionManager>
         {
             int pieceIndex = _pieces.IndexOf(p);
 
+            p.arrow.gameObject.SetActive(true);
+            p.audioGuideButton.gameObject.SetActive(true);
+
+            _directionArrow.ShowAndSetTarget(p.audioGuideButton.transform);
+            await ShowInstructions(SceneReferencer.Instance.BetweenPiecesMsg);
+
+            await p.audioGuideButton.WaitForAudioGuideToFinish();
+
+            p.audioGuideButton.gameObject.SetActive(false);
+
             //should we show the question?
             switch (_experimentType)
             {
                 case PASSIVE_TYPE:
                     break;
 
-                // If the piece is not the first piece and the experiment type is active or both (but than the piece index is within the active range), show the question
+                // If the experiment type is active or both (but than the piece index is within the active range), show the question
                 case ACTIVE_TYPE:
                 case BOTH_TYPE:
-                    if ((pieceIndex > FIRST_PIECE_INDEX) & ((_experimentType == ACTIVE_TYPE) || (pieceIndex <= _maxQuestionsInSemiActiveTour)))
+                    if ((_experimentType == ACTIVE_TYPE) || (pieceIndex <= _maxQuestionsInSemiActiveTour))
                     {
+                        SetQuestionPosition(p.questionBoardPositioner);
                         await ShowNextQuestion();
-
                     }
                     break;
             }
-
-            p.arrow.gameObject.SetActive(true);
-            p.audioGuideButton.gameObject.SetActive(true);
-
-            await ShowInstructions(SceneReferencer.Instance.BetweenPiecesMsg);
-            _directionArrow.ShowAndSetTarget(p.audioGuideButton.transform);
-            await p.audioGuideButton.WaitForAudioGuideToFinish();
-
-            p.arrow.gameObject.SetActive(false);
-            p.audioGuideButton.gameObject.SetActive(false);
 
         }
 
@@ -127,12 +128,12 @@ public class SessionManager : TXRSingleton<SessionManager>
     private async UniTask OperatorsInit()
     {
         //wait for calibration to finish
-        await _floatingBoard.ShowTextUntilContinue("Press continue when you finished calibrating");
+        await _floatingBoard.ShowTextUntilContinue("Press continue when you've finished calibrating");
         await UniTask.Delay(TimeSpan.FromSeconds(1));
 
         //set experiment type
         MultichoiceAnswer.OnAnswerSelected.AddListener(processExperimentType);
-        await _multiChoiceQuestion.SetQuestionAndWaitForAnswer("Choose the type of experiment", ACTIVE_TYPE, PASSIVE_TYPE, BOTH_TYPE);
+        await _multiChoiceQuestion.SetQuestionAndWaitForAnswer("Choose the type of experiment", ACTIVE_TYPE, BOTH_TYPE, PASSIVE_TYPE);
         MultichoiceAnswer.OnAnswerSelected.RemoveListener(processExperimentType);
         await UniTask.Delay(TimeSpan.FromSeconds(1));
 
@@ -167,17 +168,32 @@ public class SessionManager : TXRSingleton<SessionManager>
         TXRDataManager.Instance.LogLineToFile(message);
     }
 
+    private void SetQuestionPosition(Transform Positioner)
+    {
+        _multiChoiceQuestion.transform.position = Positioner.position;
+        _multiChoiceQuestion.transform.rotation = Positioner.rotation;
+    }
+
     private async UniTask ShowNextQuestion()
     {
-
         await _multiChoiceQuestion.SetQuestionAndScaleAndWaitForAnswer(_questions[question_index].Question, _questions[question_index].Answer1, _questions[question_index].Answer2, _questions[question_index].Answer3, _questions[question_index].size_x, _questions[question_index].size_y);
         question_index++;
     }
 
+    //general method to display a list of instructions on the floating board one after the other
     private async UniTask ShowInstructions(List<TextAndScaleTuple> instructions)
     {
         foreach (TextAndScaleTuple instruction in instructions)
         {
+            ////TODO change to if hebrew text
+            //if (true)
+            //{
+            //    print("reversing instruction: " + instruction.text);
+            //    instruction.text = HebrewText.ReverseString(instruction.text);
+            //    print("reversed instruction: " + instruction.text);
+            //}
+
+
             //check if the instruction should be shown
             bool shouldShowMsg;
 

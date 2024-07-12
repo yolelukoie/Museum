@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -17,28 +16,28 @@ public class AnalyticsWriter
         //dataPath = Path.Combine(Application.persistentDataPath, "AnalyticsEvents_" + TAUXRUtilities.GetFormattedDateTime(true));
 
         #region Create a new folder for all analytics events. Currenly not neccessary.
-      /*
-        // Create the folder for the CSV files if it doesn't exist
-        if (!Directory.Exists(dataPath))
-        {
-            Directory.CreateDirectory(dataPath);
-            Debug.Log($"Created a new data folder in: {dataPath}");
-        }
+        /*
+          // Create the folder for the CSV files if it doesn't exist
+          if (!Directory.Exists(dataPath))
+          {
+              Directory.CreateDirectory(dataPath);
+              Debug.Log($"Created a new data folder in: {dataPath}");
+          }
 
-        // Set permissions for the CSV folder
-        try
-        {
-            string filePath = Path.Combine(dataPath, "permission_test.txt");
-            using (StreamWriter writer = new StreamWriter(filePath))
-            {
-                writer.WriteLine("test");
-            }
-            File.Delete(filePath);
-        }
-        catch (IOException ex)
-        {
-            Debug.LogError("Error setting permissions for CSV folder: " + ex.Message);
-        }*/
+          // Set permissions for the CSV folder
+          try
+          {
+              string filePath = Path.Combine(dataPath, "permission_test.txt");
+              using (StreamWriter writer = new StreamWriter(filePath))
+              {
+                  writer.WriteLine("test");
+              }
+              File.Delete(filePath);
+          }
+          catch (IOException ex)
+          {
+              Debug.LogError("Error setting permissions for CSV folder: " + ex.Message);
+          }*/
 
         #endregion
     }
@@ -56,6 +55,7 @@ public class AnalyticsWriter
     // Called from TAUXRDataManager every time a new line is logged into a Analytics Table.
     public void WriteAnalyticsDataFile(AnalyticsDataClass dataClass)
     {
+
         string tableName = dataClass.TableName;
 
         // Check if a CSV file already exists for this event name
