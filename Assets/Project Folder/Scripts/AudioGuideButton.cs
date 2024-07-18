@@ -78,5 +78,13 @@ public class AudioGuideButton : MonoBehaviour
 
     }
 
+    public async UniTask waitForPress()
+    {
+        //wait for player to hit play
+        await new WaitUntil(() => _audioGuideSource.isPlaying == true);
+
+    }
+
+
 }
 

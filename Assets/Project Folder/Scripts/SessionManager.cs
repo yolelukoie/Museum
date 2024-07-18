@@ -5,23 +5,40 @@ using UnityEngine;
 
 public class SessionManager : TXRSingleton<SessionManager>
 {
+    //consts
     const String ACTIVE_TYPE = "Type 1";
     const String BOTH_TYPE = "Type 2";
     const String PASSIVE_TYPE = "Type 3";
-
     const int FIRST_PIECE_INDEX = 0;
 
-    private FloatingBoard _floatingBoard;
-    private MultiChoiceQuestion _multiChoiceQuestion;
-    private List<Piece> _pieces;
+
+    //config
     private String _experimentType;
     private int _maxQuestionsInSemiActiveTour;
+
+    //game objects
+    private FloatingBoard _floatingBoard;
+    private MultiChoiceQuestion _multiChoiceQuestion;
+    private MultiChoiceQuestion _expTypeQuestion;
+    private List<Piece> _pieces;
+    private List<Piece> _demoPieces;
     private List<SerializedMultichoiceQuestion> _questions;
     private ArrowPointer _directionArrow;
-
-    List<List<String>> activeTourQuestions = new List<List<String>>();
+    private List<List<String>> _activeTourQuestions = new List<List<String>>();
     private int question_index = 0;
+    private Collection _artCollection;
 
+
+
+    // demo objects
+    private InstructionsBoard _pressToStart;
+    private InstructionsBoard _welcomeToTheMuseum;
+    private InstructionsBoard _followTheArrowTotheFirstPiece;
+    private InstructionsBoard _pressTheButtonToHearAudio;
+    private InstructionsBoard _answerTheQuestion;
+    private InstructionsBoard _letsStartTheTour;
+    private InstructionsBoard _followTheArrow;
+    private Collection _demoCollection;
 
     //If there is a higher level flow manager, remove this and use his start method
     private void Start()
@@ -33,62 +50,30 @@ public class SessionManager : TXRSingleton<SessionManager>
     public async UniTask RunSessionFlow()
     {
         StartSession();
-
         //wait for calibration to finish
         await OperatorsInit();
-
-        //run the session
-        await ShowInstructions(SceneReferencer.Instance.ScaledInstructions);
-
-        //main session loop
-        foreach (Piece p in _pieces)
-        {
-            int pieceIndex = _pieces.IndexOf(p);
-
-            p.arrow.gameObject.SetActive(true);
-            p.audioGuideButton.gameObject.SetActive(true);
-
-            _directionArrow.ShowAndSetTarget(p.audioGuideButton.transform);
-            await ShowInstructions(SceneReferencer.Instance.BetweenPiecesMsg);
-
-            await p.audioGuideButton.WaitForAudioGuideToFinish();
-
-            p.audioGuideButton.gameObject.SetActive(false);
-
-            //should we show the question?
-            switch (_experimentType)
-            {
-                case PASSIVE_TYPE:
-                    break;
-
-                // If the experiment type is active or both (but than the piece index is within the active range), show the question
-                case ACTIVE_TYPE:
-                case BOTH_TYPE:
-                    if ((_experimentType == ACTIVE_TYPE) || (pieceIndex <= _maxQuestionsInSemiActiveTour))
-                    {
-                        SetQuestionPosition(p.questionBoardPositioner);
-                        await ShowNextQuestion();
-                    }
-                    break;
-            }
-
-        }
-
+        await PlayDemo();
+        await PlayTour();
         await ShowInstructions(SceneReferencer.Instance.endInstructionsAndScales);
         EndSession();
     }
+
+    // setup session initial conditions.
     private void StartSession()
     {
-        // setup session initial conditions.
         InitActiveTourQuestionsList();
 
         //get some references:
         _floatingBoard = SceneReferencer.Instance.floatingBoard;
         _pieces = SceneReferencer.Instance.pieces;
+        _demoPieces = SceneReferencer.Instance.demoPieces;
         _multiChoiceQuestion = SceneReferencer.Instance.multiChoiceQuestion;
+        _expTypeQuestion = SceneReferencer.Instance.typeQuestion;
         _maxQuestionsInSemiActiveTour = SceneReferencer.Instance.NumberOfQuestionsInSemiActiveTour;
         _questions = SceneReferencer.Instance.questions;
         _directionArrow = SceneReferencer.Instance.arrowPointer;
+        _demoCollection = SceneReferencer.Instance.demoCollection;
+        _artCollection = SceneReferencer.Instance.artCollection;
 
         //make sure everything is hidden
         foreach (Piece p in _pieces)
@@ -96,9 +81,27 @@ public class SessionManager : TXRSingleton<SessionManager>
             p.arrow.gameObject.SetActive(false);
             p.audioGuideButton.gameObject.SetActive(false);
         }
-        _multiChoiceQuestion.gameObject.SetActive(false);
-        _directionArrow.Hide();
 
+        foreach (Piece p in _demoPieces)
+        {
+            p.arrow.gameObject.SetActive(false);
+            p.audioGuideButton.gameObject.SetActive(false);
+        }
+        _multiChoiceQuestion.gameObject.SetActive(false);
+        _expTypeQuestion.gameObject.SetActive(false);
+        _directionArrow.Hide();
+        _demoCollection.SetAlphaImmediate(0f);
+        _artCollection.SetAlphaImmediate(0f);
+
+
+
+        _welcomeToTheMuseum = SceneReferencer.Instance.welcomeToTheMuseum;
+        _followTheArrowTotheFirstPiece = SceneReferencer.Instance.followTheArrowToTheFirstPiece;
+        _pressTheButtonToHearAudio = SceneReferencer.Instance.pressTheButtonToHearAudio;
+        _answerTheQuestion = SceneReferencer.Instance.answerTheQuestion;
+        _letsStartTheTour = SceneReferencer.Instance.letsStartTheTour;
+        _followTheArrow = SceneReferencer.Instance.followTheArrow;
+        _pressToStart = SceneReferencer.Instance.pressToStart;
     }
 
     private void EndSession()
@@ -118,7 +121,7 @@ public class SessionManager : TXRSingleton<SessionManager>
         List<SerializedMultichoiceQuestion> MultichoiceQuestions = SceneReferencer.Instance.questions;
         foreach (SerializedMultichoiceQuestion q in MultichoiceQuestions)
         {
-            activeTourQuestions.Add(new List<String> { q.Question, q.Answer1, q.Answer2, q.Answer3 });
+            _activeTourQuestions.Add(new List<String> { q.Question, q.Answer1, q.Answer2, q.Answer3 });
         }
 
     }
@@ -133,7 +136,7 @@ public class SessionManager : TXRSingleton<SessionManager>
 
         //set experiment type
         MultichoiceAnswer.OnAnswerSelected.AddListener(processExperimentType);
-        await _multiChoiceQuestion.SetQuestionAndWaitForAnswer("Choose the type of experiment", ACTIVE_TYPE, BOTH_TYPE, PASSIVE_TYPE);
+        await _expTypeQuestion.SetAnswersAndAndWaitForAnswer(ACTIVE_TYPE, BOTH_TYPE, PASSIVE_TYPE);
         MultichoiceAnswer.OnAnswerSelected.RemoveListener(processExperimentType);
         await UniTask.Delay(TimeSpan.FromSeconds(1));
 
@@ -176,7 +179,7 @@ public class SessionManager : TXRSingleton<SessionManager>
 
     private async UniTask ShowNextQuestion()
     {
-        await _multiChoiceQuestion.SetQuestionAndScaleAndWaitForAnswer(_questions[question_index].Question, _questions[question_index].Answer1, _questions[question_index].Answer2, _questions[question_index].Answer3, _questions[question_index].size_x, _questions[question_index].size_y);
+        await _multiChoiceQuestion.SetAnswersAndAndWaitForAnswer(_questions[question_index].Answer1, _questions[question_index].Answer2, _questions[question_index].Answer3);
         question_index++;
     }
 
@@ -185,15 +188,6 @@ public class SessionManager : TXRSingleton<SessionManager>
     {
         foreach (TextAndScaleTuple instruction in instructions)
         {
-            ////TODO change to if hebrew text
-            //if (true)
-            //{
-            //    print("reversing instruction: " + instruction.text);
-            //    instruction.text = HebrewText.ReverseString(instruction.text);
-            //    print("reversed instruction: " + instruction.text);
-            //}
-
-
             //check if the instruction should be shown
             bool shouldShowMsg;
 
@@ -230,6 +224,99 @@ public class SessionManager : TXRSingleton<SessionManager>
                 await _floatingBoard.ShowTextAndScaleUntilContinue(instruction);
                 await UniTask.Delay(TimeSpan.FromSeconds(1));
             }
+        }
+    }
+
+    private async UniTask PlayDemo()
+    {
+        await _pressToStart.ShowUntilContinuePressed();
+
+        Debug.Log("Playing demo");
+        // board: Welcome to the virtual museum! 
+        await _welcomeToTheMuseum.ShowUntilContinuePressed();
+
+        // show the arrow pointing to the first piece
+        _directionArrow.ShowAndSetTarget(_demoPieces[FIRST_PIECE_INDEX].audioGuideButton.transform);
+
+        // board: Follow the arrow to the first piece
+        await _followTheArrowTotheFirstPiece.ShowUntilAudioEnds();
+
+        // paintings appear on the wall
+        _demoCollection.FadeIn();
+
+        //show piece arrow and audio guide button
+        _demoPieces[FIRST_PIECE_INDEX].arrow.gameObject.SetActive(true);
+        _demoPieces[FIRST_PIECE_INDEX].audioGuideButton.gameObject.SetActive(true);
+
+        // board near the painting: press the button
+        _pressTheButtonToHearAudio.Show(false);
+
+        // audio playes when the button is pressed
+        await _demoPieces[FIRST_PIECE_INDEX].audioGuideButton.waitForPress();
+        _pressTheButtonToHearAudio.HideAndWaitForAnimation().Forget();
+        await _demoPieces[FIRST_PIECE_INDEX].audioGuideButton.WaitForAudioGuideToFinish();
+
+        _demoPieces[FIRST_PIECE_INDEX].audioGuideButton.gameObject.SetActive(false);
+
+
+        // Active mode:
+        if (_experimentType == ACTIVE_TYPE || _experimentType == BOTH_TYPE)
+        {
+            SetQuestionPosition(_demoPieces[FIRST_PIECE_INDEX].questionBoardPositioner);
+            await _answerTheQuestion.ShowUntilAudioEnds();
+            await _multiChoiceQuestion.SetAnswersAndAndWaitForAnswer("1", "2", "3");
+        }
+
+        //show piece arrow and audio guide button for second piece
+        _demoPieces[1].arrow.gameObject.SetActive(true);
+        _demoPieces[1].audioGuideButton.gameObject.SetActive(true);
+
+        // show the arrow pointing to the second piece
+        _directionArrow.ShowAndSetTarget(_demoPieces[1].audioGuideButton.transform);
+        _followTheArrow.ShowUntilAudioEnds().Forget();
+
+        await _demoPieces[1].audioGuideButton.waitForPress();
+        _demoPieces[1].audioGuideButton.WaitForAudioGuideToFinish().Forget();
+        _demoPieces[1].audioGuideButton.gameObject.SetActive(false);
+
+        await _letsStartTheTour.ShowUntilContinuePressed();
+
+        _demoCollection.FadeOut();
+
+    }
+
+    private async UniTask PlayTour()
+    {
+        _artCollection.FadeIn();
+
+        foreach (Piece p in _pieces)
+        {
+            int pieceIndex = _pieces.IndexOf(p);
+
+            p.arrow.gameObject.SetActive(true);
+            p.audioGuideButton.gameObject.SetActive(true);
+
+            _directionArrow.ShowAndSetTarget(p.audioGuideButton.transform);
+
+            await p.audioGuideButton.WaitForAudioGuideToFinish();
+            p.audioGuideButton.gameObject.SetActive(false);
+            //should we show the question?
+            switch (_experimentType)
+            {
+                case PASSIVE_TYPE:
+                    break;
+
+                // If the experiment type is active or both (but than the piece index is within the active range), show the question
+                case ACTIVE_TYPE:
+                case BOTH_TYPE:
+                    if ((_experimentType == ACTIVE_TYPE) || (pieceIndex <= _maxQuestionsInSemiActiveTour))
+                    {
+                        SetQuestionPosition(p.questionBoardPositioner);
+                        await ShowNextQuestion();
+                    }
+                    break;
+            }
+
         }
     }
 }
