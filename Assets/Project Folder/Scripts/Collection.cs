@@ -1,3 +1,5 @@
+
+using Sirenix.OdinInspector;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
@@ -13,6 +15,7 @@ public class Collection : MonoBehaviour
         //SetAlphaImmediate(0f);
     }
 
+    [Button("Fade In")]
     public void FadeIn()
     {
         TriggerFade(true);
