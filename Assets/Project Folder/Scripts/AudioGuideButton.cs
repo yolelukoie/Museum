@@ -15,6 +15,7 @@ public class AudioGuideButton : MonoBehaviour
     private TXRButton _txrButtonTouch;
     private bool _isPlaying = false;
     private bool _isSkipped = false;
+    private AudioTimeLeft _audioTimeLeft;
 
     public UnityEvent guideSkipped;
 
@@ -26,6 +27,8 @@ public class AudioGuideButton : MonoBehaviour
         _audioGuideSource = GetComponent<AudioSource>();
         _txrButtonTouch = GetComponent<TXRButton>();
         _piece = GetComponentInParent<Piece>();
+        _audioTimeLeft = GetComponentInChildren<AudioTimeLeft>();
+        _audioTimeLeft.gameObject.SetActive(false);
         _audioGuideSource.clip = _piece.audioGuideClip;
 
         _directionArrow = SceneReferencer.Instance.arrowPointer;
@@ -43,7 +46,7 @@ public class AudioGuideButton : MonoBehaviour
             TXRDataManager.Instance.ReportAudioGuideTiming(_piece.name, AudioGuideState.Started.ToString());
 
             _isPlaying = true;
-
+            _audioTimeLeft.gameObject.SetActive(true);
             _directionArrow.Hide();
             _piece.arrow.Hide();
         }
@@ -74,6 +77,7 @@ public class AudioGuideButton : MonoBehaviour
         await new WaitUntil(() => _audioGuideSource.time >= _audioGuideSource.clip.length);
         print("Debug WaitForAudioGuideToFinish: " + _audioGuideSource.clip.name + " finished");
 
+        _audioTimeLeft.gameObject.SetActive(false);
         TXRDataManager.Instance.ReportAudioGuideTiming(_piece.name, AudioGuideState.Finished.ToString());
 
     }
