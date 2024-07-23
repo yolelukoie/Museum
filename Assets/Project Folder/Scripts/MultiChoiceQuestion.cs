@@ -41,7 +41,12 @@ public class MultiChoiceQuestion : MonoBehaviour, Question
         TXRDataManager.Instance.ReportMultichoiceAnswer(_question, _answer1, _answer2, _answer3, selectedAnswer);
     }
 
-
+    private void SetAnswers(string answer1, string answer2, string answer3)
+    {
+        _answers[0].SetText(answer1);
+        _answers[1].SetText(answer2);
+        _answers[2].SetText(answer3);
+    }
 
     public void setQuestionWithAutoScale(string question, string answer1, string answer2, string answer3)
     {
@@ -106,6 +111,16 @@ public class MultiChoiceQuestion : MonoBehaviour, Question
         await UniTask.Delay(TimeSpan.FromSeconds(2));
         await WaitForAnswer();
 
+        Hide();
+    }
+
+    public async UniTask SetAnswersAndAndWaitForAnswer(string answer1, string answer2, string answer3)
+    {
+        Show();
+        InitAnswers();
+        SetAnswers(answer1, answer2, answer3);
+        await UniTask.Delay(TimeSpan.FromSeconds(1));
+        await WaitForAnswer();
         Hide();
     }
 

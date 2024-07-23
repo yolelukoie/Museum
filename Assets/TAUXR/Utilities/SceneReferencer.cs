@@ -12,18 +12,23 @@ public class SceneReferencer : TXRSingleton<SceneReferencer>
     [Header("Art Pieces")]
     public List<Piece> pieces;
 
+    [Header("Demo Pieces")]
+    public List<Piece> demoPieces;
+
+    [Header("Demo Instructions")]
+    public InstructionsBoard pressToStart;
+    public InstructionsBoard welcomeToTheMuseum;
+    public InstructionsBoard followTheArrowToTheFirstPiece;
+    public InstructionsBoard pressTheButtonToHearAudio;
+    public InstructionsBoard answerTheQuestion;
+    public InstructionsBoard letsStartTheTour;
+    public InstructionsBoard followTheArrow;
+
     [Header("Active Tour Questions")]
     public List<SerializedMultichoiceQuestion> questions;
 
 
     [Header("Instructions")]
-    //[TextArea(3, 10)]
-    //public List<string> instructions;
-    //[TextArea(3, 10)]
-    //public List<string> endInstructions;
-
-
-
     public List<TextAndScaleTuple> ScaledInstructions;
 
     public List<TextAndScaleTuple> BetweenPiecesMsg;
@@ -35,7 +40,12 @@ public class SceneReferencer : TXRSingleton<SceneReferencer>
     [Header("Game Objects")]
     public FloatingBoard floatingBoard;
     public MultiChoiceQuestion multiChoiceQuestion;
+    public MultiChoiceQuestion typeQuestion;
     public ArrowPointer arrowPointer;
+    public Collection artCollection;
+    public Collection demoCollection;
+
+
 
 }
 
