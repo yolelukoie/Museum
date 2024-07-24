@@ -24,16 +24,13 @@ public class SceneReferencer : TXRSingleton<SceneReferencer>
     public InstructionsBoard letsStartTheTour;
     public InstructionsBoard followTheArrow;
 
+    [Header("Tour Instructions")]
+    public InstructionsBoard endBoard;
+    public InstructionsBoard endActiveOfChoice;
+
     [Header("Active Tour Questions")]
     public List<SerializedMultichoiceQuestion> questions;
 
-
-    [Header("Instructions")]
-    public List<TextAndScaleTuple> ScaledInstructions;
-
-    public List<TextAndScaleTuple> BetweenPiecesMsg;
-
-    public List<TextAndScaleTuple> endInstructionsAndScales;
 
     //----------------------Game Objects----------------------
     [Space(20)]

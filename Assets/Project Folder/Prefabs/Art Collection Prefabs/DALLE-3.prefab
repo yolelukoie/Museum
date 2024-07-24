@@ -159,7 +159,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1344c3c82d62a2a41a3576d8abb8e3ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 2100000, guid: 19ba66cbd63d472458ddbc4900083f98, type: 2}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
@@ -434,3 +434,4 @@ MonoBehaviour:
   audioGuideButton: {fileID: 0}
   audioGuideClip: {fileID: 0}
   resizedImage: {fileID: 2800000, guid: f756879dbe352124b92081899c3ec81c, type: 3}
+  questionBoardPositioner: {fileID: 0}

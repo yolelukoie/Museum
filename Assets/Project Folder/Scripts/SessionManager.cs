@@ -5,6 +5,9 @@ using UnityEngine;
 
 public class SessionManager : TXRSingleton<SessionManager>
 {
+    [Tooltip("Editor Only!")]
+    public bool skipDemo = false;
+
     //consts
     const String ACTIVE_TYPE = "Type 1";
     const String BOTH_TYPE = "Type 2";
@@ -28,7 +31,9 @@ public class SessionManager : TXRSingleton<SessionManager>
     private int question_index = 0;
     private Collection _artCollection;
 
-
+    //Tour Instructions
+    private InstructionsBoard _endBoard;
+    private InstructionsBoard _endOfChoice;
 
     // demo objects
     private InstructionsBoard _pressToStart;
@@ -45,16 +50,18 @@ public class SessionManager : TXRSingleton<SessionManager>
     {
         RunSessionFlow().Forget();
     }
-
-
     public async UniTask RunSessionFlow()
     {
         StartSession();
-        //wait for calibration to finish
+
         await OperatorsInit();
-        await PlayDemo();
+
+        if (!UnityEngine.Application.isEditor || !skipDemo)
+        {
+            await PlayDemo();
+        }
+
         await PlayTour();
-        await ShowInstructions(SceneReferencer.Instance.endInstructionsAndScales);
         EndSession();
     }
 
@@ -74,6 +81,8 @@ public class SessionManager : TXRSingleton<SessionManager>
         _directionArrow = SceneReferencer.Instance.arrowPointer;
         _demoCollection = SceneReferencer.Instance.demoCollection;
         _artCollection = SceneReferencer.Instance.artCollection;
+        _endBoard = SceneReferencer.Instance.endBoard;
+        _endOfChoice = SceneReferencer.Instance.endActiveOfChoice;
 
         //make sure everything is hidden
         foreach (Piece p in _pieces)
@@ -103,19 +112,6 @@ public class SessionManager : TXRSingleton<SessionManager>
         _followTheArrow = SceneReferencer.Instance.followTheArrow;
         _pressToStart = SceneReferencer.Instance.pressToStart;
     }
-
-    private void EndSession()
-    {
-        // setup end session conditions
-    }
-
-    private async UniTask BetweenRoundsFlow()
-    {
-        await UniTask.Yield();
-
-        throw new NotImplementedException();
-    }
-
     private void InitActiveTourQuestionsList()
     {
         List<SerializedMultichoiceQuestion> MultichoiceQuestions = SceneReferencer.Instance.questions;
@@ -125,7 +121,6 @@ public class SessionManager : TXRSingleton<SessionManager>
         }
 
     }
-
 
     // experiment operator chooses type of experiment, etc
     private async UniTask OperatorsInit()
@@ -183,6 +178,100 @@ public class SessionManager : TXRSingleton<SessionManager>
         question_index++;
     }
 
+    private async UniTask PlayDemo()
+    {
+        await _pressToStart.ShowUntilContinuePressed();
+
+        Debug.Log("Playing demo");
+
+        //Instructions, direction arrow:
+        await _welcomeToTheMuseum.ShowUntilContinuePressed();
+        _directionArrow.ShowAndSetTarget(_demoPieces[FIRST_PIECE_INDEX].audioGuideButton.transform);
+        await _followTheArrowTotheFirstPiece.ShowUntilAudioEnds();
+
+        _demoCollection.FadeIn();
+
+        //First piece:
+        _demoPieces[FIRST_PIECE_INDEX].arrow.gameObject.SetActive(true);
+        _demoPieces[FIRST_PIECE_INDEX].audioGuideButton.gameObject.SetActive(true);
+        _pressTheButtonToHearAudio.Show(false);
+        await _demoPieces[FIRST_PIECE_INDEX].audioGuideButton.waitForPress();
+        _pressTheButtonToHearAudio.HideAndWaitForAnimation().Forget();
+        await _demoPieces[FIRST_PIECE_INDEX].audioGuideButton.WaitForAudioGuideToFinish();
+        _demoPieces[FIRST_PIECE_INDEX].audioGuideButton.gameObject.SetActive(false);
+
+
+        // Active mode question:
+        if (_experimentType == ACTIVE_TYPE || _experimentType == BOTH_TYPE)
+        {
+            SetQuestionPosition(_demoPieces[FIRST_PIECE_INDEX].questionBoardPositioner);
+            await _answerTheQuestion.ShowUntilAudioEnds();
+            await _multiChoiceQuestion.SetAnswersAndAndWaitForAnswer("1", "2", "3");
+        }
+
+        //Second piece:
+        _demoPieces[1].arrow.gameObject.SetActive(true);
+        _demoPieces[1].audioGuideButton.gameObject.SetActive(true);
+        _directionArrow.ShowAndSetTarget(_demoPieces[1].audioGuideButton.transform);
+        _followTheArrow.ShowUntilAudioEnds().Forget();
+        await _demoPieces[1].audioGuideButton.waitForPress();
+        _demoPieces[1].audioGuideButton.WaitForAudioGuideToFinish().Forget();
+        _demoPieces[1].audioGuideButton.gameObject.SetActive(false);
+
+
+        await _letsStartTheTour.ShowUntilContinuePressed();
+        _demoCollection.FadeOut();
+
+    }
+
+    private async UniTask PlayTour()
+    {
+        _artCollection.FadeIn();
+
+        foreach (Piece p in _pieces)
+        {
+            int pieceIndex = _pieces.IndexOf(p);
+
+            p.arrow.gameObject.SetActive(true);
+            p.audioGuideButton.gameObject.SetActive(true);
+
+            _directionArrow.ShowAndSetTarget(p.audioGuideButton.transform);
+
+            await p.audioGuideButton.WaitForAudioGuideToFinish();
+            p.audioGuideButton.gameObject.SetActive(false);
+            //should we show the question?
+            switch (_experimentType)
+            {
+                case PASSIVE_TYPE:
+                    break;
+
+                // If the experiment type is active or both (but than the piece index is within the active range), show the question
+                case ACTIVE_TYPE:
+                case BOTH_TYPE:
+                    if ((_experimentType == ACTIVE_TYPE) || (pieceIndex <= _maxQuestionsInSemiActiveTour))
+                    {
+                        SetQuestionPosition(p.questionBoardPositioner);
+                        await ShowNextQuestion();
+                    }
+                    else if (pieceIndex == _maxQuestionsInSemiActiveTour + 1)
+                    {
+                        _endBoard.transform.position = p.questionBoardPositioner.position;
+                        await _endOfChoice.ShowUntilContinuePressed();
+                    }
+                    break;
+            }
+            _endBoard.transform.position = p.questionBoardPositioner.position;
+            await _endBoard.ShowUntilContinuePressed();
+
+        }
+    }
+    private void EndSession()
+    {
+        // setup end session conditions
+        Application.Quit();
+    }
+
+    #region Obsolete
     //general method to display a list of instructions on the floating board one after the other
     private async UniTask ShowInstructions(List<TextAndScaleTuple> instructions)
     {
@@ -226,97 +315,5 @@ public class SessionManager : TXRSingleton<SessionManager>
             }
         }
     }
-
-    private async UniTask PlayDemo()
-    {
-        await _pressToStart.ShowUntilContinuePressed();
-
-        Debug.Log("Playing demo");
-        // board: Welcome to the virtual museum! 
-        await _welcomeToTheMuseum.ShowUntilContinuePressed();
-
-        // show the arrow pointing to the first piece
-        _directionArrow.ShowAndSetTarget(_demoPieces[FIRST_PIECE_INDEX].audioGuideButton.transform);
-
-        // board: Follow the arrow to the first piece
-        await _followTheArrowTotheFirstPiece.ShowUntilAudioEnds();
-
-        // paintings appear on the wall
-        _demoCollection.FadeIn();
-
-        //show piece arrow and audio guide button
-        _demoPieces[FIRST_PIECE_INDEX].arrow.gameObject.SetActive(true);
-        _demoPieces[FIRST_PIECE_INDEX].audioGuideButton.gameObject.SetActive(true);
-
-        // board near the painting: press the button
-        _pressTheButtonToHearAudio.Show(false);
-
-        // audio playes when the button is pressed
-        await _demoPieces[FIRST_PIECE_INDEX].audioGuideButton.waitForPress();
-        _pressTheButtonToHearAudio.HideAndWaitForAnimation().Forget();
-        await _demoPieces[FIRST_PIECE_INDEX].audioGuideButton.WaitForAudioGuideToFinish();
-
-        _demoPieces[FIRST_PIECE_INDEX].audioGuideButton.gameObject.SetActive(false);
-
-
-        // Active mode:
-        if (_experimentType == ACTIVE_TYPE || _experimentType == BOTH_TYPE)
-        {
-            SetQuestionPosition(_demoPieces[FIRST_PIECE_INDEX].questionBoardPositioner);
-            await _answerTheQuestion.ShowUntilAudioEnds();
-            await _multiChoiceQuestion.SetAnswersAndAndWaitForAnswer("1", "2", "3");
-        }
-
-        //show piece arrow and audio guide button for second piece
-        _demoPieces[1].arrow.gameObject.SetActive(true);
-        _demoPieces[1].audioGuideButton.gameObject.SetActive(true);
-
-        // show the arrow pointing to the second piece
-        _directionArrow.ShowAndSetTarget(_demoPieces[1].audioGuideButton.transform);
-        _followTheArrow.ShowUntilAudioEnds().Forget();
-
-        await _demoPieces[1].audioGuideButton.waitForPress();
-        _demoPieces[1].audioGuideButton.WaitForAudioGuideToFinish().Forget();
-        _demoPieces[1].audioGuideButton.gameObject.SetActive(false);
-
-        await _letsStartTheTour.ShowUntilContinuePressed();
-
-        _demoCollection.FadeOut();
-
-    }
-
-    private async UniTask PlayTour()
-    {
-        _artCollection.FadeIn();
-
-        foreach (Piece p in _pieces)
-        {
-            int pieceIndex = _pieces.IndexOf(p);
-
-            p.arrow.gameObject.SetActive(true);
-            p.audioGuideButton.gameObject.SetActive(true);
-
-            _directionArrow.ShowAndSetTarget(p.audioGuideButton.transform);
-
-            await p.audioGuideButton.WaitForAudioGuideToFinish();
-            p.audioGuideButton.gameObject.SetActive(false);
-            //should we show the question?
-            switch (_experimentType)
-            {
-                case PASSIVE_TYPE:
-                    break;
-
-                // If the experiment type is active or both (but than the piece index is within the active range), show the question
-                case ACTIVE_TYPE:
-                case BOTH_TYPE:
-                    if ((_experimentType == ACTIVE_TYPE) || (pieceIndex <= _maxQuestionsInSemiActiveTour))
-                    {
-                        SetQuestionPosition(p.questionBoardPositioner);
-                        await ShowNextQuestion();
-                    }
-                    break;
-            }
-
-        }
-    }
+    #endregion
 }

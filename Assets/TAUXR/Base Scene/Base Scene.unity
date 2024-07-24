@@ -374,6 +374,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9179752179251115253, guid: 967af0223632a1649afa8f1a4520fc54,
         type: 3}
+      propertyPath: near clip plane
+      value: 0.01
+      objectReference: {fileID: 0}
+    - target: {fileID: 9179752179251115253, guid: 967af0223632a1649afa8f1a4520fc54,
+        type: 3}
       propertyPath: m_BackGroundColor.a
       value: 0
       objectReference: {fileID: 0}
@@ -448,6 +453,9 @@ MonoBehaviour:
   _positions:
   - {x: 0, y: 0, z: 0}
   - {x: 1.5, y: 0, z: 0.5}
+  - {x: 0.741, y: 0, z: -2.877}
+  - {x: -1.396, y: 0, z: 1.001}
+  - {x: 1.236, y: 0, z: 0.412}
 --- !u!4 &189833906 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 9179752179252683371, guid: 967af0223632a1649afa8f1a4520fc54,
