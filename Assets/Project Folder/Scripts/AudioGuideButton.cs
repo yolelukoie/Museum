@@ -19,7 +19,7 @@ public class AudioGuideButton : MonoBehaviour
 
     public UnityEvent guideSkipped;
 
-    private ArrowPointer _directionArrow;
+    private DirectionGuideArrow _directionArrow;
     private TaskCompletionSource<bool> _guideSkipped;
 
     private void Start()
@@ -31,7 +31,7 @@ public class AudioGuideButton : MonoBehaviour
         _audioTimeLeft.gameObject.SetActive(false);
         _audioGuideSource.clip = _piece.audioGuideClip;
 
-        _directionArrow = SceneReferencer.Instance.arrowPointer;
+        _directionArrow = SceneReferencer.Instance.DirectionArrow;
         _txrButtonTouch.Pressed.AddListener(Play);
 
     }

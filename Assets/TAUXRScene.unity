@@ -521,6 +521,7 @@ GameObject:
   - component: {fileID: 93531945}
   - component: {fileID: 93531944}
   - component: {fileID: 93531948}
+  - component: {fileID: 93531949}
   m_Layer: 0
   m_Name: DirectionGuideArrow
   m_TagString: Untagged
@@ -535,7 +536,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 93531943}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d83708fa3d75f9b488144ac263d563bd, type: 3}
   m_Name: 
@@ -632,6 +633,23 @@ MonoBehaviour:
   lerpSpeed: 4
   _minDistanceToControl: 0.1
   _angleOffset: 5
+--- !u!114 &93531949
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 93531943}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3541a542c53d79d48b97adfff8175e5e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  radius: 1
+  heightOffset: -0.2
+  movementDuration: 3
+  InstructionBoardHeightOffset: 2
+  _target: {fileID: 1208092579}
 --- !u!1 &105959545
 GameObject:
   m_ObjectHideFlags: 0
@@ -7440,7 +7458,7 @@ PrefabInstance:
     - target: {fileID: 3889759835927473169, guid: 16ee61d410c83e549b07a5234f3e8fab,
         type: 3}
       propertyPath: m_text
-      value: Choose yhe type of experiment
+      value: Choose the type of experiment
       objectReference: {fileID: 0}
     - target: {fileID: 3889759835927473169, guid: 16ee61d410c83e549b07a5234f3e8fab,
         type: 3}
@@ -10713,6 +10731,12 @@ Transform:
   - {fileID: 935265253}
   m_Father: {fileID: 1358733904}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &1208092579 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2565403730489647282, guid: 2854b7023b0c0f54a93079d68ed2bc23,
+    type: 3}
+  m_PrefabInstance: {fileID: 2780304442932501425}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1208902582
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -14091,7 +14115,7 @@ PrefabInstance:
         type: 3}
       propertyPath: arrowPointer
       value: 
-      objectReference: {fileID: 93531944}
+      objectReference: {fileID: 0}
     - target: {fileID: 612552674921322229, guid: 56cb0481d0a95af4a8059ec0bd4b07c5,
         type: 3}
       propertyPath: pressToStart
@@ -14112,6 +14136,11 @@ PrefabInstance:
       propertyPath: floatingBoard
       value: 
       objectReference: {fileID: 831323812}
+    - target: {fileID: 612552674921322229, guid: 56cb0481d0a95af4a8059ec0bd4b07c5,
+        type: 3}
+      propertyPath: DirectionArrow
+      value: 
+      objectReference: {fileID: 93531949}
     - target: {fileID: 612552674921322229, guid: 56cb0481d0a95af4a8059ec0bd4b07c5,
         type: 3}
       propertyPath: demoCollection

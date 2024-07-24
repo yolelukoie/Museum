@@ -38,7 +38,7 @@ public class SceneReferencer : TXRSingleton<SceneReferencer>
     public FloatingBoard floatingBoard;
     public MultiChoiceQuestion multiChoiceQuestion;
     public MultiChoiceQuestion typeQuestion;
-    public ArrowPointer arrowPointer;
+    public DirectionGuideArrow DirectionArrow;
     public Collection artCollection;
     public Collection demoCollection;
 

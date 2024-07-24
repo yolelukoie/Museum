@@ -26,7 +26,7 @@ public class SessionManager : TXRSingleton<SessionManager>
     private List<Piece> _pieces;
     private List<Piece> _demoPieces;
     private List<SerializedMultichoiceQuestion> _questions;
-    private ArrowPointer _directionArrow;
+    private DirectionGuideArrow _directionArrow;
     private List<List<String>> _activeTourQuestions = new List<List<String>>();
     private int question_index = 0;
     private Collection _artCollection;
@@ -78,7 +78,7 @@ public class SessionManager : TXRSingleton<SessionManager>
         _expTypeQuestion = SceneReferencer.Instance.typeQuestion;
         _maxQuestionsInSemiActiveTour = SceneReferencer.Instance.NumberOfQuestionsInSemiActiveTour;
         _questions = SceneReferencer.Instance.questions;
-        _directionArrow = SceneReferencer.Instance.arrowPointer;
+        _directionArrow = SceneReferencer.Instance.DirectionArrow;
         _demoCollection = SceneReferencer.Instance.demoCollection;
         _artCollection = SceneReferencer.Instance.artCollection;
         _endBoard = SceneReferencer.Instance.endBoard;
@@ -186,7 +186,7 @@ public class SessionManager : TXRSingleton<SessionManager>
 
         //Instructions, direction arrow:
         await _welcomeToTheMuseum.ShowUntilContinuePressed();
-        _directionArrow.ShowAndSetTarget(_demoPieces[FIRST_PIECE_INDEX].audioGuideButton.transform);
+        _directionArrow.ShowAndSetTarget(_demoPieces[FIRST_PIECE_INDEX].audioGuideButton.transform, false).Forget();
         await _followTheArrowTotheFirstPiece.ShowUntilAudioEnds();
 
         _demoCollection.FadeIn();
@@ -212,7 +212,7 @@ public class SessionManager : TXRSingleton<SessionManager>
         //Second piece:
         _demoPieces[1].arrow.gameObject.SetActive(true);
         _demoPieces[1].audioGuideButton.gameObject.SetActive(true);
-        _directionArrow.ShowAndSetTarget(_demoPieces[1].audioGuideButton.transform);
+        _directionArrow.ShowAndSetTarget(_demoPieces[1].audioGuideButton.transform, true).Forget();
         _followTheArrow.ShowUntilAudioEnds().Forget();
         await _demoPieces[1].audioGuideButton.waitForPress();
         _demoPieces[1].audioGuideButton.WaitForAudioGuideToFinish().Forget();
@@ -235,7 +235,7 @@ public class SessionManager : TXRSingleton<SessionManager>
             p.arrow.gameObject.SetActive(true);
             p.audioGuideButton.gameObject.SetActive(true);
 
-            _directionArrow.ShowAndSetTarget(p.audioGuideButton.transform);
+            _directionArrow.ShowAndSetTarget(p.audioGuideButton.transform, false).Forget();
 
             await p.audioGuideButton.WaitForAudioGuideToFinish();
             p.audioGuideButton.gameObject.SetActive(false);

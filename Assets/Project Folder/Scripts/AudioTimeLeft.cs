@@ -9,6 +9,7 @@ public class AudioTimeLeft : MonoBehaviour
     public TextMeshPro text;
     public Line line;
 
+    private Piece _piece;
     private Vector3 initialLineLength;
     private float initialLineLengthX;
     private float initilTime;
@@ -17,9 +18,18 @@ public class AudioTimeLeft : MonoBehaviour
     void Start()
     {
         audioSource = GetComponentInParent<AudioGuideButton>().GetComponent<AudioSource>();
+        if (audioSource == null)
+        {
+            Debug.LogError("AudioSource not found in " + gameObject.name);
+        }
 
+        _piece = GetComponentInParent<AudioGuideButton>().GetComponentInParent<Piece>();
+        if (_piece == null)
+        {
+            Debug.LogError("Piece component not found in " + gameObject.name);
+        }
         initialLineLengthX = line.End.x;
-        initilTime = audioSource.clip.length;
+        initilTime = _piece.audioGuideClip.length;
     }
 
     // Update is called once per frame
