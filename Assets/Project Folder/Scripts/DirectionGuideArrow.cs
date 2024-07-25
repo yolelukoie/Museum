@@ -16,20 +16,26 @@ public class DirectionGuideArrow : MonoBehaviour
 
     public Transform _target;
     private Transform _playerHead;
+    //private Transform _player;
+
     [ShowInInspector]
     private bool _shouldUpdatePosition = false;
     private InstructionsBoard _followTheArrowInstruction;
     private MeshRenderer _meshRenderer;
+    //private float _initialRadius;
 
     private void Awake()
     {
         _meshRenderer = GetComponent<MeshRenderer>();
+        //_initialRadius = radius;
     }
     private void Start()
     {
         _playerHead = TXRPlayer.Instance.PlayerHead;
+        //_player = TXRPlayer.Instance.gameObject.transform;
         _followTheArrowInstruction = SceneReferencer.Instance.followTheArrow;
         _shouldUpdatePosition = false;
+
     }
 
     // Update is called once per frame
@@ -41,18 +47,17 @@ public class DirectionGuideArrow : MonoBehaviour
         }
     }
 
-    //public void Show() { gameObject.SetActive(true); }
-    //public void Hide() { gameObject.SetActive(false); }
-
     public void Show()
     {
         _meshRenderer.enabled = true;
         _shouldUpdatePosition = false;
+        //ResetRadius();
     }
     public void Hide()
     {
         _meshRenderer.enabled = false;
         _shouldUpdatePosition = false;
+        //ResetRadius();
     }
     public void SetTarget(Transform newTarget)
     {
@@ -93,6 +98,7 @@ public class DirectionGuideArrow : MonoBehaviour
         Vector3 firstPosition = calculateFirstPosition();
         transform.position = firstPosition;
         _meshRenderer.enabled = true;
+        //ResetRadius();
         MoveOnCircle(transform.position, calculatePositionTowardsTarget(), _playerHead.position, movementDuration);
         await UniTask.Delay(TimeSpan.FromSeconds(movementDuration));
         _shouldUpdatePosition = true;
@@ -145,6 +151,7 @@ public class DirectionGuideArrow : MonoBehaviour
     {
         transform.position = calculatePositionTowardsTarget();
         transform.LookAt(_target);
+        //UpdateRadius();
     }
 
     public async UniTask ShowAndSetTarget(Transform newTarget, bool showInstruction)
@@ -166,6 +173,27 @@ public class DirectionGuideArrow : MonoBehaviour
         _followTheArrowInstruction.transform.rotation = Quaternion.LookRotation(_playerHead.position - _followTheArrowInstruction.transform.position, Vector3.up) * Quaternion.Euler(0, 180, 0);
         _followTheArrowInstruction.ShowUntilAudioEnds().Forget();
     }
+
+
+    //private void UpdateRadius()
+    //{
+    //TODO: Check if this is needed, fix it or remove it
+    //    // player instead of playerHead because its jumpy
+    //    float distanceToTarget = Vector3.Distance(_player.position, _target.position);
+    //    if (distanceToTarget < radius)
+    //    {
+    //        radius = distanceToTarget;
+    //    }
+    //    else
+    //    {
+    //        radius = _initialRadius;
+    //    }
+    //}
+
+    //private void ResetRadius()
+    //{
+    //    radius = _initialRadius;
+    //}
 
     #region Debug
     [Button]
