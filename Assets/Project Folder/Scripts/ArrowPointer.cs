@@ -1,5 +1,6 @@
 using UnityEngine;
 
+//Obsolete class, use DirectionGuideArrow instead
 public class ArrowPointer : MonoBehaviour
 {
     public Transform target; // Reference to the target GameObject

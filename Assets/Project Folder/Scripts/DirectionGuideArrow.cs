@@ -10,7 +10,7 @@ public class DirectionGuideArrow : MonoBehaviour
     public float radius = 1f;
     public float heightOffset = 1f;
     public float movementDuration = 2f;
-    public float InstructionBoardHeightOffset = 0.5f;
+    public float InstructionBoardHeightOffset = 0.2f;
 
     private Vector3 disableYVec = new Vector3(1, 0, 1);
 
@@ -21,24 +21,39 @@ public class DirectionGuideArrow : MonoBehaviour
     private InstructionsBoard _followTheArrowInstruction;
     private MeshRenderer _meshRenderer;
 
-    // Start is called before the first frame update
+    private void Awake()
+    {
+        _meshRenderer = GetComponent<MeshRenderer>();
+    }
     private void Start()
     {
         _playerHead = TXRPlayer.Instance.PlayerHead;
         _followTheArrowInstruction = SceneReferencer.Instance.followTheArrow;
-        _meshRenderer = GetComponent<MeshRenderer>();
         _shouldUpdatePosition = false;
-
     }
 
     // Update is called once per frame
     private void Update()
     {
-        //UpdatePositionTowardsTarget();
+        if (_shouldUpdatePosition)
+        {
+            UpdatePositionTowardsTarget();
+        }
     }
 
-    public void Show() { gameObject.SetActive(true); }
-    public void Hide() { gameObject.SetActive(false); }
+    //public void Show() { gameObject.SetActive(true); }
+    //public void Hide() { gameObject.SetActive(false); }
+
+    public void Show()
+    {
+        _meshRenderer.enabled = true;
+        _shouldUpdatePosition = false;
+    }
+    public void Hide()
+    {
+        _meshRenderer.enabled = false;
+        _shouldUpdatePosition = false;
+    }
     public void SetTarget(Transform newTarget)
     {
         _target = newTarget;
@@ -46,13 +61,9 @@ public class DirectionGuideArrow : MonoBehaviour
 
     private Vector3 calculateFirstPosition()
     {
-        Start();
-        Debug.Log("DEBUG: calculateFirstPosition");
-        _shouldUpdatePosition = false;
         Vector3 directionToTarget = (_target.position - _playerHead.position).normalized;
         Vector3 firstPosition = _playerHead.position + (Vector3.Scale(_playerHead.forward, disableYVec).normalized * radius);
         firstPosition.y = _playerHead.position.y + heightOffset; // Set y position with heightOffset
-        Debug.Log("DEBUG: calculateFirstPosition 1");
 
         // Determine the direction to face
         Vector3 cross = Vector3.Cross(_playerHead.forward, directionToTarget);
@@ -66,7 +77,6 @@ public class DirectionGuideArrow : MonoBehaviour
             // Face right
             transform.rotation = Quaternion.LookRotation(Vector3.Cross(_playerHead.forward, Vector3.up));
         }
-        Debug.Log("DEBUG: calculateFirstPosition 2");
         return firstPosition;
     }
 
@@ -75,6 +85,23 @@ public class DirectionGuideArrow : MonoBehaviour
         Vector3 targetPosition = _playerHead.position + radius * (_target.position - _playerHead.position).normalized;
         targetPosition.y = _playerHead.position.y + heightOffset; // Set y position with heightOffset
         return targetPosition;
+    }
+
+    private async UniTask MoveArrow()
+    {
+        _shouldUpdatePosition = false;
+        Vector3 firstPosition = calculateFirstPosition();
+        transform.position = firstPosition;
+        _meshRenderer.enabled = true;
+        MoveOnCircle(transform.position, calculatePositionTowardsTarget(), _playerHead.position, movementDuration);
+        await UniTask.Delay(TimeSpan.FromSeconds(movementDuration));
+        _shouldUpdatePosition = true;
+    }
+
+    public void StopArrow()
+    {
+        _shouldUpdatePosition = false;
+        _meshRenderer.enabled = false;
     }
 
     private void MoveOnCircle(Vector3 pointA, Vector3 pointB, Vector3 center, float duration)
@@ -112,36 +139,26 @@ public class DirectionGuideArrow : MonoBehaviour
         // Move the object along the waypoints and rotate smoothly towards the target
         transform.DOPath(waypoints, duration, PathType.CatmullRom).SetEase(Ease.InOutCubic);
         transform.DOLookAt(_target.position, duration, AxisConstraint.Y).SetEase(Ease.InOutCubic);
-
     }
-
-
 
     private void UpdatePositionTowardsTarget()
     {
-        if (!_shouldUpdatePosition)
-        {
-            return;
-        }
         transform.position = calculatePositionTowardsTarget();
         transform.LookAt(_target);
-
     }
 
     public async UniTask ShowAndSetTarget(Transform newTarget, bool showInstruction)
     {
-        Show();
         SetTarget(newTarget);
+        Show();
         transform.position = calculateFirstPosition();
         if (showInstruction)
         {
             SetInstructionsPositionAndShow();
         }
-
-        await UniTask.Delay(TimeSpan.FromSeconds(1.5f));
-        MoveOnCircle(transform.position, calculatePositionTowardsTarget(), _playerHead.position, movementDuration);
-        _shouldUpdatePosition = true;
+        await MoveArrow(); // Call MoveArrow to handle the movement
     }
+
 
     private void SetInstructionsPositionAndShow()
     {
@@ -150,16 +167,17 @@ public class DirectionGuideArrow : MonoBehaviour
         _followTheArrowInstruction.ShowUntilAudioEnds().Forget();
     }
 
-
     #region Debug
     [Button]
     public async UniTask TestAsync()
     {
         Show();
+
         transform.position = calculateFirstPosition();
+
         SetInstructionsPositionAndShow();
-        await UniTask.Delay(TimeSpan.FromSeconds(1));
-        MoveOnCircle(transform.position, calculatePositionTowardsTarget(), _playerHead.position, movementDuration);
+
+        await MoveArrow(); // Call MoveArrow to handle the movement
     }
     #endregion
 }

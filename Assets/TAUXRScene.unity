@@ -605,7 +605,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0.01277, z: 0}
-  m_LocalScale: {x: 9, y: 9, z: 9}
+  m_LocalScale: {x: 10, y: 10, z: 10}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 240351956}
@@ -648,7 +648,7 @@ MonoBehaviour:
   radius: 1
   heightOffset: -0.2
   movementDuration: 3
-  InstructionBoardHeightOffset: 2
+  InstructionBoardHeightOffset: 0.2
   _target: {fileID: 1208092579}
 --- !u!1 &105959545
 GameObject:
@@ -3182,7 +3182,7 @@ PrefabInstance:
     - target: {fileID: 3889759835927473169, guid: 16ee61d410c83e549b07a5234f3e8fab,
         type: 3}
       propertyPath: m_text
-      value: "\u05E8\u05D5\u05D9\u05E1\u05DC \u05DD\u05D9\u05D0\u05D1\u05D4 \u05DD\u05D9\u05DB\u05D5\u05E8\u05D1"
+      value: Something went wrong. Please call the operator
       objectReference: {fileID: 0}
     - target: {fileID: 3889759835927473169, guid: 16ee61d410c83e549b07a5234f3e8fab,
         type: 3}
@@ -3214,6 +3214,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_fontSizeBase
       value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3889759835927473169, guid: 16ee61d410c83e549b07a5234f3e8fab,
+        type: 3}
+      propertyPath: m_isRightToLeft
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3889759835927473169, guid: 16ee61d410c83e549b07a5234f3e8fab,
         type: 3}
@@ -3249,7 +3254,7 @@ PrefabInstance:
     - target: {fileID: 7867516359336035635, guid: 16ee61d410c83e549b07a5234f3e8fab,
         type: 3}
       propertyPath: width
-      value: 1.1064377
+      value: 0.69
       objectReference: {fileID: 0}
     - target: {fileID: 7867516359336035635, guid: 16ee61d410c83e549b07a5234f3e8fab,
         type: 3}
