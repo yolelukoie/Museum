@@ -522,7 +522,7 @@ GameObject:
   - component: {fileID: 93531944}
   - component: {fileID: 93531948}
   - component: {fileID: 93531949}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: DirectionGuideArrow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
