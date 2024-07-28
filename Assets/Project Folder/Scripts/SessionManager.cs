@@ -195,18 +195,26 @@ public class SessionManager : TXRSingleton<SessionManager>
         _demoPieces[FIRST_PIECE_INDEX].arrow.gameObject.SetActive(true);
         _demoPieces[FIRST_PIECE_INDEX].audioGuideButton.gameObject.SetActive(true);
         _pressTheButtonToHearAudio.Show(false);
+        Debug.Log("SessionManager.cs: Waiting for button press");
         await _demoPieces[FIRST_PIECE_INDEX].audioGuideButton.waitForPress();
+        Debug.Log("SessionManager.cs: Button pressed");
         _pressTheButtonToHearAudio.HideAndWaitForAnimation().Forget();
+        Debug.Log("SessionManager.cs: after _pressTheButtonToHearAudio.HideAndWaitForAnimation()");
         await _demoPieces[FIRST_PIECE_INDEX].audioGuideButton.WaitForAudioGuideToFinish();
+        Debug.Log("SessionManager.cs: after _demoPieces[FIRST_PIECE_INDEX].audioGuideButton.WaitForAudioGuideToFinish()");
         _demoPieces[FIRST_PIECE_INDEX].audioGuideButton.gameObject.SetActive(false);
-
+        Debug.Log("SessionManager.cs: after _demoPieces[FIRST_PIECE_INDEX].audioGuideButton.gameObject.SetActive(false)");
 
         // Active mode question:
         if (_experimentType == ACTIVE_TYPE || _experimentType == BOTH_TYPE)
         {
+            Debug.Log("SessionManager.cs: Showing question");
             SetQuestionPosition(_demoPieces[FIRST_PIECE_INDEX].questionBoardPositioner);
+            Debug.Log("SessionManager.cs: after SetQuestionPosition");
             await _answerTheQuestion.ShowUntilAudioEnds();
+            Debug.Log("SessionManager.cs: after _answerTheQuestion.ShowUntilAudioEnds()");
             await _multiChoiceQuestion.SetAnswersAndAndWaitForAnswer("1", "2", "3");
+            Debug.Log("SessionManager.cs: after _multiChoiceQuestion.SetAnswersAndAndWaitForAnswer()");
         }
 
         //Second piece:

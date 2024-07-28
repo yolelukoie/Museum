@@ -20,13 +20,13 @@ public class AudioTimeLeft : MonoBehaviour
         audioSource = GetComponentInParent<AudioGuideButton>().GetComponent<AudioSource>();
         if (audioSource == null)
         {
-            Debug.LogError("AudioSource not found in " + gameObject.name);
+            Debug.LogError("DEBUG: AudioSource not found in " + gameObject.name);
         }
 
         _piece = GetComponentInParent<AudioGuideButton>().GetComponentInParent<Piece>();
         if (_piece == null)
         {
-            Debug.LogError("Piece component not found in " + gameObject.name);
+            Debug.LogError("DEBUG: Piece component not found in " + gameObject.name);
         }
         initialLineLengthX = line.End.x;
         initilTime = _piece.audioGuideClip.length;
