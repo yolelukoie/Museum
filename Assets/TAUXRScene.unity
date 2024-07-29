@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028411, g: 0.22571464, b: 0.3069242, a: 1}
+  m_IndirectSpecularColor: {r: 0.3361133, g: 0.46571994, b: 0.6190999, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -16887,8 +16887,8 @@ ReflectionProbe:
   m_TimeSlicingMode: 0
   m_Resolution: 512
   m_UpdateFrequency: 0
-  m_BoxSize: {x: 12.222109, y: 9.085452, z: 15.266014}
-  m_BoxOffset: {x: -1.1110544, y: 3.392745, z: 2.633007}
+  m_BoxSize: {x: 12.222109, y: 19.88, z: 15.266014}
+  m_BoxOffset: {x: -1.1110544, y: 0, z: 2.633007}
   m_NearClip: 0.3
   m_FarClip: 1000
   m_ShadowDistance: 100
