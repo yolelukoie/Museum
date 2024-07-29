@@ -116,11 +116,14 @@ public class MultiChoiceQuestion : MonoBehaviour, Question
 
     public async UniTask SetAnswersAndAndWaitForAnswer(string answer1, string answer2, string answer3)
     {
+        Debug.Log("MultiChoiceQuestion.cs : SetAnswersAndAndWaitForAnswer()");
         Show();
         InitAnswers();
         SetAnswers(answer1, answer2, answer3);
+        Debug.Log("MultiChoiceQuestion.cs : SetAnswersAndAndWaitForAnswer() : SetAnswers() done");
         await UniTask.Delay(TimeSpan.FromSeconds(1));
         await WaitForAnswer();
+        Debug.Log("MultiChoiceQuestion.cs : SetAnswersAndAndWaitForAnswer() : WaitForAnswer() done");
         Hide();
     }
 

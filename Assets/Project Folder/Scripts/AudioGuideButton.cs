@@ -26,12 +26,13 @@ public class AudioGuideButton : MonoBehaviour
     {
         _audioGuideSource = GetComponent<AudioSource>();
         _txrButtonTouch = GetComponent<TXRButton>();
+        _piece = GetComponentInParent<Piece>();
+        _audioTimeLeft = GetComponentInChildren<AudioTimeLeft>();
     }
 
     private void Start()
     {
-        _piece = GetComponentInParent<Piece>();
-        _audioTimeLeft = GetComponentInChildren<AudioTimeLeft>();
+
         _audioTimeLeft.gameObject.SetActive(false);
         _audioGuideSource.clip = _piece.audioGuideClip;
         _directionArrow = SceneReferencer.Instance.DirectionArrow;
@@ -101,6 +102,11 @@ public class AudioGuideButton : MonoBehaviour
     {
         //wait for player to hit play
         await new WaitUntil(() => _audioGuideSource.isPlaying == true);
+
+    }
+
+    public void Show()
+    {
 
     }
 
