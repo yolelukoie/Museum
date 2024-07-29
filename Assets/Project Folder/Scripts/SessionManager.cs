@@ -172,9 +172,18 @@ public class SessionManager : TXRSingleton<SessionManager>
         _multiChoiceQuestion.transform.rotation = Positioner.rotation;
     }
 
+    private void SetBoardPosition(InstructionsBoard board, Transform Positioner)
+    {
+        board.transform.position = Positioner.position;
+        board.transform.rotation = Positioner.rotation;
+        board.transform.Rotate(0, 180, 0); //fix rotation so that the board is facing forward
+    }
+
     private async UniTask ShowNextQuestion()
     {
+        Debug.Log("SessionManager.cs: in ShowNextQuestion()");
         await _multiChoiceQuestion.SetAnswersAndAndWaitForAnswer(_questions[question_index].Answer1, _questions[question_index].Answer2, _questions[question_index].Answer3);
+        Debug.Log("SessionManager.cs: after _multiChoiceQuestion.SetAnswersAndAndWaitForAnswer()");
         question_index++;
     }
 
@@ -195,26 +204,26 @@ public class SessionManager : TXRSingleton<SessionManager>
         _demoPieces[FIRST_PIECE_INDEX].arrow.gameObject.SetActive(true);
         _demoPieces[FIRST_PIECE_INDEX].audioGuideButton.gameObject.SetActive(true);
         _pressTheButtonToHearAudio.Show(false);
-        Debug.Log("SessionManager.cs: Waiting for button press");
+        Debug.Log("SessionManager.cs demo: Waiting for button press");
         await _demoPieces[FIRST_PIECE_INDEX].audioGuideButton.waitForPress();
-        Debug.Log("SessionManager.cs: Button pressed");
+        Debug.Log("SessionManager.cs demo: Button pressed");
         _pressTheButtonToHearAudio.HideAndWaitForAnimation().Forget();
-        Debug.Log("SessionManager.cs: after _pressTheButtonToHearAudio.HideAndWaitForAnimation()");
+        Debug.Log("SessionManager.cs demo: after _pressTheButtonToHearAudio.HideAndWaitForAnimation()");
         await _demoPieces[FIRST_PIECE_INDEX].audioGuideButton.WaitForAudioGuideToFinish();
-        Debug.Log("SessionManager.cs: after _demoPieces[FIRST_PIECE_INDEX].audioGuideButton.WaitForAudioGuideToFinish()");
+        Debug.Log("SessionManager.cs demo: after _demoPieces[FIRST_PIECE_INDEX].audioGuideButton.WaitForAudioGuideToFinish()");
         _demoPieces[FIRST_PIECE_INDEX].audioGuideButton.gameObject.SetActive(false);
-        Debug.Log("SessionManager.cs: after _demoPieces[FIRST_PIECE_INDEX].audioGuideButton.gameObject.SetActive(false)");
+        Debug.Log("SessionManager.cs demo: after _demoPieces[FIRST_PIECE_INDEX].audioGuideButton.gameObject.SetActive(false)");
 
         // Active mode question:
         if (_experimentType == ACTIVE_TYPE || _experimentType == BOTH_TYPE)
         {
-            Debug.Log("SessionManager.cs: Showing question");
+            Debug.Log("SessionManager.cs demo: Showing question");
             SetQuestionPosition(_demoPieces[FIRST_PIECE_INDEX].questionBoardPositioner);
-            Debug.Log("SessionManager.cs: after SetQuestionPosition");
+            Debug.Log("SessionManager.cs demo: after SetQuestionPosition");
             await _answerTheQuestion.ShowUntilAudioEnds();
-            Debug.Log("SessionManager.cs: after _answerTheQuestion.ShowUntilAudioEnds()");
+            Debug.Log("SessionManager.cs demo: after _answerTheQuestion.ShowUntilAudioEnds()");
             await _multiChoiceQuestion.SetAnswersAndAndWaitForAnswer("1", "2", "3");
-            Debug.Log("SessionManager.cs: after _multiChoiceQuestion.SetAnswersAndAndWaitForAnswer()");
+            Debug.Log("SessionManager.cs demo: after _multiChoiceQuestion.SetAnswersAndAndWaitForAnswer()");
         }
 
         //Second piece:
@@ -234,19 +243,24 @@ public class SessionManager : TXRSingleton<SessionManager>
 
     private async UniTask PlayTour()
     {
+        Debug.Log("Playing Tour");
         _artCollection.FadeIn();
+        int lastQuestionInSemiTourIndex = _maxQuestionsInSemiActiveTour - 1;
 
         foreach (Piece p in _pieces)
         {
             int pieceIndex = _pieces.IndexOf(p);
-
+            Debug.Log("SessionManager.cs tour: Playing piece " + pieceIndex);
             p.arrow.gameObject.SetActive(true);
             p.audioGuideButton.gameObject.SetActive(true);
 
-            _directionArrow.ShowAndSetTarget(p.audioGuideButton.transform, false).Forget();
+            _directionArrow.ShowAndSetTarget(p.audioGuideButton.transform, true).Forget();
 
+            Debug.Log("SessionManager.cs tour: fefore WaitForAudioGuideToFinish()");
             await p.audioGuideButton.WaitForAudioGuideToFinish();
+            Debug.Log("SessionManager.cs tour: after WaitForAudioGuideToFinish()");
             p.audioGuideButton.gameObject.SetActive(false);
+            Debug.Log("SessionManager.cs tour: after p.audioGuideButton.gameObject.SetActive(false)");
             //should we show the question?
             switch (_experimentType)
             {
@@ -256,22 +270,25 @@ public class SessionManager : TXRSingleton<SessionManager>
                 // If the experiment type is active or both (but than the piece index is within the active range), show the question
                 case ACTIVE_TYPE:
                 case BOTH_TYPE:
-                    if ((_experimentType == ACTIVE_TYPE) || (pieceIndex <= _maxQuestionsInSemiActiveTour))
+                    if ((_experimentType == ACTIVE_TYPE) || (pieceIndex <= lastQuestionInSemiTourIndex))
                     {
+                        Debug.Log("SessionManager.cs tour: Showing question");
                         SetQuestionPosition(p.questionBoardPositioner);
+                        Debug.Log("SessionManager.cs tour: after SetQuestionPosition");
                         await ShowNextQuestion();
+                        Debug.Log("SessionManager.c tours: after ShowNextQuestion()");
                     }
-                    else if (pieceIndex == _maxQuestionsInSemiActiveTour + 1)
+                    else if (pieceIndex == lastQuestionInSemiTourIndex + 1)
                     {
-                        _endBoard.transform.position = p.questionBoardPositioner.position;
+                        SetBoardPosition(_endOfChoice, p.questionBoardPositioner);
                         await _endOfChoice.ShowUntilContinuePressed();
                     }
                     break;
             }
-            _endBoard.transform.position = p.questionBoardPositioner.position;
-            await _endBoard.ShowUntilContinuePressed();
-
         }
+        int endPieceIndex = _pieces.Count - 1;
+        SetBoardPosition(_endBoard, _pieces[endPieceIndex].questionBoardPositioner);
+        await _endBoard.ShowUntilContinuePressed();
     }
     private void EndSession()
     {
