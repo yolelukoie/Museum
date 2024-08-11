@@ -103,7 +103,9 @@ public class DirectionGuideArrow : MonoBehaviour
         _meshRenderer.enabled = true;
         //ResetRadius();
         Debug.Log("DirectionGuideArrow.cs: MoveArrow: before move on circle");
-        MoveOnCircle(transform.position, calculatePositionTowardsTarget(), _playerHead.position, movementDuration);
+        Vector3 secondPosition = calculatePositionTowardsTarget();
+        Debug.Log("DirectionGuideArrow.cs: MoveArrow: secondPosition: " + secondPosition.ToString());
+        MoveOnCircle(transform.position, secondPosition, _playerHead.position, movementDuration);
         Debug.Log("DirectionGuideArrow.cs: MoveArrow: after move on circle");
         await UniTask.Delay(TimeSpan.FromSeconds(movementDuration));
         _shouldUpdatePosition = true;

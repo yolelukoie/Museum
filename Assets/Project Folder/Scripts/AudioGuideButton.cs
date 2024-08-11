@@ -14,7 +14,6 @@ public class AudioGuideButton : MonoBehaviour
     private AudioSource _audioGuideSource;
     private TXRButton _txrButtonTouch;
     private bool _isPlaying = false;
-    private bool _isSkipped = false;
     private AudioTimeLeft _audioTimeLeft;
 
     public UnityEvent guideSkipped;
@@ -71,7 +70,6 @@ public class AudioGuideButton : MonoBehaviour
     [Button("Skip")]
     private void Skip()
     {
-        _isSkipped = true;
         _audioGuideSource.Stop();
         guideSkipped.Invoke();
         _guideSkipped.SetResult(true);
@@ -104,12 +102,6 @@ public class AudioGuideButton : MonoBehaviour
         await new WaitUntil(() => _audioGuideSource.isPlaying == true);
 
     }
-
-    public void Show()
-    {
-
-    }
-
 
 }
 

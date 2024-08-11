@@ -17,7 +17,7 @@ public class FollowPlayer : MonoBehaviour
     [SerializeField] float _angle;
     [SerializeField] private Vector3 _rotationOffset;
     [SerializeField] private bool _shouldLookAtPlayer = true;
-    [SerializeField] private float _maxDistance = .4f;
+    //[SerializeField] private float _maxDistance = .4f;
     [SerializeField] private float lerpSpeed = 5f;
     [SerializeField] private float _minDistanceToControl = .3f;
     [SerializeField] private float _angleOffset = 5f;
