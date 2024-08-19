@@ -14,6 +14,9 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/PerformanceTest.unity
     guid: 1c860b9483309f647951e882eb2d1692
+  - enabled: 0
+    path: Assets/Performance_test_15.08.unity
+    guid: f59b1732b567b30469f74a492b6efb1e
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: ea433a37a58c3fc4182d950dba8ad61f,
       type: 2}
