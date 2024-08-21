@@ -307,6 +307,10 @@ PrefabInstance:
       propertyPath: overlayType
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 929733144, guid: 967af0223632a1649afa8f1a4520fc54, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 9179752177440450417, guid: 967af0223632a1649afa8f1a4520fc54,
         type: 3}
       propertyPath: m_Name
@@ -320,17 +324,17 @@ PrefabInstance:
     - target: {fileID: 9179752177440450423, guid: 967af0223632a1649afa8f1a4520fc54,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: -1.77
       objectReference: {fileID: 0}
     - target: {fileID: 9179752177440450423, guid: 967af0223632a1649afa8f1a4520fc54,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 2.35
       objectReference: {fileID: 0}
     - target: {fileID: 9179752177440450423, guid: 967af0223632a1649afa8f1a4520fc54,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -20
+      value: -6.62
       objectReference: {fileID: 0}
     - target: {fileID: 9179752177440450423, guid: 967af0223632a1649afa8f1a4520fc54,
         type: 3}
@@ -2611,6 +2615,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: TXR_SceneManager
+      objectReference: {fileID: 0}
+    - target: {fileID: 520214805826158736, guid: 23b83ec3dee330c4f9526e4e9eb37f41,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 520214805826158739, guid: 23b83ec3dee330c4f9526e4e9eb37f41,
         type: 3}

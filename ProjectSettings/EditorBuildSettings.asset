@@ -14,6 +14,12 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/PerformanceTest.unity
     guid: 1c860b9483309f647951e882eb2d1692
+  - enabled: 0
+    path: Assets/Project Folder/Scenes/Test.unity
+    guid: c6554e650f7f8874ab4d7241ddae7eaf
+  - enabled: 0
+    path: Assets/OmriTest.unity
+    guid: a6b3cd7b62366ff438de974e473706c1
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: ea433a37a58c3fc4182d950dba8ad61f,
       type: 2}
