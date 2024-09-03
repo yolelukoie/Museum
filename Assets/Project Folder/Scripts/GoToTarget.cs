@@ -8,7 +8,7 @@ public class GoToTarget : MonoBehaviour
     public Transform target;
     public float distanceFromPlayer = 2.0f;
     private NavMeshPath path;
-    private int currentPathIndex = 0;
+    private int currentSegmentEnd = 0;
 
     public bool isPathCalculated = false;
 
@@ -29,25 +29,18 @@ public class GoToTarget : MonoBehaviour
         // Move the arrow along the path
         if (path.corners.Length > 1)
         {
-            Vector3 _;
 
-            (closestPointToPlayer, _) = FindClosestPointOnPathAndEndOfSegment(player.position);
-            (_, nextPoint) = FindClosestPointOnPathAndEndOfSegment(transform.position);
-            directionToNextPoint = nextPoint - closestPointToPlayer;
+            (closestPointToPlayer, nextPoint) = findPlayerPointOnPathAndArrowPosition();
+            if (currentSegmentEnd == path.corners.Length - 1)
+            {
+                transform.LookAt(target);
+            }
+            else
+            {
+                transform.LookAt(path.corners[currentSegmentEnd]);
+            }
+            transform.position = nextPoint;
 
-            // Check if the arrow is close enough to the next point
-            //if (directionToNextPoint.magnitude < distanceFromPlayer)
-            //{
-            //    currentPathIndex++;
-            //    if (currentPathIndex >= path.corners.Length)
-            //    {
-            //        currentPathIndex = path.corners.Length - 1;
-            //    }
-            //}
-
-            // Move the arrow to the next point
-            Vector3 arrowPosition = closestPointToPlayer + directionToNextPoint.normalized * distanceFromPlayer;
-            transform.position = arrowPosition;
         }
     }
 
@@ -61,6 +54,7 @@ public class GoToTarget : MonoBehaviour
                 Gizmos.DrawLine(path.corners[i], path.corners[i + 1]);
                 Gizmos.DrawSphere(path.corners[i], 0.05f);
             }
+
         }
         // Draw the closest point to the player
         if (closestPointToPlayer != Vector3.zero)
@@ -81,34 +75,24 @@ public class GoToTarget : MonoBehaviour
     void CalculatePath()
     {
         path.ClearCorners();
-        NavMesh.CalculatePath(player.position, target.position, NavMesh.AllAreas, path);
+
+        Vector3 targetPosition = target.position;
+        NavMeshHit hit;
+
+        // Sample the closest point on the NavMesh within maxDistance
+        if (NavMesh.SamplePosition(targetPosition, out hit, 100, NavMesh.AllAreas))
+        {
+            // Use hit.position as the target position
+            Debug.Log("Closest point on NavMesh: " + hit.position);
+        }
+        else
+        {
+            Debug.LogWarning("Target is too far from the NavMesh.");
+        }
+        NavMesh.CalculatePath(player.position, hit.position, NavMesh.AllAreas, path);
         isPathCalculated = true;
     }
 
-
-    (Vector3, Vector3) FindClosestPointOnPathAndEndOfSegment(Vector3 playerPosition)
-    {
-        Vector3 closestPoint = path.corners[0];
-        float closestDistance = Vector3.Distance(playerPosition, closestPoint);
-        Vector3 nextEndSegment = path.corners[0];
-        for (int i = 0; i < path.corners.Length - 1; i++)
-        {
-            Vector3 segmentStart = path.corners[i];
-            Vector3 segmentEnd = path.corners[i + 1];
-            Vector3 closestPointOnSegment = PointProjection.ProjectPointOnLine(playerPosition, segmentStart, segmentEnd);//GetClosestPointOnSegment(playerPosition, segmentStart, segmentEnd);
-
-            float distance = Vector3.Distance(playerPosition, closestPointOnSegment);
-            if (distance < closestDistance)
-            {
-                closestDistance = distance;
-                closestPoint = closestPointOnSegment;
-                nextEndSegment = segmentEnd;
-            }
-
-        }
-
-        return (closestPoint, nextEndSegment);
-    }
 
     (Vector3, Vector3) findPlayerPointOnPathAndArrowPosition()
     {
@@ -118,6 +102,7 @@ public class GoToTarget : MonoBehaviour
         int startSegmentIndex = 0;
         int endSegmentIndex = 0;
         float remainingDistance = distanceFromPlayer;
+
 
         for (int i = 0; i < path.corners.Length - 1; i++)
         {
@@ -132,44 +117,39 @@ public class GoToTarget : MonoBehaviour
                 closestPointToPlayer = closestPointOnSegment;
                 startSegmentIndex = i;
                 endSegmentIndex = i + 1;
-                remainingDistance = Vector3.Distance(closestPointToPlayer, segmentEnd);
-
             }
 
         }
-        if (remainingDistance < distanceFromPlayer)
+        // Calculate the arrow position which is distanceFromPlayer units away from the closest point
+        Vector3 currentPoint = closestPointToPlayer;
+        Vector3 arrowPosition = path.corners[path.corners.Length - 1];
+        for (int i = startSegmentIndex; i < path.corners.Length - 1; i++)
         {
 
+            Vector3 segmentStart = path.corners[i];
+            Vector3 segmentEnd = path.corners[i + 1];
+            Vector3 direction = (segmentEnd - segmentStart).normalized;
+            float segmentLength = Vector3.Distance(segmentStart, segmentEnd);
+            float distanceToEnd = Vector3.Distance(currentPoint, segmentEnd);
+
+            if (remainingDistance <= distanceToEnd)
+            {
+                arrowPosition = currentPoint + direction * remainingDistance;
+                currentSegmentEnd = i + 1;
+                break;
+            }
+            else
+            {
+                remainingDistance -= distanceToEnd;
+                currentPoint = segmentEnd;
+                currentSegmentEnd = i + 1;
+            }
         }
+        return (closestPointToPlayer, arrowPosition);
 
-
-        return (closestPointToPlayer, nextEndSegment);
     }
 
-    Vector3 GetClosestPointOnSegment(Vector3 point, Vector3 segmentStart, Vector3 segmentEnd)
-    {
-        Vector3 segmentDirection = segmentEnd - segmentStart;
-        float segmentLength = segmentDirection.magnitude;
-        segmentDirection.Normalize();
 
-        float projection = Vector3.Dot(point - segmentStart, segmentDirection);
-        projection = Mathf.Clamp(projection, 0, segmentLength);
-
-        return segmentStart + segmentDirection * projection;
-    }
-
-    //Vector3 FindNextCorner(Vector3 pointOnPath)
-    //{
-    //    for (int i = 0; i < path.corners.Length - 1; i++)
-    //    {
-    //        Vector3 segmentStart = path.corners[i];
-    //        Vector3 segmentEnd = path.corners[i + 1];
-    //        if (Vector3.Distance(pointOnPath, segmentEnd) < Vector3.Distance(pointOnPath, segmentStart))
-    //        {
-    //            return segmentEnd;
-    //        }
-    //    }
-    //    return path.corners[path.corners.Length - 1]; // Return the last corner if no next corner is found
 
 }
 public class PointProjection
