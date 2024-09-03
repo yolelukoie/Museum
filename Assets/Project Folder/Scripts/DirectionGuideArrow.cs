@@ -1,6 +1,7 @@
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using Sirenix.OdinInspector;
+
 using System;
 using UnityEngine;
 
@@ -94,12 +95,18 @@ public class DirectionGuideArrow : MonoBehaviour
 
     private async UniTask MoveArrow()
     {
+        Debug.Log("DirectionGuideArrow.cs: MoveArrow");
         _shouldUpdatePosition = false;
         Vector3 firstPosition = calculateFirstPosition();
+        Debug.Log("DirectionGuideArrow.cs: firstPosition: " + firstPosition.ToString());
         transform.position = firstPosition;
         _meshRenderer.enabled = true;
         //ResetRadius();
-        MoveOnCircle(transform.position, calculatePositionTowardsTarget(), _playerHead.position, movementDuration);
+        Debug.Log("DirectionGuideArrow.cs: MoveArrow: before move on circle");
+        Vector3 secondPosition = calculatePositionTowardsTarget();
+        Debug.Log("DirectionGuideArrow.cs: MoveArrow: secondPosition: " + secondPosition.ToString());
+        MoveOnCircle(transform.position, secondPosition, _playerHead.position, movementDuration);
+        Debug.Log("DirectionGuideArrow.cs: MoveArrow: after move on circle");
         await UniTask.Delay(TimeSpan.FromSeconds(movementDuration));
         _shouldUpdatePosition = true;
     }
@@ -112,12 +119,13 @@ public class DirectionGuideArrow : MonoBehaviour
 
     private void MoveOnCircle(Vector3 pointA, Vector3 pointB, Vector3 center, float duration)
     {
+        Debug.Log("DirectionGuideArrow.cs: MoveOnCircle()");
         // Calculate the angle between point A and point B relative to the center
         Vector3 dirA = (pointA - center).normalized;
         Vector3 dirB = (pointB - center).normalized;
         float angleA = Mathf.Atan2(dirA.z, dirA.x);
         float angleB = Mathf.Atan2(dirB.z, dirB.x);
-
+        Debug.Log("DirectionGuideArrow.cs: MoveOnCircle() angleA: " + angleA.ToString() + ", angleB: " + angleB.ToString());
         // Ensure the shortest path is taken
         if (Mathf.Abs(angleB - angleA) > Mathf.PI)
         {
@@ -130,7 +138,7 @@ public class DirectionGuideArrow : MonoBehaviour
                 angleB += 2 * Mathf.PI;
             }
         }
-
+        Debug.Log("DirectionGuideArrow.cs: MoveOnCircle() before waypoints");
         // Calculate waypoints along the circular path
         int numWaypoints = 50; // Number of waypoints
         Vector3[] waypoints = new Vector3[numWaypoints];
@@ -142,9 +150,12 @@ public class DirectionGuideArrow : MonoBehaviour
             waypoints[i].y = center.y + heightOffset; // Keep the y value constant with heightOffset
         }
 
+        Debug.Log("DirectionGuideArrow.cs: MoveOnCircle() before DOPath");
         // Move the object along the waypoints and rotate smoothly towards the target
         transform.DOPath(waypoints, duration, PathType.CatmullRom).SetEase(Ease.InOutCubic);
+        Debug.Log("DirectionGuideArrow.cs: MoveOnCircle() before DOLookAt");
         transform.DOLookAt(_target.position, duration, AxisConstraint.Y).SetEase(Ease.InOutCubic);
+        Debug.Log("DirectionGuideArrow.cs: MoveOnCircle() after DOLookAt");
     }
 
     private void UpdatePositionTowardsTarget()
@@ -154,9 +165,12 @@ public class DirectionGuideArrow : MonoBehaviour
         //UpdateRadius();
     }
 
+    [Button("ShowAndSetTarget")]
     public async UniTask ShowAndSetTarget(Transform newTarget, bool showInstruction)
     {
+        Debug.Log("DirectionGuideArrow.cs: ShowAndSetTarget() ");
         SetTarget(newTarget);
+        Debug.Log("DirectionGuideArrow.cs: ShowAndSetTarget()  new target position: " + newTarget.position.ToString());
         Show();
         transform.position = calculateFirstPosition();
         if (showInstruction)
@@ -164,6 +178,7 @@ public class DirectionGuideArrow : MonoBehaviour
             SetInstructionsPositionAndShow();
         }
         await MoveArrow(); // Call MoveArrow to handle the movement
+        Debug.Log("DirectionGuideArrow.cs: ShowAndSetTarget(): End after MoveArrow");
     }
 
 
