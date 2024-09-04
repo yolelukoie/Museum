@@ -6,15 +6,16 @@ public class GoToTarget : MonoBehaviour
 {
     public Transform player;
     public Transform target;
-    public float distanceFromPlayer = 2.0f;
+    public float distanceFromPlayer = 3.0f;
     private NavMeshPath path;
     private int currentSegmentEnd = 0;
-
+    public float speed = 1.5f;
     public bool isPathCalculated = false;
 
     private Vector3 nextPoint;
     private Vector3 directionToNextPoint;
     private Vector3 closestPointToPlayer;
+    //private List<Vector3> pathPoints = new List<Vector3>();
 
     void Start()
     {
@@ -39,7 +40,8 @@ public class GoToTarget : MonoBehaviour
             {
                 transform.LookAt(path.corners[currentSegmentEnd]);
             }
-            transform.position = nextPoint;
+
+            transform.position = Vector3.Lerp(transform.position, nextPoint, Time.deltaTime * speed);
 
         }
     }
