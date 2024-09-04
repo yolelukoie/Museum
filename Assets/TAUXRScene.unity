@@ -213,7 +213,9 @@ MonoBehaviour:
   player: {fileID: 1072223885}
   target: {fileID: 1911572942}
   distanceFromPlayer: 0.5
+  lerpSpeed: 5
   isPathCalculated: 0
+  segments: 5
 --- !u!1 &88243401
 GameObject:
   m_ObjectHideFlags: 0
@@ -2981,7 +2983,9 @@ MonoBehaviour:
   player: {fileID: 1072223885}
   target: {fileID: 1208092579}
   distanceFromPlayer: 0.5
+  lerpSpeed: 1.5
   isPathCalculated: 0
+  segments: 10
 --- !u!1 &548068466
 GameObject:
   m_ObjectHideFlags: 0
