@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using Sirenix.OdinInspector;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,7 @@ public class GoToTarget : MonoBehaviour
     public Transform player;
     public Transform target;
     public float distanceFromPlayer = 3.0f;
+    public float heightOffsetFromPlayer = -1.5f;
     private NavMeshPath path;
     private int currentSegmentEnd = 0;
     public float lerpSpeed = 3f;
@@ -19,9 +21,11 @@ public class GoToTarget : MonoBehaviour
     private List<Vector3> spline = new List<Vector3>();
     public int segments = 10;
 
-    void Start()
+
+    void Awake()
     {
         path = new NavMeshPath();
+        player = TXRPlayer.Instance.PlayerHead;
     }
 
     void Update()
@@ -96,11 +100,10 @@ public class GoToTarget : MonoBehaviour
     {
         path.ClearCorners();
         spline.Clear();
-        Vector3 targetPosition = target.position;
         NavMeshHit hit;
 
         // Sample the closest point on the NavMesh within maxDistance
-        if (NavMesh.SamplePosition(targetPosition, out hit, 100, NavMesh.AllAreas))
+        if (NavMesh.SamplePosition(target.position, out hit, 100, NavMesh.AllAreas))
         {
             // Use hit.position as the target position
             Debug.Log("Closest point on NavMesh: " + hit.position);
@@ -109,11 +112,46 @@ public class GoToTarget : MonoBehaviour
         {
             Debug.LogWarning("Target is too far from the NavMesh.");
         }
+
         NavMesh.CalculatePath(player.position, hit.position, NavMesh.AllAreas, path);
         spline = CatmullRomSpline.GenerateCatmullRomSpline(path.corners.ToList(), segments);
+        spline = SetPathHeight(spline);
         isPathCalculated = true;
     }
 
+    private List<Vector3> SetPathHeight(List<Vector3> path)
+    {
+        float height = player.position.y + heightOffsetFromPlayer;
+
+        for (int i = 0; i < path.Count; i++)
+        {
+            path[i] = new Vector3(path[i].x, path[i].y + 1, path[i].z);
+        }
+        return path;
+    }
+
+    public async UniTask ShowAndSetTarget(Transform newTarget, bool showInstruction)
+    {
+        Show();
+        SetTarget(newTarget);
+        CalculatePath();
+        await UniTask.WaitUntil(() => isPathCalculated);
+    }
+
+    public void Hide()
+    {
+        gameObject.SetActive(false);
+    }
+
+    public void Show()
+    {
+        gameObject.SetActive(true);
+    }
+
+    private void SetTarget(Transform newTarget)
+    {
+        target = newTarget;
+    }
 
     (Vector3, Vector3) findPlayerPointOnPathAndArrowPosition()
     {
