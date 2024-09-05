@@ -1,3 +1,4 @@
+using NaughtyAttributes;
 using System;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -5,10 +6,12 @@ using UnityEngine.Events;
 
 public class TXRButton : MonoBehaviour
 {
-    public ButtonState State => state;
+    public TXRButtonState State => _state;
     public bool ShouldPlaySounds = true;
+    public bool IsInteractable => _isInteractable;
 
-    [SerializeField] private ButtonState state = ButtonState.Interactable;
+    private bool _isInteractable = true;
+    [SerializeField] private TXRButtonState _state = TXRButtonState.Active;
 
     public UnityEvent Pressed;
     public UnityEvent Released;
@@ -20,82 +23,65 @@ public class TXRButton : MonoBehaviour
     [SerializeField] protected ButtonColliderResponse ResponsePress;
     [SerializeField] protected ButtonColliderResponse ResponseRelease;
 
-    protected TXRButtonInput input;
-    protected TXRButtonVisuals visuals;
+    protected TXRButtonInput _input;
+    protected TXRButtonVisuals _visuals;
 
     public Action<Transform> PressTransform;
     public TXRButtonReferences References;
 
-    public Transform ActiveToucher => input.MainToucher;
+    public Transform ActiveToucher => _input.MainToucher;
 
-
-    // Noa Added:
-    private TaskCompletionSource<bool> _buttonPressedTcs;
-
-    [SerializeField]
-    private TMPro.TextMeshPro textComponent;
-
-    public void SetText(String text)
-    {
-        textComponent.text = text;
-    }
-
-    public void TextInit()
-    {
-        textComponent = ComponentChecker.GetComponentInAllChildren<TMPro.TextMeshPro>(transform);
-    }
-
-    public Task WaitForButtonPress()
-    {
-        _buttonPressedTcs = new TaskCompletionSource<bool>();
-        return _buttonPressedTcs.Task;
-    }
-
-    // end of Noa Added
-
-    protected virtual void Start()
+    protected virtual void Awake()
     {
         Init();
-        textComponent = ComponentChecker.GetComponentInAllChildren<TMPro.TextMeshPro>(transform);
     }
 
     protected virtual void Init()
     {
-        visuals = References.ButtonVisuals;
-        visuals.Init(References);
+        //References.ActiveColor = References.Backface.FillColorEnd;
+        _visuals = References.ButtonVisuals;
+        _visuals.Init(References);
 
-        input = References.ButtonInput;
-        input.Init(References);
-        SetState(state);
+        _input = References.ButtonInput;
+        _input.Init(References);
+        SetState(_state);
     }
 
-    public void SetColor(EButtonAnimationState state, Color color, float duration = 0.25f)
+    [Button]
+    public void SetState()
     {
-        visuals.SetColor(state, color, duration);
+        SetState(_state);
     }
 
-    public void SetState(ButtonState state)
+    public void SetState(TXRButtonState state)
     {
-        switch (state)
-        {
-            case ButtonState.Hidden:
-                visuals.SetState(EButtonAnimationState.Hide);
-                break;
-            case ButtonState.Disabled:
-                visuals.SetState(EButtonAnimationState.Disable);
-                break;
-            case ButtonState.Interactable:
-                visuals.SetState(EButtonAnimationState.Active);
-                break;
-            case ButtonState.Frozen:
-                break;
-        }
+        _visuals.SetState(state);
+        _state = state;
+    }
+    public void SetInteractable(bool isInteractable)
+    {
+        _isInteractable = isInteractable;
+    }
 
-        this.state = state;
+    public void SetColor(TXRButtonState state, Color color, float duration = 0.25f)
+    {
+        _visuals.SetBackfaceColor(state, color, duration);
+    }
+
+    public Color GetColor(TXRButtonState state)
+    {
+        return _visuals.GetColor(state);
+    }
+
+    protected void PlaySound(AudioSource sound)
+    {
+        if (sound == null || !ShouldPlaySounds) return;
+        sound.Stop();
+        sound.Play();
     }
 
     // used for external scripts that want to manipulate buttons regardless of touchers.
-    public virtual void TriggerButtonEvent(ButtonEvent buttonEvent, ButtonColliderResponse response)
+    public virtual void TriggerButtonEventFromCode(ButtonEvent buttonEvent, ButtonColliderResponse response)
     {
         switch (buttonEvent)
         {
@@ -120,7 +106,7 @@ public class TXRButton : MonoBehaviour
     // called from input manager
     public virtual void TriggerButtonEventFromInput(ButtonEvent buttonEvent)
     {
-        if (State != ButtonState.Interactable) return;
+        if (!_isInteractable) return;
 
         switch (buttonEvent)
         {
@@ -142,15 +128,6 @@ public class TXRButton : MonoBehaviour
         }
     }
 
-
-
-    protected void PlaySound(AudioSource sound)
-    {
-        if (sound == null || !ShouldPlaySounds) return;
-        sound.Stop();
-        sound.Play();
-    }
-
     protected void DelegateInteralExtenralResponses(ButtonColliderResponse response, Action internalAction, UnityEvent externalEvent)
     {
         switch (response)
@@ -158,8 +135,8 @@ public class TXRButton : MonoBehaviour
             case ButtonColliderResponse.None:
                 break;
             case ButtonColliderResponse.Both:
-                externalEvent.Invoke();
                 internalAction();
+                externalEvent.Invoke();
                 break;
             case ButtonColliderResponse.Internal:
                 internalAction();
@@ -169,34 +146,79 @@ public class TXRButton : MonoBehaviour
                 break;
         }
     }
+
     protected virtual void OnHoverEnterInternal()
     {
-        visuals.SetState(EButtonAnimationState.Hover);
+        _visuals.SetBackfaceColor(TXRButtonState.Hover, References.ActiveColor);
+        _visuals.SetState(TXRButtonState.Hover);
     }
+
     protected virtual void OnHoverExitInternal()
     {
-        visuals.SetState(EButtonAnimationState.Active);
+        _visuals.SetState(TXRButtonState.Active);
     }
+
+
+
+    protected virtual void OnReleasedInternal()
+    {
+        PlaySound(References.SoundRelease);
+        _visuals.SetState(TXRButtonState.Active);
+    }
+
+    #region Noa's editions
+
+    public void SetText(String text)
+    {
+        References.Text.text = text;
+    }
+
+    private TaskCompletionSource<bool> _buttonPressedTcs;
+    public Task WaitForButtonPress()
+    {
+        _buttonPressedTcs = new TaskCompletionSource<bool>();
+        return _buttonPressedTcs.Task;
+    }
+
     protected virtual void OnPressedInternal()
     {
         PlaySound(References.SoundPress);
-        visuals.SetState(EButtonAnimationState.Press);
+        _visuals.SetState(TXRButtonState.Pressed);
         // Complete the task after button pressed
-        print("Button: OnPressedInternal");
         if (_buttonPressedTcs != null && !_buttonPressedTcs.Task.IsCompleted)
         {
             _buttonPressedTcs.SetResult(true);
         }
     }
-    protected virtual void OnReleasedInternal()
-    {
-        PlaySound(References.SoundRelease);
-        visuals.SetState(EButtonAnimationState.Active);
-    }
+
+
+    #endregion
+
+
+
 }
 
+public enum ButtonColliderResponse
+{
+    Both,
+    Internal,
+    External,
+    None
+}
 
+public enum ButtonEvent
+{
+    HoverEnter,
+    Pressed,
+    Released,
+    HoverExit
+}
 
-public enum ButtonColliderResponse { Both, Internal, External, None }
-public enum ButtonEvent { HoverEnter, Pressed, Released, HoverExit }
-public enum ButtonState { Hidden, Disabled, Interactable, Frozen }
+public enum TXRButtonState
+{
+    Hidden,
+    Active,
+    Hover,
+    Pressed,
+    Disabled,
+}

@@ -113,7 +113,10 @@ public class TextPopUp : MonoBehaviour
         _textPopUpReferences.TextPopUpAnimator.Init(_textPopUpReferences);
         _textPopUpReferences.TextPopUpAnimator.SetAppearance(newState, false);
     }
-
+    public string GetText()
+    {
+        return _textPopUpReferences.TextUI.text;
+    }
 
 #endif
 }

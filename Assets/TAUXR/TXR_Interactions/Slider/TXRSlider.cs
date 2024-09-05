@@ -1,6 +1,6 @@
-using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
+using TMPro;
 
 // currently not used. To be implemented in the future.
 public enum SliderState
@@ -40,7 +40,7 @@ public class TXRSlider : MonoBehaviour
     Transform node;
     Vector3 nodePositionTarget;
     float nodeLerpSpeed = 15f;
-    float detachmentDistanceThreshold = .1f;
+    float detachmentDistanceThreshold = .1f;    
 
     private float playTickStepFrequency = .05f;
     float valueLastTick = 0;
@@ -81,7 +81,7 @@ public class TXRSlider : MonoBehaviour
 
         node = touchButton.transform;
         node.position = TAUXRUtilities.GetPointOnLineFromNormalizedValue(lineStart.position, lineEnd.position, valueStart);
-        nodePositionTarget = node.position;
+        nodePositionTarget = node.position;        
 
         SliderReset.Invoke();
     }
@@ -118,10 +118,10 @@ public class TXRSlider : MonoBehaviour
             {
                 DetachNodeFromToucher();
             }
-
+            
             // Calculate slider value based on finger percise position on slider line.
             valueCurrent = TAUXRUtilities.GetNormalizedValueFromPointOnLine(lineStart.position, lineEnd.position, nodePositionTarget);
-            valueCurrent = RoundToStepSize(stepSize, valueCurrent);
+            valueCurrent = RoundToStepSize(stepSize,valueCurrent);
 
             // Update node position target to match step size round.
             nodePositionTarget = TAUXRUtilities.GetPointOnLineFromNormalizedValue(lineStart.position, lineEnd.position, valueCurrent);
@@ -153,7 +153,7 @@ public class TXRSlider : MonoBehaviour
         line.transform.position = start;
         line.transform.rotation = Quaternion.LookRotation(end - start, line.transform.up);
         line.SetPosition(1, new Vector3(0, 0, (end - start).magnitude));
-
+        
         // TODO: Move to shader!
         // moves the line on its local z axis to allow multiple lines depth organization.
         Vector3 linePosition = line.transform.localPosition;
@@ -165,11 +165,11 @@ public class TXRSlider : MonoBehaviour
         float toucherToLineDistance = (toucherPosition - linePoint).magnitude;
         return (toucherToLineDistance > threshold);
     }
-
+    
     // Ends the rating action by detaching node from toucher.
     private void DetachNodeFromToucher()
     {
-        touchButton.TriggerButtonEvent(ButtonEvent.Released, ButtonColliderResponse.Internal);
+        touchButton.TriggerButtonEventFromCode(ButtonEvent.Released, ButtonColliderResponse.Internal);
         NodeDetached.Invoke();
 
         isNodeTouched = false;
@@ -203,7 +203,7 @@ public class TXRSlider : MonoBehaviour
         if (isNodeTouched) return;
 
         // Activate button internal response from the slider script so it will be called only on the first press.
-        touchButton.TriggerButtonEvent(ButtonEvent.Pressed, ButtonColliderResponse.Internal);
+        touchButton.TriggerButtonEventFromCode(ButtonEvent.Pressed, ButtonColliderResponse.Internal);
         NodeTouched.Invoke();
 
         toucher = touchButton.ActiveToucher;

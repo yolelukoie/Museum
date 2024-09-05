@@ -1,8 +1,6 @@
 using Cysharp.Threading.Tasks;
 using Sirenix.OdinInspector;
-using System.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.Events;
 
 public enum AudioGuideState { Started, Finished }
 
@@ -17,10 +15,10 @@ public class AudioGuideButton : MonoBehaviour
     private AudioTimeLeft _audioTimeLeft;
     private Glow _glow;
     private bool _shouldButtonGlow;
-    public UnityEvent guideSkipped;
+
 
     private GoToTarget _directionArrow;
-    private TaskCompletionSource<bool> _guideSkipped;
+
 
     private void Awake()
     {
@@ -28,15 +26,15 @@ public class AudioGuideButton : MonoBehaviour
         _txrButtonTouch = GetComponent<TXRButton>();
         _piece = GetComponentInParent<Piece>();
         _audioTimeLeft = GetComponentInChildren<AudioTimeLeft>();
-        if (_shouldButtonGlow)
-            _glow = GetComponentsInChildren<Glow>()[0];
+        _glow = GetComponentsInChildren<Glow>()[0];
+        _glow.enabled = false;
 
     }
 
     private void Start()
     {
         _shouldButtonGlow = SceneReferencer.Instance.shouldButtonGlow;
-        //_glow.enabled = false;
+
         _audioTimeLeft.gameObject.SetActive(false);
         _audioGuideSource.clip = _piece.audioGuideClip;
         _directionArrow = SceneReferencer.Instance.DirectionArrow;
@@ -75,10 +73,7 @@ public class AudioGuideButton : MonoBehaviour
     [Button("Skip")]
     private void Skip()
     {
-        _audioGuideSource.Stop();
-        guideSkipped.Invoke();
-        _guideSkipped.SetResult(true);
-
+        _audioGuideSource.time = _audioGuideSource.clip.length - 2f;
     }
 
 

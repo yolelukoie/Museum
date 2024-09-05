@@ -220,7 +220,7 @@ public class SessionManager : TXRSingleton<SessionManager>
 
             await _answerTheQuestion.ShowUntilAudioEnds();
 
-            await _multiChoiceQuestion.SetAnswersAndAndWaitForAnswer("1", "2", "3");
+            await _multiChoiceQuestion.SetAnswersAndAndWaitForAnswer("מאפיין מס' 1", "מאפיין מס' 2", "מאפיין מס' 3");
 
         }
 

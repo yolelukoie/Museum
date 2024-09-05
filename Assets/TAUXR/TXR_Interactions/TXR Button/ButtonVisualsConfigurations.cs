@@ -39,10 +39,15 @@ public class ButtonVisualsConfigurations : ScriptableObject
     [Tooltip("Z position of the backfade on hover")]
     public float backfadeZPositionHover;
 
+    [Header("Disabled Animation")]
+    public float textOpacityDisabled = .5f;
+    public float strokeThicknessDisabled = .0005f;
+
     [Header("Defaults")]
     public Color activeColor;
     public Color pressColor;
     public Color disableColor;
+    public Color hoverGradientColor;
 
     /*
      * possibly new parameters

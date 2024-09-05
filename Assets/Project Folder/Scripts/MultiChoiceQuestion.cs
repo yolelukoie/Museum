@@ -38,7 +38,7 @@ public class MultiChoiceQuestion : MonoBehaviour, Question
 
 
         Debug.Log("Selected answer: " + selectedAnswer);
-        TXRDataManager.Instance.ReportMultichoiceAnswer(_question, _answer1, _answer2, _answer3, selectedAnswer);
+        TXRDataManager.Instance.ReportMultichoiceAnswer(board.GetText(), _answer1, _answer2, _answer3, selectedAnswer);
     }
 
     private void SetAnswers(string answer1, string answer2, string answer3)
@@ -46,6 +46,11 @@ public class MultiChoiceQuestion : MonoBehaviour, Question
         _answers[0].SetText(answer1);
         _answers[1].SetText(answer2);
         _answers[2].SetText(answer3);
+
+        _answer1 = answer1;
+        _answer2 = answer2;
+        _answer3 = answer3;
+
     }
 
     public void setQuestionWithAutoScale(string question, string answer1, string answer2, string answer3)
