@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 02b8afd752ff26b44b9e987702577508, type: 3}
-  m_Name: ButtonVisualsRegular
+  m_Name: ButtonVisuals-Continue
   m_EditorClassIdentifier: 
   backfaceGradientRadiusActive: 0
   strokeThicknessActive: 0.001
@@ -28,7 +28,7 @@ MonoBehaviour:
   backfadeZPositionHover: 0.0049
   textOpacityDisabled: 0.3
   strokeThicknessDisabled: 0.0003
-  activeColor: {r: 0.8509804, g: 0.8509804, b: 0.8509804, a: 1}
+  activeColor: {r: 0.3647059, g: 0.7372549, b: 0.49019608, a: 1}
   pressColor: {r: 0.33333334, g: 0.50980395, b: 0.9490196, a: 1}
   disableColor: {r: 0.4862745, g: 0.4862745, b: 0.4862745, a: 1}
-  hoverGradientColor: {r: 0.6666667, g: 0.6666667, b: 0.6666667, a: 1}
+  hoverGradientColor: {r: 0.45768067, g: 0.8018868, b: 0.4760452, a: 1}

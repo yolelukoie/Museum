@@ -1,4 +1,7 @@
+using Cysharp.Threading.Tasks;
 using Sirenix.OdinInspector;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -6,19 +9,23 @@ public class GoToTarget : MonoBehaviour
 {
     public Transform player;
     public Transform target;
-    public float distanceFromPlayer = 2.0f;
+    public float distanceFromPlayer = 3.0f;
+    public float heightOffsetFromPlayer = -1.5f;
     private NavMeshPath path;
     private int currentSegmentEnd = 0;
-
+    public float lerpSpeed = 3f;
     public bool isPathCalculated = false;
-
     private Vector3 nextPoint;
     private Vector3 directionToNextPoint;
     private Vector3 closestPointToPlayer;
+    private List<Vector3> spline = new List<Vector3>();
+    public int segments = 10;
 
-    void Start()
+
+    void Awake()
     {
         path = new NavMeshPath();
+        player = TXRPlayer.Instance.PlayerHead;
     }
 
     void Update()
@@ -27,32 +34,49 @@ public class GoToTarget : MonoBehaviour
 
 
         // Move the arrow along the path
-        if (path.corners.Length > 1)
+        if (spline.Count > 1)
         {
 
             (closestPointToPlayer, nextPoint) = findPlayerPointOnPathAndArrowPosition();
-            if (currentSegmentEnd == path.corners.Length - 1)
+            Vector3 direction;
+            if (currentSegmentEnd == spline.Count - 1)
             {
-                transform.LookAt(target);
+                //transform.LookAt(target);
+                direction = (target.position - spline[spline.Count - 1]).normalized;
             }
             else
             {
-                transform.LookAt(path.corners[currentSegmentEnd]);
+                //transform.LookAt(spline[currentSegmentEnd]);
+                direction = (spline[currentSegmentEnd] - spline[currentSegmentEnd - 1]).normalized;
+
             }
-            transform.position = nextPoint;
+            Quaternion rotation = Quaternion.LookRotation(direction);
+            transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * lerpSpeed);
+            //transform.position = nextPoint;
+            transform.position = Vector3.Slerp(transform.position, nextPoint, Time.deltaTime * lerpSpeed);
 
         }
     }
 
     void OnDrawGizmos()
     {
-        if (path != null)
+        if (spline != null)
         {
             Gizmos.color = Color.red;
+            for (int i = 0; i < spline.Count - 1; i++)
+            {
+                Gizmos.DrawLine(spline[i], spline[i + 1]);
+                Gizmos.DrawSphere(spline[i], 0.05f);
+            }
+
+        }
+        if (path != null)
+        {
+            Gizmos.color = Color.magenta;
             for (int i = 0; i < path.corners.Length - 1; i++)
             {
                 Gizmos.DrawLine(path.corners[i], path.corners[i + 1]);
-                Gizmos.DrawSphere(path.corners[i], 0.05f);
+                Gizmos.DrawSphere(path.corners[i], 0.03f);
             }
 
         }
@@ -75,12 +99,11 @@ public class GoToTarget : MonoBehaviour
     void CalculatePath()
     {
         path.ClearCorners();
-
-        Vector3 targetPosition = target.position;
+        spline.Clear();
         NavMeshHit hit;
 
         // Sample the closest point on the NavMesh within maxDistance
-        if (NavMesh.SamplePosition(targetPosition, out hit, 100, NavMesh.AllAreas))
+        if (NavMesh.SamplePosition(target.position, out hit, 100, NavMesh.AllAreas))
         {
             // Use hit.position as the target position
             Debug.Log("Closest point on NavMesh: " + hit.position);
@@ -89,25 +112,61 @@ public class GoToTarget : MonoBehaviour
         {
             Debug.LogWarning("Target is too far from the NavMesh.");
         }
+
         NavMesh.CalculatePath(player.position, hit.position, NavMesh.AllAreas, path);
+        spline = CatmullRomSpline.GenerateCatmullRomSpline(path.corners.ToList(), segments);
+        spline = SetPathHeight(spline);
         isPathCalculated = true;
     }
 
+    private List<Vector3> SetPathHeight(List<Vector3> path)
+    {
+        float height = player.position.y + heightOffsetFromPlayer;
+
+        for (int i = 0; i < path.Count; i++)
+        {
+            path[i] = new Vector3(path[i].x, path[i].y + 1, path[i].z);
+        }
+        return path;
+    }
+
+    public async UniTask ShowAndSetTarget(Transform newTarget, bool showInstruction)
+    {
+        Show();
+        SetTarget(newTarget);
+        CalculatePath();
+        await UniTask.WaitUntil(() => isPathCalculated);
+    }
+
+    public void Hide()
+    {
+        gameObject.SetActive(false);
+    }
+
+    public void Show()
+    {
+        gameObject.SetActive(true);
+    }
+
+    private void SetTarget(Transform newTarget)
+    {
+        target = newTarget;
+    }
 
     (Vector3, Vector3) findPlayerPointOnPathAndArrowPosition()
     {
-        Vector3 closestPointToPlayer = path.corners[0];
+        Vector3 closestPointToPlayer = spline[0];
         float closestDistance = Vector3.Distance(player.position, closestPointToPlayer);
-        Vector3 nextEndSegment = path.corners[0];
+        Vector3 nextEndSegment = spline[0];
         int startSegmentIndex = 0;
         int endSegmentIndex = 0;
         float remainingDistance = distanceFromPlayer;
 
 
-        for (int i = 0; i < path.corners.Length - 1; i++)
+        for (int i = 0; i < spline.Count - 1; i++)
         {
-            Vector3 segmentStart = path.corners[i];
-            Vector3 segmentEnd = path.corners[i + 1];
+            Vector3 segmentStart = spline[i];
+            Vector3 segmentEnd = spline[i + 1];
             Vector3 closestPointOnSegment = PointProjection.ProjectPointOnLine(player.position, segmentStart, segmentEnd);//GetClosestPointOnSegment(playerPosition, segmentStart, segmentEnd);
 
             float distance = Vector3.Distance(player.position, closestPointOnSegment);
@@ -122,12 +181,12 @@ public class GoToTarget : MonoBehaviour
         }
         // Calculate the arrow position which is distanceFromPlayer units away from the closest point
         Vector3 currentPoint = closestPointToPlayer;
-        Vector3 arrowPosition = path.corners[path.corners.Length - 1];
-        for (int i = startSegmentIndex; i < path.corners.Length - 1; i++)
+        Vector3 arrowPosition = spline[spline.Count - 1];
+        for (int i = startSegmentIndex; i < spline.Count - 1; i++)
         {
 
-            Vector3 segmentStart = path.corners[i];
-            Vector3 segmentEnd = path.corners[i + 1];
+            Vector3 segmentStart = spline[i];
+            Vector3 segmentEnd = spline[i + 1];
             Vector3 direction = (segmentEnd - segmentStart).normalized;
             float segmentLength = Vector3.Distance(segmentStart, segmentEnd);
             float distanceToEnd = Vector3.Distance(currentPoint, segmentEnd);

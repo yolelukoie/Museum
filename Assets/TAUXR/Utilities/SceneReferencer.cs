@@ -5,8 +5,9 @@ using UnityEngine;
 // Stores references for everything needer to refer to in the scene.
 public class SceneReferencer : TXRSingleton<SceneReferencer>
 {
-    //[Header("Configurations")]
+    //--------------Experiment Configurations--------------
 
+    [Header("Experiment Configurations")]
     public int NumberOfQuestionsInSemiActiveTour = 3;
 
     [Header("Art Pieces")]
@@ -32,13 +33,20 @@ public class SceneReferencer : TXRSingleton<SceneReferencer>
     public List<SerializedMultichoiceQuestion> questions;
 
 
+    //---------------------------FX--------------------------
+    [Header("Buttons Gloe Effect")]
+    public bool shouldButtonGlow = false;
+    public float globalGlowSpeed = 1.9f;
+    public float globalMinGlow = 0.1f;               //also looks nice: min 0.05, max 0.8
+    public float globalMaxGlow = 1.0f;
+
     //----------------------Game Objects----------------------
     [Space(20)]
     [Header("Game Objects")]
     public FloatingBoard floatingBoard;
     public MultiChoiceQuestion multiChoiceQuestion;
     public MultiChoiceQuestion typeQuestion;
-    public DirectionGuideArrow DirectionArrow;
+    public GoToTarget DirectionArrow;
     public Collection artCollection;
     public Collection demoCollection;
 

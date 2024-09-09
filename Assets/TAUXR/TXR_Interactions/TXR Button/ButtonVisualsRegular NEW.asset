@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 02b8afd752ff26b44b9e987702577508, type: 3}
-  m_Name: ButtonVisualsRegular
+  m_Name: ButtonVisualsRegular NEW
   m_EditorClassIdentifier: 
   backfaceGradientRadiusActive: 0
   strokeThicknessActive: 0.001

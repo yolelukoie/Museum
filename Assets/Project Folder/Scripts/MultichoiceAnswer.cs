@@ -18,7 +18,8 @@ public class MultichoiceAnswer : MonoBehaviour
     {
         button = GetComponentInChildren<TXRButton>(true);
         button.Released.AddListener(() => SelectAnswer(answerText));
-        button.TextInit();
+        //TODO check if this is needed
+        //button.TextInit();
     }
 
 
