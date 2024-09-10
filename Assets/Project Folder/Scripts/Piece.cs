@@ -9,6 +9,8 @@ public class Piece : MonoBehaviour
     public AudioClip audioGuideClip;
     public Texture2D resizedImage;
     public Transform questionBoardPositioner;
+    public ArtPieceProximityDetector proximityDetector;
+    public Collider imageCollider;
 
 }
 
