@@ -193,7 +193,7 @@ public class SessionManager : TXRSingleton<SessionManager>
 
         //Instructions, direction arrow:
         await _welcomeToTheMuseum.ShowUntilContinuePressed();
-        _directionArrow.ShowAndSetTarget(_demoPieces[FIRST_PIECE_INDEX].audioGuideButton.transform, false).Forget();
+        _directionArrow.ShowAndSetTarget(_demoPieces[FIRST_PIECE_INDEX].imageComponent.transform, false).Forget();
         await _followTheArrowTotheFirstPiece.ShowUntilAudioEnds();
 
         _demoCollection.FadeIn();
@@ -229,7 +229,7 @@ public class SessionManager : TXRSingleton<SessionManager>
         _demoPieces[1].arrow.gameObject.SetActive(true);
         _demoPieces[1].audioGuideButton.gameObject.SetActive(true);
         _demoPieces[1].proximityDetector.Activate();
-        _directionArrow.ShowAndSetTarget(_demoPieces[1].audioGuideButton.transform, true).Forget();
+        _directionArrow.ShowAndSetTarget(_demoPieces[1].imageComponent.transform, true).Forget();
         _followTheArrow.ShowUntilAudioEnds().Forget();
         await _demoPieces[1].audioGuideButton.waitForPress();
         _demoPieces[1].audioGuideButton.WaitForAudioGuideToFinish().Forget();
@@ -254,7 +254,7 @@ public class SessionManager : TXRSingleton<SessionManager>
             p.arrow.gameObject.SetActive(true);
             p.audioGuideButton.gameObject.SetActive(true);
             p.proximityDetector.Activate();
-            _directionArrow.ShowAndSetTarget(p.audioGuideButton.transform, true).Forget();
+            _directionArrow.ShowAndSetTarget(p.imageComponent.transform, true).Forget();
             await p.audioGuideButton.WaitForAudioGuideToFinish();
 
             p.audioGuideButton.gameObject.SetActive(false);
