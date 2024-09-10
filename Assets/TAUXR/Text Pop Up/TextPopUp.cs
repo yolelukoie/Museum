@@ -88,6 +88,11 @@ public class TextPopUp : MonoBehaviour
         _textPopUpReferences.TextUI.isRightToLeftText = true;
         _textPopUpReferences.TextUI.alignment = TextAlignmentOptions.Right;
     }
+
+    public string GetText()
+    {
+        return _textPopUpReferences.TextUI.text;
+    }
 #if UNITY_EDITOR
     public void GetTextFromComponent()
     {
@@ -113,10 +118,7 @@ public class TextPopUp : MonoBehaviour
         _textPopUpReferences.TextPopUpAnimator.Init(_textPopUpReferences);
         _textPopUpReferences.TextPopUpAnimator.SetAppearance(newState, false);
     }
-    public string GetText()
-    {
-        return _textPopUpReferences.TextUI.text;
-    }
+
 
 #endif
 }

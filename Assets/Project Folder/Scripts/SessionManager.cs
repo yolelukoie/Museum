@@ -201,6 +201,7 @@ public class SessionManager : TXRSingleton<SessionManager>
         //First piece:
         _demoPieces[FIRST_PIECE_INDEX].arrow.gameObject.SetActive(true);
         _demoPieces[FIRST_PIECE_INDEX].audioGuideButton.gameObject.SetActive(true);
+        _demoPieces[FIRST_PIECE_INDEX].proximityDetector.Activate();
         _pressTheButtonToHearAudio.Show(false);
 
         await _demoPieces[FIRST_PIECE_INDEX].audioGuideButton.waitForPress();
@@ -210,7 +211,6 @@ public class SessionManager : TXRSingleton<SessionManager>
         await _demoPieces[FIRST_PIECE_INDEX].audioGuideButton.WaitForAudioGuideToFinish();
 
         _demoPieces[FIRST_PIECE_INDEX].audioGuideButton.gameObject.SetActive(false);
-
 
         // Active mode question:
         if (_experimentType == ACTIVE_TYPE || _experimentType == BOTH_TYPE)
@@ -223,16 +223,18 @@ public class SessionManager : TXRSingleton<SessionManager>
             await _multiChoiceQuestion.SetAnswersAndAndWaitForAnswer("מאפיין מס' 1", "מאפיין מס' 2", "מאפיין מס' 3");
 
         }
+        _demoPieces[FIRST_PIECE_INDEX].proximityDetector.Deactivate();
 
         //Second piece:
         _demoPieces[1].arrow.gameObject.SetActive(true);
         _demoPieces[1].audioGuideButton.gameObject.SetActive(true);
+        _demoPieces[1].proximityDetector.Activate();
         _directionArrow.ShowAndSetTarget(_demoPieces[1].audioGuideButton.transform, true).Forget();
         _followTheArrow.ShowUntilAudioEnds().Forget();
         await _demoPieces[1].audioGuideButton.waitForPress();
         _demoPieces[1].audioGuideButton.WaitForAudioGuideToFinish().Forget();
         _demoPieces[1].audioGuideButton.gameObject.SetActive(false);
-
+        _demoPieces[1].proximityDetector.Deactivate();
 
         await _letsStartTheTour.ShowUntilContinuePressed();
         _demoCollection.FadeOut();
@@ -250,6 +252,7 @@ public class SessionManager : TXRSingleton<SessionManager>
             int pieceIndex = _pieces.IndexOf(p);
             p.arrow.gameObject.SetActive(true);
             p.audioGuideButton.gameObject.SetActive(true);
+            p.proximityDetector.Activate();
             _directionArrow.ShowAndSetTarget(p.audioGuideButton.transform, true).Forget();
             await p.audioGuideButton.WaitForAudioGuideToFinish();
 
@@ -281,6 +284,7 @@ public class SessionManager : TXRSingleton<SessionManager>
                     }
                     break;
             }
+            p.proximityDetector.Deactivate();
         }
         int endPieceIndex = _pieces.Count - 1;
         SetBoardPosition(_endBoard, _pieces[endPieceIndex].questionBoardPositioner);

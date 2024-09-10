@@ -740,6 +740,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 7126357125374730504}
   - {fileID: 7072182651452399157}
   - {fileID: 4457597635362012861}
   - {fileID: 4547270397415445703}
@@ -765,6 +766,8 @@ MonoBehaviour:
   audioGuideClip: {fileID: 8300000, guid: 4757a46513b6d6c4b809c695decc5bc9, type: 3}
   resizedImage: {fileID: 2800000, guid: 2b5dc6f7591c92e43aef1d91c282e0a7, type: 3}
   questionBoardPositioner: {fileID: 5485379557114344846}
+  proximityDetector: {fileID: 2269342200645515741}
+  imageCollider: {fileID: 679866617699068763}
 --- !u!1 &4188218258976600123
 GameObject:
   m_ObjectHideFlags: 0
@@ -2089,7 +2092,7 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 07d00fc7b291f8540aa8c51867759ff7,
         type: 3}
       propertyPath: m_Name
-      value: janco_frame
+      value: frame
       objectReference: {fileID: 0}
     - target: {fileID: 7339356831882890532, guid: 07d00fc7b291f8540aa8c51867759ff7,
         type: 3}
@@ -2285,6 +2288,107 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 66d88fbfad66c40ca9019daccfa2cf16,
     type: 3}
   m_PrefabInstance: {fileID: 4246941786752642412}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &4618696206937414308
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 4180993936865282354}
+    m_Modifications:
+    - target: {fileID: 2521188644438031276, guid: e18cb7cc5665a0f4788f31a7c705e2da,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 2521188644438031276, guid: e18cb7cc5665a0f4788f31a7c705e2da,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 2521188644438031276, guid: e18cb7cc5665a0f4788f31a7c705e2da,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 200
+      objectReference: {fileID: 0}
+    - target: {fileID: 2521188644438031276, guid: e18cb7cc5665a0f4788f31a7c705e2da,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.07100011
+      objectReference: {fileID: 0}
+    - target: {fileID: 2521188644438031276, guid: e18cb7cc5665a0f4788f31a7c705e2da,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.21851218
+      objectReference: {fileID: 0}
+    - target: {fileID: 2521188644438031276, guid: e18cb7cc5665a0f4788f31a7c705e2da,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.014100082
+      objectReference: {fileID: 0}
+    - target: {fileID: 2521188644438031276, guid: e18cb7cc5665a0f4788f31a7c705e2da,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2521188644438031276, guid: e18cb7cc5665a0f4788f31a7c705e2da,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2521188644438031276, guid: e18cb7cc5665a0f4788f31a7c705e2da,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 2521188644438031276, guid: e18cb7cc5665a0f4788f31a7c705e2da,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 2521188644438031276, guid: e18cb7cc5665a0f4788f31a7c705e2da,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -90
+      objectReference: {fileID: 0}
+    - target: {fileID: 2521188644438031276, guid: e18cb7cc5665a0f4788f31a7c705e2da,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: 2521188644438031276, guid: e18cb7cc5665a0f4788f31a7c705e2da,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: 3005835105182310678, guid: e18cb7cc5665a0f4788f31a7c705e2da,
+        type: 3}
+      propertyPath: m_Name
+      value: Art Piece Proximity Detector
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: e18cb7cc5665a0f4788f31a7c705e2da, type: 3}
+--- !u!114 &2269342200645515741 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6874380959617491833, guid: e18cb7cc5665a0f4788f31a7c705e2da,
+    type: 3}
+  m_PrefabInstance: {fileID: 4618696206937414308}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 19b9c9707ec6808449fe234578977c7a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &7126357125374730504 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2521188644438031276, guid: e18cb7cc5665a0f4788f31a7c705e2da,
+    type: 3}
+  m_PrefabInstance: {fileID: 4618696206937414308}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7275954828935075719
 PrefabInstance:
