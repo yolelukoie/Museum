@@ -24,6 +24,7 @@ public class MultichoiceAnswer : MonoBehaviour
     void SelectAnswer(string selectedAnswer)
     {
         OnAnswerSelected.Invoke(selectedAnswer);
+        button.Pressed.RemoveListener(() => SelectAnswer(answerText));
     }
 
     internal void SetText(string answer)
@@ -36,6 +37,7 @@ public class MultichoiceAnswer : MonoBehaviour
 
     public void OnEnable()
     {
+        Init();
         button.SetInteractable(true);
         button.SetState(TXRButtonState.Active);
     }

@@ -27,29 +27,18 @@ public class AudioGuideButton : MonoBehaviour
         _piece = GetComponentInParent<Piece>();
         _audioTimeLeft = GetComponentInChildren<AudioTimeLeft>();
         _glow = GetComponentsInChildren<Glow>()[0];
-        _glow.enabled = false;
+        _glow.Deactivate();
+        _shouldButtonGlow = SceneReferencer.Instance.shouldButtonGlow;
 
     }
 
     private void Start()
     {
-        _shouldButtonGlow = SceneReferencer.Instance.shouldButtonGlow;
 
         _audioTimeLeft.gameObject.SetActive(false);
         _audioGuideSource.clip = _piece.audioGuideClip;
         _directionArrow = SceneReferencer.Instance.DirectionArrow;
         _txrButtonTouch.Pressed.AddListener(Play);
-
-        Debug.Log("AudioGuideButton.cs: " + _piece.name + " state after start: \n"
-            + "_piece = " + _piece.ToString() + "\n"
-            + "_audioGuideSource = " + _audioGuideSource.ToString() + "\n"
-            + "_audioTimeLeft = " + _audioTimeLeft.ToString() + "\n"
-            + "_isPlaying = " + _isPlaying.ToString() + "\n"
-            + "_audioGuideSource.clip = " + _audioGuideSource.clip.ToString() + "\n"
-            + "_piece.audioGuideClip = " + _piece.audioGuideClip.ToString() + "\n"
-            + "_audioGuideSource.clip.length = " + _audioGuideSource.clip.length.ToString() + "\n"
-            + "_piece.audioGuideClip.length = " + _piece.audioGuideClip.length.ToString() + "\n"
-            );
 
     }
 
@@ -79,9 +68,18 @@ public class AudioGuideButton : MonoBehaviour
 
     public async UniTask WaitForAudioGuideToFinish()
     {
+        if (_shouldButtonGlow)
+        {
+            _glow.Activate();
+        }
+
         //wait for player to hit play
         await new WaitUntil(() => _audioGuideSource.isPlaying == true);
 
+        if (_shouldButtonGlow)
+        {
+            _glow.Deactivate();
+        }
         // wait for audio guide to finish
         await new WaitUntil(() => _audioGuideSource.time >= _audioGuideSource.clip.length);
         _audioTimeLeft.gameObject.SetActive(false);
@@ -92,15 +90,8 @@ public class AudioGuideButton : MonoBehaviour
 
     public async UniTask waitForPress()
     {
-        if (_shouldButtonGlow)
-            _glow.enabled = true;
-
         //wait for player to hit play
         await new WaitUntil(() => _audioGuideSource.isPlaying == true);
-
-        if (_shouldButtonGlow)
-            _glow.enabled = false;
-
 
     }
 
