@@ -15,7 +15,6 @@ public class ArtPieceProximityDetector : MonoBehaviour
     {
         if (_isActive)
         {
-
             if (other.CompareTag("PlayerHead"))
             {
                 _isPlayerInside = true;

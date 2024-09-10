@@ -20,7 +20,6 @@ public class MultiChoiceQuestion : MonoBehaviour, Question
     {
         _answers = new List<MultichoiceAnswer>();
         _answers.AddRange(GetComponentsInChildren<MultichoiceAnswer>());
-        print("Debug MultiChiceQuestion, _answers.count: " + _answers.Count);
     }
 
     private void Start()
