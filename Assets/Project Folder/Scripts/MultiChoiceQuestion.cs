@@ -1,4 +1,5 @@
 using Cysharp.Threading.Tasks;
+using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -29,6 +30,7 @@ public class MultiChoiceQuestion : MonoBehaviour, Question
 
     }
 
+    [Button("Answer (Debug)")]
     void ProcessAnswer(string selectedAnswer)
     {
 
@@ -139,4 +141,5 @@ public class MultiChoiceQuestion : MonoBehaviour, Question
     {
         gameObject.SetActive(true);
     }
+
 }

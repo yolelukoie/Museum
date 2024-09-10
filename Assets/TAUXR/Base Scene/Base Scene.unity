@@ -97,7 +97,8 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 0}
+  m_LightingDataAsset: {fileID: 112000002, guid: 7db6e90bf5d19224287d25361a66f77c,
+    type: 2}
   m_LightingSettings: {fileID: 4890085278179872738, guid: 98ee975b74776234986f4d35f14c4ccc,
     type: 2}
 --- !u!196 &4
@@ -329,7 +330,7 @@ PrefabInstance:
     - target: {fileID: 9179752177440450423, guid: 967af0223632a1649afa8f1a4520fc54,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.804
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9179752177440450423, guid: 967af0223632a1649afa8f1a4520fc54,
         type: 3}
@@ -2772,10 +2773,20 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 5697661394101616562, guid: 4f1a36f89d969e4439091cd33e0a16aa,
+        type: 3}
+      propertyPath: _shouldCalibrateOnEditor
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5697661394101616562, guid: 4f1a36f89d969e4439091cd33e0a16aa,
+        type: 3}
+      propertyPath: _shouldProjectUseCalibration
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6069588633503000438, guid: 4f1a36f89d969e4439091cd33e0a16aa,
         type: 3}
       propertyPath: m_Name
-      value: GameManager
+      value: TXR_Project Initializer
       objectReference: {fileID: 0}
     - target: {fileID: 6069588633503000439, guid: 4f1a36f89d969e4439091cd33e0a16aa,
         type: 3}

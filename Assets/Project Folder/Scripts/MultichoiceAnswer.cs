@@ -33,4 +33,11 @@ public class MultichoiceAnswer : MonoBehaviour
         button.SetText(answer);
         answerText = answer;
     }
+
+    public void OnEnable()
+    {
+        button.SetInteractable(true);
+        button.SetState(TXRButtonState.Active);
+    }
 }
+

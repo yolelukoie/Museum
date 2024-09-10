@@ -11,17 +11,17 @@ public class ArtPieceProximityDetector : MonoBehaviour
         _piece = GetComponentInParent<Piece>();
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if (_isActive)
-        {
-            if (other.CompareTag("PlayerHead"))
-            {
-                _isPlayerInside = true;
-            }
+    //private void OnTriggerEnter(Collider other)
+    //{
+    //    if (_isActive)
+    //    {
+    //        if (other.CompareTag("PlayerHead"))
+    //        {
 
-        }
-    }
+    //        }
+
+    //    }
+    //}
 
     private void OnTriggerStay(Collider other)
     {

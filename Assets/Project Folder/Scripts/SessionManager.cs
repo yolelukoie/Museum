@@ -246,6 +246,7 @@ public class SessionManager : TXRSingleton<SessionManager>
         Debug.Log("Playing Tour");
         _artCollection.FadeIn();
         int lastQuestionInSemiTourIndex = _maxQuestionsInSemiActiveTour - 1;
+        int endPieceIndex = _pieces.Count - 1;
 
         foreach (Piece p in _pieces)
         {
@@ -266,11 +267,14 @@ public class SessionManager : TXRSingleton<SessionManager>
 
                 // If the experiment type is active or both (but than the piece index is within the active range), show the question
                 case ACTIVE_TYPE:
-                    SetQuestionPosition(p.questionBoardPositioner);
-                    await ShowNextQuestion();
+                    if (pieceIndex <= endPieceIndex - 1)
+                    {
+                        SetQuestionPosition(p.questionBoardPositioner);
+                        await ShowNextQuestion();
+                    }
                     break;
                 case BOTH_TYPE:
-                    if ((_experimentType == ACTIVE_TYPE) || (pieceIndex <= lastQuestionInSemiTourIndex))
+                    if (pieceIndex <= lastQuestionInSemiTourIndex)
                     {
 
                         SetQuestionPosition(p.questionBoardPositioner);
@@ -286,7 +290,7 @@ public class SessionManager : TXRSingleton<SessionManager>
             }
             p.proximityDetector.Deactivate();
         }
-        int endPieceIndex = _pieces.Count - 1;
+
         SetBoardPosition(_endBoard, _pieces[endPieceIndex].questionBoardPositioner);
         await _endBoard.ShowUntilContinuePressed();
     }

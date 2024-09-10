@@ -1,8 +1,6 @@
 using Cysharp.Threading.Tasks;
-using System;
 using Unity.VisualScripting;
 using UnityEngine;
-using System.Threading;
 
 public class TXRPlayer : TXRSingleton<TXRPlayer>
 {
@@ -94,7 +92,7 @@ public class TXRPlayer : TXRSingleton<TXRPlayer>
 
     public void RepositionPlayer(PlayerRepositioner repositioner)
     {
-        RepositionAfterHeadsetLoaded(repositioner).Forget();
+        RepositionAfterHeadsetLoaded(repositioner).Forget(); //BUG: this is not working as expected, player spawns in the air. 
     }
 
     private async UniTask RepositionAfterHeadsetLoaded(PlayerRepositioner repositioner)
