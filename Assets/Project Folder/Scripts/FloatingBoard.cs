@@ -1,5 +1,4 @@
 using Cysharp.Threading.Tasks;
-using System;
 using UnityEngine;
 
 public class FloatingBoard : MonoBehaviour
@@ -42,7 +41,7 @@ public class FloatingBoard : MonoBehaviour
 
         await ContinueButton.WaitForButtonPress();
 
-        await UniTask.Delay(TimeSpan.FromSeconds(1));
+        //await UniTask.Delay(TimeSpan.FromSeconds(1));
 
         board.Hide();
         ContinueButton.gameObject.SetActive(false);

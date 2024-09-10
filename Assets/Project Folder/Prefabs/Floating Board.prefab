@@ -202,32 +202,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShouldPlaySounds: 1
-  state: 0
-  buttonSurface: {fileID: 8548463700690291948}
-  activeToucher: {fileID: 0}
-  ResponseHoverEnter: 0
-  HoverEnter:
-    m_PersistentCalls:
-      m_Calls: []
-  ResponseHoverExit: 0
-  HoverExit:
-    m_PersistentCalls:
-      m_Calls: []
-  ResponsePress: 0
+  _state: 1
   Pressed:
     m_PersistentCalls:
       m_Calls: []
-  ResponseRelease: 0
   Released:
     m_PersistentCalls:
       m_Calls: []
-  soundDisabled: {fileID: 0}
-  soundActive: {fileID: 0}
-  soundHoverEnter: {fileID: 0}
-  soundHoverExit: {fileID: 0}
-  soundPress: {fileID: 3209833613720013485}
-  soundRelease: {fileID: 0}
-  animator: {fileID: 6424260005242328155}
+  HoverEnter:
+    m_PersistentCalls:
+      m_Calls: []
+  HoverExit:
+    m_PersistentCalls:
+      m_Calls: []
+  ResponseHoverEnter: 0
+  ResponseHoverExit: 0
+  ResponsePress: 0
+  ResponseRelease: 0
+  References: {fileID: 0}
 --- !u!1 &3219294474616693725
 GameObject:
   m_ObjectHideFlags: 0
@@ -270,7 +262,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4494482096423897416}
-  - component: {fileID: 2357883905108252625}
   - component: {fileID: 6514153312089124578}
   m_Layer: 0
   m_Name: Floating Board
@@ -296,29 +287,6 @@ Transform:
   - {fileID: 4802353525810725795}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2357883905108252625
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4062196696358321803}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f813787f17eb305409d210d0313a2a0e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _heightOffsetType: 0
-  isRightHand: 0
-  _heightOffset: 1
-  _radius: 0.5
-  _angle: 180
-  _rotationOffset: {x: 0, y: 0, z: 0}
-  _shouldLookAtPlayer: 1
-  _maxDistance: 0.1
-  lerpSpeed: 4
-  _minDistanceToControl: 0.1
-  _angleOffset: 5
 --- !u!114 &6514153312089124578
 MonoBehaviour:
   m_ObjectHideFlags: 0

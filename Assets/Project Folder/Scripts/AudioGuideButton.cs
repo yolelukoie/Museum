@@ -1,8 +1,6 @@
 using Cysharp.Threading.Tasks;
 using Sirenix.OdinInspector;
-using System.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.Events;
 
 public enum AudioGuideState { Started, Finished }
 
@@ -15,11 +13,12 @@ public class AudioGuideButton : MonoBehaviour
     private TXRButton _txrButtonTouch;
     private bool _isPlaying = false;
     private AudioTimeLeft _audioTimeLeft;
+    private Glow _glow;
+    private bool _shouldButtonGlow;
 
-    public UnityEvent guideSkipped;
 
-    private DirectionGuideArrow _directionArrow;
-    private TaskCompletionSource<bool> _guideSkipped;
+    private GoToTarget _directionArrow;
+
 
     private void Awake()
     {
@@ -27,10 +26,14 @@ public class AudioGuideButton : MonoBehaviour
         _txrButtonTouch = GetComponent<TXRButton>();
         _piece = GetComponentInParent<Piece>();
         _audioTimeLeft = GetComponentInChildren<AudioTimeLeft>();
+        _glow = GetComponentsInChildren<Glow>()[0];
+        _glow.enabled = false;
+
     }
 
     private void Start()
     {
+        _shouldButtonGlow = SceneReferencer.Instance.shouldButtonGlow;
 
         _audioTimeLeft.gameObject.SetActive(false);
         _audioGuideSource.clip = _piece.audioGuideClip;
@@ -70,36 +73,34 @@ public class AudioGuideButton : MonoBehaviour
     [Button("Skip")]
     private void Skip()
     {
-        _audioGuideSource.Stop();
-        guideSkipped.Invoke();
-        _guideSkipped.SetResult(true);
-
+        _audioGuideSource.time = _audioGuideSource.clip.length - 2f;
     }
 
 
     public async UniTask WaitForAudioGuideToFinish()
     {
-        print("AudioGuideButton.cs: Debug WaitForAudioGuideToFinish, " + _piece.name);
-
         //wait for player to hit play
         await new WaitUntil(() => _audioGuideSource.isPlaying == true);
 
-        print("AudioGuideButton.cs: Debug WaitForAudioGuideToFinish: " + _audioGuideSource.clip.name + " is playing");
         // wait for audio guide to finish
-
         await new WaitUntil(() => _audioGuideSource.time >= _audioGuideSource.clip.length);
-        print("AudioGuideButton.cs: Debug WaitForAudioGuideToFinish: " + _audioGuideSource.clip.name + " finished");
-
         _audioTimeLeft.gameObject.SetActive(false);
-        print("AudioGuideButton.cs: after _audioTimeLeft.gameObject.SetActive(false)");
+
         TXRDataManager.Instance.ReportAudioGuideTiming(_piece.name, AudioGuideState.Finished.ToString());
 
     }
 
     public async UniTask waitForPress()
     {
+        if (_shouldButtonGlow)
+            _glow.enabled = true;
+
         //wait for player to hit play
         await new WaitUntil(() => _audioGuideSource.isPlaying == true);
+
+        if (_shouldButtonGlow)
+            _glow.enabled = false;
+
 
     }
 
