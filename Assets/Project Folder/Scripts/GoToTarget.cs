@@ -7,25 +7,28 @@ using UnityEngine.AI;
 
 public class GoToTarget : MonoBehaviour
 {
+    [ReadOnly]
     public Transform player;
+    [ReadOnly]
     public Transform target;
     public float distanceFromPlayer = 3.0f;
     public float heightOffsetFromPlayer = -1.5f;
     private NavMeshPath path;
     private int currentSegmentEnd = 0;
     public float lerpSpeed = 3f;
-    public bool isPathCalculated = false;
+    private bool isPathCalculated = false;
     private Vector3 nextPoint;
-    private Vector3 directionToNextPoint;
+
     private Vector3 closestPointToPlayer;
     private List<Vector3> spline = new List<Vector3>();
     public int segments = 10;
-
+    private AudioSource audioSource;
 
     void Awake()
     {
         path = new NavMeshPath();
         player = TXRPlayer.Instance.PlayerHead;
+        audioSource = GetComponent<AudioSource>();
     }
 
     void Update()
@@ -135,6 +138,10 @@ public class GoToTarget : MonoBehaviour
         Show();
         SetTarget(newTarget);
         CalculatePath();
+        if (audioSource != null)
+        {
+            audioSource.Play();
+        }
         await UniTask.WaitUntil(() => isPathCalculated);
     }
 
