@@ -15,16 +15,34 @@ public class ArtPieceProximityDetector : MonoBehaviour
     {
         if (_isActive)
         {
-            if (TXRPlayer.Instance.FocusedObject == _piece.imageCollider)
+
+            if (other.CompareTag("PlayerHead"))
             {
-                if (other.CompareTag("PlayerHead"))
+                _isPlayerInside = true;
+            }
+
+        }
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        if (_isActive)
+        {
+            if (_isPlayerInside)
+            {
+                if (TXRPlayer.Instance.FocusedObject == _piece.imageCollider)
                 {
-                    TXRDataManager.Instance.LogLineToFile("Player entered the zone of " + _piece.gameObject.name + ", zone radius in cm: " + transform.localScale.x);
-                    _isPlayerInside = true;
+                    if (other.CompareTag("PlayerHead"))
+                    {
+                        TXRDataManager.Instance.LogLineToFile("Player is inside the zone of " + _piece.gameObject.name + ", zone radius in cm: " + transform.localScale.x);
+                        Debug.Log("Player is inside the zone of " + _piece.gameObject.name + ", zone radius in cm: " + transform.localScale.x);
+                        _isPlayerInside = true;
+                    }
                 }
             }
         }
     }
+
 
     private void OnTriggerExit(Collider other)
     {
@@ -32,7 +50,9 @@ public class ArtPieceProximityDetector : MonoBehaviour
         {
             if (other.CompareTag("PlayerHead"))
             {
+
                 TXRDataManager.Instance.LogLineToFile("Player exited the zone of " + _piece.gameObject.name + ", zone radius in cm: " + transform.localScale.x);
+                Debug.Log("Player exited the zone of " + _piece.gameObject.name + ", zone radius in cm: " + transform.localScale.x);
                 _isPlayerInside = false;
             }
         }
