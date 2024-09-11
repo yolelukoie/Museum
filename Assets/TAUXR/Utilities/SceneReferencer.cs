@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 
@@ -49,6 +50,7 @@ public class SceneReferencer : TXRSingleton<SceneReferencer>
     public GoToTarget DirectionArrow;
     public Collection artCollection;
     public Collection demoCollection;
+    public TextMeshProUGUI debugText;
 
 
 

@@ -1,3 +1,6 @@
+using Cysharp.Threading.Tasks;
+using System;
+using TMPro;
 using UnityEngine;
 
 public class ArtPieceProximityDetector : MonoBehaviour
@@ -6,9 +9,11 @@ public class ArtPieceProximityDetector : MonoBehaviour
     Piece _piece;
     bool _isActive = false;
     bool _isPlayerInside = false;
+    public TextMeshProUGUI _debugText;
     private void Awake()
     {
         _piece = GetComponentInParent<Piece>();
+        _debugText = SceneReferencer.Instance.debugText;
     }
 
     //private void OnTriggerEnter(Collider other)
@@ -36,6 +41,7 @@ public class ArtPieceProximityDetector : MonoBehaviour
                         TXRDataManager.Instance.LogLineToFile("Player is inside the zone of " + _piece.gameObject.name + ", zone radius in cm: " + transform.localScale.x);
                         Debug.Log("Player is inside the zone of " + _piece.gameObject.name + ", zone radius in cm: " + transform.localScale.x);
                         _isPlayerInside = true;
+                        ShowDebugText("Player is inside the zone of " + _piece.gameObject.name, Color.green).Forget();
                     }
                 }
             }
@@ -53,6 +59,7 @@ public class ArtPieceProximityDetector : MonoBehaviour
                 TXRDataManager.Instance.LogLineToFile("Player exited the zone of " + _piece.gameObject.name + ", zone radius in cm: " + transform.localScale.x);
                 Debug.Log("Player exited the zone of " + _piece.gameObject.name + ", zone radius in cm: " + transform.localScale.x);
                 _isPlayerInside = false;
+                ShowDebugText("Player exited the zone of " + _piece.gameObject.name, Color.red).Forget();
             }
         }
     }
@@ -65,6 +72,19 @@ public class ArtPieceProximityDetector : MonoBehaviour
     {
         _isActive = false;
         _isPlayerInside = false; //is this right?
+    }
+
+    async UniTask ShowDebugText(string text, Color color)
+    {
+        if (_debugText != null)
+        {
+            _debugText.text = text;
+            _debugText.color = color;
+            await UniTask.Delay(TimeSpan.FromSeconds(3));
+        }
+
+
+        _debugText.text = "";
     }
 }
 
