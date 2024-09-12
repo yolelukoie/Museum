@@ -33,9 +33,11 @@ public class SceneReferencer : TXRSingleton<SceneReferencer>
     [Header("Active Tour Questions")]
     public List<SerializedMultichoiceQuestion> questions;
 
+    [Header("Demo Questions")]
+    public List<SerializedMultichoiceQuestion> demoQuestions;
 
     //---------------------------FX--------------------------
-    [Header("Buttons Gloe Effect")]
+    [Header("Buttons Glow Effect")]
     public bool shouldButtonGlow = false;
     public float globalGlowSpeed = 1.9f;
     public float globalMinGlow = 0.1f;               //also looks nice: min 0.05, max 0.8

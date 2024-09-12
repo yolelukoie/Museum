@@ -90,9 +90,16 @@ public class AudioGuideButton : MonoBehaviour
 
     public async UniTask waitForPress()
     {
+        if (_shouldButtonGlow)
+        {
+            _glow.Activate();
+        }
         //wait for player to hit play
         await new WaitUntil(() => _audioGuideSource.isPlaying == true);
-
+        if (_shouldButtonGlow)
+        {
+            _glow.Deactivate();
+        }
     }
 
 }

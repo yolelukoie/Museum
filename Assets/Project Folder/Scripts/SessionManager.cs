@@ -26,6 +26,7 @@ public class SessionManager : TXRSingleton<SessionManager>
     private List<Piece> _pieces;
     private List<Piece> _demoPieces;
     private List<SerializedMultichoiceQuestion> _questions;
+    private List<SerializedMultichoiceQuestion> _demoQuestions;
     private GoToTarget _directionArrow;
     private List<List<String>> _activeTourQuestions = new List<List<String>>();
     private int question_index = 0;
@@ -220,7 +221,7 @@ public class SessionManager : TXRSingleton<SessionManager>
 
             await _answerTheQuestion.ShowUntilAudioEnds();
 
-            await _multiChoiceQuestion.SetAnswersAndAndWaitForAnswer("מאפיין מס' 1", "מאפיין מס' 2", "מאפיין מס' 3");
+            await _multiChoiceQuestion.SetAnswersAndAndWaitForAnswer(_demoQuestions[0].Answer1, _demoQuestions[0].Answer2, _demoQuestions[0].Answer3);
 
         }
         _demoPieces[FIRST_PIECE_INDEX].proximityDetector.Deactivate();
