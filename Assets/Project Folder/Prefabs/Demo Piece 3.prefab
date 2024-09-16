@@ -112,7 +112,7 @@ GameObject:
   - component: {fileID: 8645579914924340244}
   - component: {fileID: 679866617699068763}
   m_Layer: 5
-  m_Name: Demo pics
+  m_Name: Demo Piece 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -158,7 +158,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 2100000, guid: 19ba66cbd63d472458ddbc4900083f98, type: 2}
-  m_Color: {r: 0.61635214, g: 0.60119885, b: 0.53300893, a: 1}
+  m_Color: {r: 0.7830189, g: 0.7411978, b: 0.62419903, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1760,7 +1760,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8572394932573874032}
   m_LocalRotation: {x: -0, y: 1, z: -0, w: 0}
-  m_LocalPosition: {x: 0, y: 0, z: 0.009}
+  m_LocalPosition: {x: 0, y: 0, z: -0.006}
   m_LocalScale: {x: 0.00962324, y: 0.009320009, z: 0.2953}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1769,7 +1769,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: -0.071, y: -0.2083}
+  m_AnchoredPosition: {x: -0.075, y: -0.212}
   m_SizeDelta: {x: 565, y: 319}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &731135972742915416
@@ -2249,6 +2249,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Pointer
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 66d88fbfad66c40ca9019daccfa2cf16,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1721408997582961648, guid: 66d88fbfad66c40ca9019daccfa2cf16,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -2398,6 +2403,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 4180993936865282354}
     m_Modifications:
+    - target: {fileID: 1210616660700920698, guid: ae1e60ba9bfe31944bb2ca585b1d3a1e,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 3509209796719956170, guid: ae1e60ba9bfe31944bb2ca585b1d3a1e,
         type: 3}
       propertyPath: m_Name

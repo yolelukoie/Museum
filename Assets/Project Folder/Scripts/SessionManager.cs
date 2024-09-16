@@ -79,6 +79,7 @@ public class SessionManager : TXRSingleton<SessionManager>
         _expTypeQuestion = SceneReferencer.Instance.typeQuestion;
         _maxQuestionsInSemiActiveTour = SceneReferencer.Instance.NumberOfQuestionsInSemiActiveTour;
         _questions = SceneReferencer.Instance.questions;
+        _demoQuestions = SceneReferencer.Instance.demoQuestions;
         _directionArrow = SceneReferencer.Instance.DirectionArrow;
         _demoCollection = SceneReferencer.Instance.demoCollection;
         _artCollection = SceneReferencer.Instance.artCollection;
