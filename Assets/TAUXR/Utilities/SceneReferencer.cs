@@ -52,7 +52,7 @@ public class SceneReferencer : TXRSingleton<SceneReferencer>
     public GoToTarget DirectionArrow;
     public Collection artCollection;
     public Collection demoCollection;
-    public TextMeshProUGUI debugText;
+    public TextMeshPro debugText;
 
 
 

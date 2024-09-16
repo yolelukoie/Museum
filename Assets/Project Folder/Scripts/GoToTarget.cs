@@ -160,6 +160,16 @@ public class GoToTarget : MonoBehaviour
         target = newTarget;
     }
 
+    [Button("Play Sound")]
+    private void PlaySound()
+    {
+        if (audioSource != null)
+        {
+            audioSource.Play();
+        }
+    }
+
+
     (Vector3, Vector3) findPlayerPointOnPathAndArrowPosition()
     {
         Vector3 closestPointToPlayer = spline[0];
