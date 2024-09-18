@@ -76,7 +76,6 @@ public class ArtPieceProximityDetector : MonoBehaviour
     public void Deactivate()
     {
         _isActive = false;
-        _isPlayerInsideCollider = false;
     }
 
     async UniTask ShowDebugText(string text, Color color)
