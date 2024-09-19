@@ -301,7 +301,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06304f325db43a5408a4dc30487f01e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  skipDemo: 0
+  skipDemo: 1
 --- !u!4 &88243403
 Transform:
   m_ObjectHideFlags: 0
@@ -10648,7 +10648,7 @@ PrefabInstance:
     - target: {fileID: 612552674921322229, guid: 56cb0481d0a95af4a8059ec0bd4b07c5,
         type: 3}
       propertyPath: shouldButtonGlow
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 612552674921322229, guid: 56cb0481d0a95af4a8059ec0bd4b07c5,
         type: 3}
@@ -11402,7 +11402,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1658820992
 Transform:
   m_ObjectHideFlags: 0
@@ -16782,6 +16782,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Layer
       value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 2206167641276719005, guid: 5554c57095f01624b80b43f019f7b1f5,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 2206167641276719005, guid: 5554c57095f01624b80b43f019f7b1f5,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 2329979964403590895, guid: 5554c57095f01624b80b43f019f7b1f5,
         type: 3}

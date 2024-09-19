@@ -10,6 +10,7 @@ public class ArtPieceProximityDetector : MonoBehaviour
     bool _isActive = false;
     bool _isPlayerInsideCollider = false;
     bool _waitingForGaze = false;
+    bool _waitingForExit = false;
     public TextMeshPro _debugText;
     private void Awake()
     {
@@ -42,11 +43,12 @@ public class ArtPieceProximityDetector : MonoBehaviour
                 {
                     if (other.CompareTag("PlayerHead"))
                     {
-                        TXRDataManager.Instance.LogLineToFile("Player is inside the zone of " + _piece.gameObject.name + ", zone radius in cm: " + transform.localScale.x);
-                        Debug.Log("Player is inside the zone of " + _piece.gameObject.name + ", zone radius in cm: " + transform.localScale.x);
+                        TXRDataManager.Instance.LogLineToFile("Player entered the zone of " + _piece.gameObject.name + ", zone radius in cm: " + transform.localScale.x);
+                        Debug.Log("Player entered the zone of " + _piece.gameObject.name + ", zone radius in cm: " + transform.localScale.x);
                         _isPlayerInsideCollider = true;
                         _waitingForGaze = false;
-                        ShowDebugText("Player is inside the zone of " + _piece.gameObject.name, Color.green).Forget();
+                        _waitingForExit = true;
+                        ShowDebugText("Player entered the zone of " + _piece.gameObject.name, Color.green).Forget();
                     }
                 }
             }
@@ -56,14 +58,14 @@ public class ArtPieceProximityDetector : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (_isPlayerInsideCollider)
+        if (_isPlayerInsideCollider && _waitingForExit)
         {
             if (other.CompareTag("PlayerHead"))
             {
-
                 TXRDataManager.Instance.LogLineToFile("Player exited the zone of " + _piece.gameObject.name + ", zone radius in cm: " + transform.localScale.x);
                 Debug.Log("Player exited the zone of " + _piece.gameObject.name + ", zone radius in cm: " + transform.localScale.x);
                 _isPlayerInsideCollider = false;
+                _waitingForExit = false;
                 ShowDebugText("Player exited the zone of " + _piece.gameObject.name, Color.red).Forget();
             }
         }

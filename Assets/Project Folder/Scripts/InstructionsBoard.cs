@@ -37,6 +37,7 @@ public class InstructionsBoard : MonoBehaviour
         {
             _continueButton.gameObject.SetActive(true);
         }
+        TXRDataManager.Instance.LogLineToFile("Instructions board shown: " + gameObject.name);
     }
     private void Disable()
     {
@@ -48,6 +49,7 @@ public class InstructionsBoard : MonoBehaviour
         _animator.SetTrigger("Hide");
         await UniTask.WaitUntil(() => _animator.GetCurrentAnimatorStateInfo(0).IsName(_hideAnimationName));
         await UniTask.WaitWhile(() => _animator.GetCurrentAnimatorStateInfo(0).IsName(_hideAnimationName));
+        TXRDataManager.Instance.LogLineToFile("Instructions board hidden " + gameObject.name);
         Disable();
     }
 
@@ -56,7 +58,6 @@ public class InstructionsBoard : MonoBehaviour
         Show(true);
         _audioSource.Play();
         await _continueButton.WaitForButtonPress();
-        //await UniTask.Delay(TimeSpan.FromSeconds(1));
         await HideAndWaitForAnimation();
     }
 

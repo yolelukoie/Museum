@@ -48,6 +48,7 @@ public class AudioGuideButton : MonoBehaviour
         // If the audio guide is not playing, play it
         if (!_isPlaying)
         {
+            //PlayAudioAsync().Forget();
             _audioGuideSource.Play();
             TXRDataManager.Instance.ReportAudioGuideTiming(_piece.name, AudioGuideState.Started.ToString());
 
@@ -56,6 +57,12 @@ public class AudioGuideButton : MonoBehaviour
             _directionArrow.Hide();
             _piece.arrow.Hide();
         }
+    }
+
+    private async UniTask PlayAudioAsync()
+    {
+        _audioGuideSource.Play();
+        await UniTask.Yield();
     }
 
     // Skip the audio guide, for debug only!!!
