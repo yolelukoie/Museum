@@ -89,13 +89,13 @@ public class SessionManager : TXRSingleton<SessionManager>
         //make sure everything is hidden
         foreach (Piece p in _pieces)
         {
-            p.arrow.gameObject.SetActive(false);
+            //p.arrow.gameObject.SetActive(false);
             p.audioGuideButton.gameObject.SetActive(false);
         }
 
         foreach (Piece p in _demoPieces)
         {
-            p.arrow.gameObject.SetActive(false);
+            //p.arrow.gameObject.SetActive(false);
             p.audioGuideButton.gameObject.SetActive(false);
         }
         _multiChoiceQuestion.gameObject.SetActive(false);
@@ -184,6 +184,7 @@ public class SessionManager : TXRSingleton<SessionManager>
     private async UniTask ShowNextQuestion()
     {
         await _multiChoiceQuestion.SetAnswersAndAndWaitForAnswer(_questions[question_index].Answer1, _questions[question_index].Answer2, _questions[question_index].Answer3);
+        await UniTask.Delay(TimeSpan.FromSeconds(1));
         question_index++;
     }
 
@@ -201,7 +202,7 @@ public class SessionManager : TXRSingleton<SessionManager>
         _demoCollection.FadeIn();
 
         //First piece:
-        _demoPieces[FIRST_PIECE_INDEX].arrow.gameObject.SetActive(true);
+        //_demoPieces[FIRST_PIECE_INDEX].arrow.gameObject.SetActive(true);
         _demoPieces[FIRST_PIECE_INDEX].audioGuideButton.gameObject.SetActive(true);
         _demoPieces[FIRST_PIECE_INDEX].proximityDetector.Activate();
         _pressTheButtonToHearAudio.Show(false);
@@ -223,12 +224,13 @@ public class SessionManager : TXRSingleton<SessionManager>
             await _answerTheQuestion.ShowUntilAudioEnds();
 
             await _multiChoiceQuestion.SetAnswersAndAndWaitForAnswer(_demoQuestions[0].Answer1, _demoQuestions[0].Answer2, _demoQuestions[0].Answer3);
+            await UniTask.Delay(TimeSpan.FromSeconds(1));
 
         }
         _demoPieces[FIRST_PIECE_INDEX].proximityDetector.Deactivate();
 
         //Second piece:
-        _demoPieces[1].arrow.gameObject.SetActive(true);
+        //_demoPieces[1].arrow.gameObject.SetActive(true);
         _demoPieces[1].audioGuideButton.gameObject.SetActive(true);
         _demoPieces[1].proximityDetector.Activate();
         _directionArrow.ShowAndSetTarget(_demoPieces[1].imageComponent.transform, true).Forget();
@@ -253,7 +255,7 @@ public class SessionManager : TXRSingleton<SessionManager>
         foreach (Piece p in _pieces)
         {
             int pieceIndex = _pieces.IndexOf(p);
-            p.arrow.gameObject.SetActive(true);
+            //p.arrow.gameObject.SetActive(true);
             p.audioGuideButton.gameObject.SetActive(true);
             p.proximityDetector.Activate();
             _directionArrow.ShowAndSetTarget(p.imageComponent.transform, true).Forget();
