@@ -59,11 +59,11 @@ public class AudioGuideButton : MonoBehaviour
         }
     }
 
-    private async UniTask PlayAudioAsync()
-    {
-        _audioGuideSource.Play();
-        await UniTask.Yield();
-    }
+    //private async UniTask PlayAudioAsync()
+    //{
+    //    _audioGuideSource.Play();
+    //    await UniTask.Yield();
+    //}
 
     // Skip the audio guide, for debug only!!!
     [Button("Skip")]
@@ -81,6 +81,7 @@ public class AudioGuideButton : MonoBehaviour
         }
 
         //wait for player to hit play
+        Debug.Log("Waiting for audio to start...");
         await new WaitUntil(() => _audioGuideSource.isPlaying == true);
 
         if (_shouldButtonGlow)
@@ -88,7 +89,8 @@ public class AudioGuideButton : MonoBehaviour
             _glow.Deactivate();
         }
         // wait for audio guide to finish
-        await new WaitUntil(() => _audioGuideSource.time >= _audioGuideSource.clip.length);
+        Debug.Log("Waiting for audio to finish...");
+        await new WaitUntil(() => _audioGuideSource.isPlaying == false);
         _audioTimeLeft.gameObject.SetActive(false);
 
         TXRDataManager.Instance.ReportAudioGuideTiming(_piece.name, AudioGuideState.Finished.ToString());
