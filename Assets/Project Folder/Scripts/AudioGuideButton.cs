@@ -67,7 +67,7 @@ public class AudioGuideButton : MonoBehaviour
 
     // Skip the audio guide, for debug only!!!
     [Button("Skip")]
-    private void Skip()
+    public void Skip()
     {
         _audioGuideSource.time = _audioGuideSource.clip.length - 2f;
     }
