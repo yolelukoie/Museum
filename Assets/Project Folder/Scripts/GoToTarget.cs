@@ -9,7 +9,7 @@ public class GoToTarget : MonoBehaviour
 {
     [ReadOnly]
     public Transform player;
-    [ReadOnly]
+    //[ReadOnly]
     public Transform target;
     public float distanceFromPlayer = 3.0f;
     public float heightOffsetFromPlayer = -1.5f;
