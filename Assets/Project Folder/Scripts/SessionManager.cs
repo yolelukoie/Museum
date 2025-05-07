@@ -9,10 +9,10 @@ public class SessionManager : TXRSingleton<SessionManager>
     public bool skipDemo = false;
 
     //consts
-    const String ACTIVE_TYPE = "Type 1";
-    const String BOTH_TYPE = "Type 2";
-    const String PASSIVE_TYPE = "Type 3";
-    const int FIRST_PIECE_INDEX = 0;
+    private const String ACTIVE_TYPE = "Type 1";
+    private const String BOTH_TYPE = "Type 2";
+    private const String PASSIVE_TYPE = "Type 3";
+    private const int FIRST_PIECE_INDEX = 0;
 
 
     //config
@@ -101,8 +101,8 @@ public class SessionManager : TXRSingleton<SessionManager>
         _multiChoiceQuestion.gameObject.SetActive(false);
         _expTypeQuestion.gameObject.SetActive(false);
         _directionArrow.Hide();
-        _demoCollection.SetAlphaImmediate(0f);
-        _artCollection.SetAlphaImmediate(0f);
+        _demoCollection.SetVisibilityImmediate(0f);
+        _artCollection.SetVisibilityImmediate(0f);
 
 
 
