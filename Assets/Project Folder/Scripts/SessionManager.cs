@@ -249,6 +249,9 @@ public class SessionManager : TXRSingleton<SessionManager>
     {
         Debug.Log("Playing Tour");
         _artCollection.FadeIn();
+
+        ArtPieceColliderExporter.ExportCollidersAsync(_pieces).Forget(); // shpold be after fade in so that the image colliders are turned on, enabling position recording
+
         int lastQuestionInSemiTourIndex = _maxQuestionsInSemiActiveTour - 1;
         int endPieceIndex = _pieces.Count - 1;
 

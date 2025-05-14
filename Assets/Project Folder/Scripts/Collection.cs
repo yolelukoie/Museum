@@ -124,4 +124,6 @@ public class Collection : MonoBehaviour
             SetMaterialAlpha(renderer, alpha);
         }
     }
+
+
 }
