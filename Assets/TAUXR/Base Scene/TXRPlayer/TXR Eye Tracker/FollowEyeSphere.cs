@@ -1,18 +1,42 @@
-using System.Collections;
-using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class FollowEyeSphere : MonoBehaviour
 {
-    [SerializeField] float lerpSpeed;
+    [SerializeField] private float lerpSpeed;
+    private TXRPlayer player;
+    private TextMeshPro focusedObjectText;
 
-    void Start()
+
+    private void Start()
     {
+        focusedObjectText = GetComponentInChildren<TextMeshPro>();
+        player = TXRPlayer.Instance;
+
     }
 
-    void Update()
+    private void Update()
     {
-        transform.position = Vector3.Lerp(transform.position, TXRPlayer.Instance.EyeGazeHitPosition,
+        transform.position = Vector3.Lerp(transform.position, player.EyeGazeHitPosition,
             lerpSpeed * Time.deltaTime);
+        UpdateFocusedObjectText();
+    }
+
+    private void UpdateFocusedObjectText()
+    {
+        if (focusedObjectText != null)
+        {
+            if (player.FocusedObject != null)
+            {
+                focusedObjectText.text = player.FocusedObject.name;
+
+                Vector3 reverseDirection = (transform.position - player.PlayerHead.position).normalized;
+                transform.rotation = Quaternion.LookRotation(reverseDirection);
+            }
+            else
+            {
+                focusedObjectText.text = "Nothing";
+            }
+        }
     }
 }
