@@ -2,20 +2,26 @@ using Cysharp.Threading.Tasks;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using Unity.Collections;
 using UnityEngine;
 
 public class TilesPositionExporter : MonoBehaviour
 {
-    [SerializeField]
+
     private Renderer[] planeTileRenderers;
+    [SerializeField, ReadOnly]
     private Dictionary<String, Renderer> tileRenderers = new Dictionary<String, Renderer>();
 
     private void Start()
     {
         planeTileRenderers = GetComponentsInChildren<Renderer>();
+
         foreach (var tileRenderer in planeTileRenderers)
         {
             String name = tileRenderer.transform.parent.gameObject.name;
+
+            if (tileRenderer.name.Contains("Rectangle")) // ignore rectangle mesh renderers, use only the planes
+                continue;
 
             if (!tileRenderers.ContainsKey(name))
             {
